@@ -1,4 +1,7 @@
 # AWP - Astrodynamics with Python
+
+![Channel Image](docs/prof_pic_hq.png)
+
 The GitHub repository corresponding to the Orbital Mechanics with Python, Numerical Methods with Python, and Spacecraft Attitude Control with Python video series on YouTube.
 Please direct all questions and comments to the corresponding videos on YouTube.
 
