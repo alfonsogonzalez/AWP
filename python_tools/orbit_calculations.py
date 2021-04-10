@@ -1,6 +1,8 @@
 '''
-AWP
-Orbit calculation tools
+AWP | Astrodynamics with Python by Alfonso Gonzalez
+https://github.com/alfonsogonzalez/AWP
+
+Orbit Calculations Library
 '''
 
 # 3rd party libraries
@@ -18,16 +20,24 @@ def esc_v( r, mu = pd.earth[ 'mu' ] ):
 	'''
 	return math.sqrt( 2 * mu / r )
  
-def state2coes( state, et = 0, mu = pd.earth[ 'mu' ], deg = True, print_results = False ):
-	rp,e,i,raan,aop,ma,t0,mu,ta,a,T = spice.oscltx( state, et, mu )
+def state2coes( state, args = {} ):
+	_args = {
+		'et'        : 0,
+		'mu'        : pd.earth[ 'mu' ],
+		'deg'       : True,
+		'print_coes': False
+	}
 
-	if deg:
+	rp,e,i,raan,aop,ma,t0,mu,ta,a,T = spice.oscltx( 
+		state, _args[ 'et' ], _args[ 'mu' ] )
+
+	if _args[ 'deg' ]:
 		i    *= nt.r2d
 		ta   *= nt.r2d
 		aop  *= nt.r2d
 		raan *= nt.r2d
 
-	if print_results:
+	if _args[ 'print_coes' ]:
 		print( 'a'   , a    )
 		print( 'e'   , e    )
 		print( 'i'   , i    )
@@ -69,3 +79,9 @@ def state2ap( state, mu = pd.earth[ 'mu' ] ):
 	ra      = a * ( 1 + e )
 	rp      = a * ( 1 - e )
 	return  ra, rp
+
+def two_body_ode( t, state, mu = pd.earth[ 'mu' ] ):
+	r = state[ :3 ]
+	a = -mu * r / np.linalg.norm( r ) ** 3
+
+	return [ state[ 3 ], state[ 4 ], state[ 5 ], a[ 0 ], a[ 1 ], a[ 2 ] ]
