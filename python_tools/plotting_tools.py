@@ -1,5 +1,8 @@
 '''
-Astrodynamics with Python Plotting Tools
+AWP | Astrodynamics with Python by Alfonso Gonzalez
+https://github.com/alfonsogonzalez/AWP
+
+Plotting Tools Library
 '''
 
 import numpy as np
@@ -300,5 +303,3 @@ def plot_orbits( rs, args, vectors = [] ):
 		plt.show()
 
 	plt.close()
-
-
