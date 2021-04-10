@@ -1,11 +1,13 @@
 '''
-AWP
-Planetary data file
+AWP | Astrodynamics with Python by Alfonso Gonzalez
+https://github.com/alfonsogonzalez/AWP
+
+Planetary Data Library
 '''
 
 # gravitational constant
-G_meters = 6.67430e-11       # m**3/kg/s**2
-G        = G_meters * 10**-9 # km**3/kg/s**2
+G_meters = 6.67430e-11       # m**3 / kg / s**2
+G        = G_meters * 10**-9 # km**3/ kg / s**2
 
 earth = {
 		'name'            : 'Earth',
