@@ -1,5 +1,6 @@
 '''
-AWP
+AWP | Astrodynamics with Python by Alfonso Gonzalez
+
 Spacecraft class definition
 '''
 
@@ -10,9 +11,9 @@ import math as m
 # 3rd party libraries
 import numpy as np
 import matplotlib.pyplot as plt
-import spiceypy as spice
 plt.style.use( 'dark_background' )
 from scipy.integrate import ode
+import spiceypy as spice
 
 # personal libraries
 import orbit_calculations as oc
@@ -20,11 +21,6 @@ import numerical_tools    as nt
 import plotting_tools     as pt
 import planetary_data     as pd
 import spice_data         as sd
-
-def null_orbit_perts():
-	return {
-			'J2': False
-	}
 
 def null_config():
 	return {
@@ -35,12 +31,13 @@ def null_config():
 		'dt'             : 100,
 		'orbit_state'    : [],
 		'coes'           : [],
-		'orbit_perts'    : null_orbit_perts(),
+		'orbit_perts'    : {},
 		'propagator'     : 'lsoda',
 		'stop_conditions': {},
+		'print_stop'     : True,
 		'mass0'          : 0,
 		'output_dir'     : '.',
-		'start'          : True
+		'propagate'      : True
 	}
 
 class Spacecraft:
@@ -71,7 +68,7 @@ class Spacecraft:
 
 		self.states[ 0, :6 ] = self.config[ 'orbit_state' ]
 		self.states[ 0, 6  ] = self.config[ 'mass0'  ]
-		self.alts[ 0 ]       = nt.norm( self.states[ 0, :3 ] ) -\
+		self.alts  [ 0 ]     = nt.norm( self.states[ 0, :3 ] ) -\
 									self.cb[ 'radius' ]
 
 		self.assign_stop_condition_functions()
@@ -83,12 +80,12 @@ class Spacecraft:
 
 		self.solver = ode( self.diffy_q )
 		self.solver.set_integrator( self.config[ 'propagator' ] )
-		self.solver.set_initial_value( self.states[ 0, : ], 0 )
+		self.solver.set_initial_value( self.states[ 0, : ], self.ets[ 0 ] )
 
 		self.coes_calculated    = False
 		self.latlons_calculated = False
 
-		if self.config[ 'start' ]:
+		if self.config[ 'propagate' ]:
 			self.propagate_orbit()
 
 	def assign_stop_condition_functions( self ):
@@ -105,10 +102,12 @@ class Spacecraft:
 				self.stop_conditions_map[ key ] )
 
 	def assign_orbit_perturbations_functions( self ):
+	
 		self.orbit_perts_funcs_map = {
 			'J2': self.calc_J2
 		}
 		self.orbit_perts_funcs = []
+
 		for key in self.config[ 'orbit_perts' ]:
 			self.orbit_perts_funcs.append( 
 				self.orbit_perts_funcs_map[ key ] )
@@ -129,40 +128,37 @@ class Spacecraft:
 
 	def check_deorbit( self ):
 		if self.alts[ self.step ] < self.cb[ 'deorbit_altitude' ]:
-			print('Spacecraft deorbited after %.1f seconds' % 
-				( self.ets[ self.step ] - self.ets[ 0 ] ) )
+			if self.config[ 'print_stop' ]:
+				self.print_stop_condition( 'deorbit altitude' )
 			return False
 		return True
 
 	def check_max_alt( self ):
-		if self.alts[ self.step ] > self.config[ 'sc' ][ 'max_alt' ]:
-			print('Spacecraft reached maximum altitude after %.1f seconds' % self.ets[self.step])
+		if self.alts[ self.step ] > self.config[ 'stop_conditions' ][ 'max_alt' ]:
+			if self.config[ 'print_stop' ]:
+				self.print_stop_condition( 'max altitude' )
 			return False
 		return True
 
 	def check_min_alt( self ):
-		if self.alts[self.step]<self.stop_conditions_dict['min_alt']:
-			print('Spacecraft reached minimum altitude after %.1f seconds' % self.ets[self.step])
+		if self.alts[ self.step ] > self.config[ 'stop_conditions' ][ 'min_alt' ]:
+			if self.config[ 'print_stop' ]:
+				self.print_stop_condition( 'min altitude' )
 			return False
 		return True
 
 	def print_stop_condition( self, parameter ):
-		print('Spacecraft has reached %s after %.2f days (%.2f hours or %1.f seconds)' % ( parameter,
-			self.ts[ self.step ] * days, self.ts[ self.step ] * hours,
-			self.ts[ self.step ] ) )
+		print( f'Spacecraft has reached {parameter}.' )
 
 	def check_stop_conditions( self ):
-		for sc in self.stop_condition_functions:
-			if not sc():
+		for stop_condition in self.stop_condition_functions:
+			if not stop_condition():
 				return False
 		return True
 
-	'''
-	Orbital perturbation functions
-	'''
 	def calc_J2( self, state ):
 		z2     = state[ 2 ] ** 2
-		norm_r = nt.norm( state[: 3 ] )
+		norm_r = nt.norm( state[ :3 ] )
 		r2     = norm_r ** 2
 		tx     = state[ 0 ] / norm_r * ( 5 * z2 / r2 - 1 )
 		ty     = state[ 1 ] / norm_r * ( 5 * z2 / r2 - 1 )
@@ -171,24 +167,24 @@ class Spacecraft:
 			   self.cb['radius'] ** 2 \
 			 / r2 ** 2 * np.array( [ tx, ty, tz ] )
 
-	def diffy_q( self, t, state ):
+	def diffy_q( self, et, state ):
 		rx, ry, rz, vx, vy, vz, mass = state
-		r          = np.array( [ rx,   ry,   rz   ] )
-		v          = np.array( [ vx,   vy,   vz   ] )
-		norm_r     = nt.norm( r )
-		mass_dot   = 0.0
-		y_dot      = np.zeros( 7 )
+		r         = np.array( [ rx,   ry,   rz   ] )
+		v         = np.array( [ vx,   vy,   vz   ] )
+		norm_r    = nt.norm( r )
+		mass_dot  = 0.0
+		state_dot = np.zeros( 7 )
 
 		a = -r * self.cb[ 'mu' ] / norm_r ** 3
 
 		for pert in self.orbit_perts_funcs:
-			a += pert( state )
+			a += pert( et, state )
 
-		y_dot[ :3  ] = v
-		y_dot[ 3:6 ] = a
-		y_dot[ 6   ] = mass_dot
+		state_dot[ :3  ] = v
+		state_dot[ 3:6 ] = a
+		state_dot[ 6   ] = mass_dot
 
-		return y_dot
+		return state_dot
 
 	def propagate_orbit( self ):
 		print( 'Propagating orbit..' )
@@ -200,10 +196,10 @@ class Spacecraft:
 			self.states[ self.step ] = self.solver.y
 			self.alts  [ self.step ] = nt.norm( self.solver.y[ :3 ] ) -\
 										self.cb[ 'radius' ]
-			if not self.check_stop_conditions():
-				break
-			else:
+			if self.check_stop_conditions():
 				self.step += 1
+			else:
+				break
 
 		self.ets    = self.ets   [ :self.step ]
 		self.states = self.states[ :self.step ]
@@ -214,7 +210,8 @@ class Spacecraft:
 		self.coes = np.zeros( ( self.step, 6 ) )
 
 		for n in range( self.step ):
-			self.coes[ n, : ] = oc.state2coes( self.states[ n, :6 ], mu = self.cb[ 'mu' ] )
+			self.coes[ n, : ] = oc.state2coes( 
+				self.states[ n, :6 ], mu = self.cb[ 'mu' ] )
 			
 		self.coes_rel        = self.coes[ : ] - self.coes[ 0, : ]
 		self.coes_calculated = True
