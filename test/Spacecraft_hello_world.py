@@ -1,5 +1,7 @@
 '''
-AWP
+AWP | Astrodynamics with Python by Alfonso Gonzalez
+https://github.com/alfonsogonzalez/AWP
+
 Hello world of Spacecraft class
 Two-body propagation with J2 perturbation for 100 periods
 '''
