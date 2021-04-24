@@ -1,0 +1,4 @@
+matplotlib >= 3.3.0
+scipy      >= 1.5.2
+spiceypy   >= 3.1.1
+pytest     >= 6.2.3
