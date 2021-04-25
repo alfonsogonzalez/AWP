@@ -1,1 +1,0 @@
-leap_seconds_kernel = '../spice/lsk/naif0012.tls'

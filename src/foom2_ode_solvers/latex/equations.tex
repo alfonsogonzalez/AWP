@@ -1,0 +1,114 @@
+\documentclass{article}
+
+\usepackage{amsmath} %% for \cfrac
+%\usepackage{esvect}
+
+\usepackage{xcolor} %% for colored text
+\usepackage{pagecolor} %% for dark background
+
+\pagecolor{black}
+\definecolor{magenta}{RGB}{255,0,255}
+\definecolor{cyan}{RGB}{0,255,255}
+
+\begin{document}
+
+\color{magenta}
+
+\begin{center}\huge{
+	$
+	a_{gravity}=\cfrac{\mu}{r^2}
+	$
+}
+\end{center}
+
+\color{cyan}
+\begin{center}\huge{
+	$\vec{r}(t)$
+}
+\end{center}
+
+\color{magenta}
+\begin{center}\huge{
+$
+\vec{a}_{gravity}=
+-\cfrac{\mu}{|\vec{r}|^3}\vec{r}
+$
+}\end{center}
+
+\begin{center}\huge{
+$
+\vec{a}_{gravity}=
+\cfrac{d\vec{v}}{dt}=\cfrac{d^2\vec{r}}{dt^2}
+$
+}\end{center}
+
+\begin{center}\huge{
+$
+\vec{a}_{gravity}=
+\dot{\vec{v}}=\ddot{\vec{r}}
+$
+}\end{center}
+
+
+\begin{center}\huge{
+$\displaystyle
+\iint \vec{a}_{gravity}$\space$ dt^2 =
+\displaystyle
+\int  \vec{v}$\space$ dt =
+\color{cyan}\vec{r}(t)
+$
+}\end{center}
+\color{magenta}
+
+
+\begin{center}\huge{
+$\displaystyle
+\int \vec{a}_{gravity}$\space$ dt =
+\displaystyle
+\vec{v}(t)
+$
+}\end{center}
+\color{magenta}
+
+\begin{center}\huge{
+$\displaystyle
+\int \vec{v}$\space$ dt =
+\displaystyle
+\vec{r}(t)
+$
+}\end{center}
+\color{magenta}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% integral equations
+\begin{center}\huge{
+$\displaystyle
+\iint a_{gravity_x}$\space$ dt^2 =
+\displaystyle
+\int  v_x$\space$ dt =
+\color{cyan}
+r_x(t)
+$
+}\end{center}
+\color{magenta}
+
+\begin{center}\huge{
+$\displaystyle
+\iint a_{gravity_y}$\space$ dt^2 =
+\displaystyle
+\int  v_y$\space$ dt =
+r_y(t)
+$
+}\end{center}
+
+\begin{center}\huge{
+$\displaystyle
+\iint a_{gravity_z}$\space$ dt^2 =
+\displaystyle
+\int  v_z$\space$ dt =
+r_z(t)
+$
+}\end{center}
+
+\end{document}

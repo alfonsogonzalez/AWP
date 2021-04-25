@@ -1,5 +1,7 @@
 '''
 AWP | Astrodynamics with Python by Alfonso Gonzalez
+https://github.com/alfonsogonzalez/AWP
+https://www.youtube.com/c/AlfonsoGonzalezSpaceEngineering
 
 Spacecraft class definition
 '''
@@ -15,7 +17,7 @@ plt.style.use( 'dark_background' )
 from scipy.integrate import ode
 import spiceypy as spice
 
-# personal libraries
+# AWP libraries
 import orbit_calculations as oc
 import numerical_tools    as nt
 import plotting_tools     as pt
@@ -80,7 +82,7 @@ class Spacecraft:
 
 		self.solver = ode( self.diffy_q )
 		self.solver.set_integrator( self.config[ 'propagator' ] )
-		self.solver.set_initial_value( self.states[ 0, : ], self.ets[ 0 ] )
+		self.solver.set_initial_value( self.states[ 0, : ], 0 )
 
 		self.coes_calculated    = False
 		self.latlons_calculated = False
@@ -113,9 +115,8 @@ class Spacecraft:
 				self.orbit_perts_funcs_map[ key ] )
 
 	def load_spice_kernels( self ):
-
-		spice.furnsh( sd.leap_seconds_kernel )
-		self.spice_kernels_loaded = [ sd.leap_seconds_kernel ]
+		spice.furnsh( sd.leapseconds_kernel )
+		self.spice_kernels_loaded = [ sd.leapseconds_kernel ]
 
 		if self.config[ 'et0' ] is not None:
 			self.et0 = self.config[ 'et0' ]
@@ -156,7 +157,7 @@ class Spacecraft:
 				return False
 		return True
 
-	def calc_J2( self, state ):
+	def calc_J2( self, et, state ):
 		z2     = state[ 2 ] ** 2
 		norm_r = nt.norm( state[ :3 ] )
 		r2     = norm_r ** 2
@@ -164,7 +165,7 @@ class Spacecraft:
 		ty     = state[ 1 ] / norm_r * ( 5 * z2 / r2 - 1 )
 		tz     = state[ 2 ] / norm_r * ( 5 * z2 / r2 - 3 )
 		return 1.5 * self.cb[ 'J2' ] * self.cb[ 'mu' ] *\
-			   self.cb['radius'] ** 2 \
+			   self.cb[ 'radius' ] ** 2 \
 			 / r2 ** 2 * np.array( [ tx, ty, tz ] )
 
 	def diffy_q( self, et, state ):
@@ -174,6 +175,7 @@ class Spacecraft:
 		norm_r    = nt.norm( r )
 		mass_dot  = 0.0
 		state_dot = np.zeros( 7 )
+		et       += self.et0
 
 		a = -r * self.cb[ 'mu' ] / norm_r ** 3
 
@@ -183,7 +185,6 @@ class Spacecraft:
 		state_dot[ :3  ] = v
 		state_dot[ 3:6 ] = a
 		state_dot[ 6   ] = mass_dot
-
 		return state_dot
 
 	def propagate_orbit( self ):
@@ -191,7 +192,6 @@ class Spacecraft:
 
 		while self.solver.successful() and self.step < self.steps:
 			self.solver.integrate( self.solver.t + self.config[ 'dt' ] )
-
 			self.ets   [ self.step ] = self.solver.t
 			self.states[ self.step ] = self.solver.y
 			self.alts  [ self.step ] = nt.norm( self.solver.y[ :3 ] ) -\

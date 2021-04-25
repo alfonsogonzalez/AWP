@@ -1,13 +1,14 @@
 '''
 AWP | Astrodynamics with Python by Alfonso Gonzalez
 https://github.com/alfonsogonzalez/AWP
+https://www.youtube.com/c/AlfonsoGonzalezSpaceEngineering
 
 Fundamentals of Orbital Mechanics 2
 Ordinary Differential Equations (ODEs) Solvers
-https://www.youtube.com/watch?v=8-SyHZb7w40
 
 Acceleration, Velocity and Position subplots script
-for Molniya orbit
+for circular orbit
+Try changing out the orbital parameters!
 '''
 
 from Spacecraft import Spacecraft as SC
@@ -16,16 +17,10 @@ import orbit_calculations as oc
 import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use( 'dark_background' )
-import matplotlib
-matplotlib.rcParams[ 'lines.linewidth' ] = 2
 
 # Molniya orbital elements
-raan = 30.0
-inc  = 63.4
-aop  = 270.0
-a    = 26600.0
-e    = 0.7
-coes = [ a, e, inc, 0.0, aop, raan ]
+a    = 6778.0
+coes = [ a, 0.0, 0.0, 0.0, 0.0, 0.0 ]
 
 sc_config = {
 	'coes' : coes,
@@ -34,16 +29,7 @@ sc_config = {
 }
 
 if __name__ == '__main__':
-	sc = SC( sc_config )
-
-	sc.plot_3d( {
-		'colors'   : [ 'c' ],
-		'elevation': 13,
-		'azimuth'  : -13,
-		'legend'   : False,
-		'show'     : True
-		} )
-
+	sc     = SC( sc_config )
 	accels = np.zeros( ( sc.states.shape[ 0 ], 3 ) )
 	
 	for n in range( sc.states.shape[ 0 ] ):
@@ -63,7 +49,7 @@ if __name__ == '__main__':
 	ax0.plot( ets, accels[ :, 2 ], 'b', label = r'$a_z$'   )
 	ax0.plot( ets, anorms        , 'm', label = r'$Norms$' )
 	ax0.grid( linestyle = 'dotted' )
-	ax0.set_xlim( left = 0, right = 30 )
+	ax0.set_xlim( left = 0, right = ets[ -1 ] )
 	ax0.set_ylabel( r'Acceleration $(\dfrac{km}{s^2})$', fontsize = 20 )
 	ax0.legend( loc = 'upper center' )
 
@@ -72,7 +58,7 @@ if __name__ == '__main__':
 	ax1.plot( ets, sc.states[ :, 5 ], 'b', label = r'$v_z$'   )
 	ax1.plot( ets, vnorms           , 'm', label = r'$Norms$' )
 	ax1.grid( linestyle = 'dotted' )
-	ax1.set_xlim( left = 0, right = 30 )
+	ax1.set_xlim( left = 0, right = ets[ -1 ] )
 	ax1.set_ylabel( r'Velocity $(\dfrac{km}{s})$', fontsize = 20 )
 	ax1.legend( loc = 'upper center' )
 
@@ -81,10 +67,13 @@ if __name__ == '__main__':
 	ax2.plot( ets, sc.states[ :, 2 ], 'b', label = r'$r_z$'   )
 	ax2.plot( ets, rnorms,            'm', label = r'$Norms$' )
 	ax2.grid( linestyle = 'dotted' )
-	ax2.set_xlim( left = 0, right = 30 )
+	ax2.set_xlim( left = 0, right = ets[ -1 ] )
 	ax2.set_ylabel( r'Position $(km)$', fontsize = 20 )
 	ax2.set_xlabel( 'Time (hours)' )
 	ax2.legend( loc = 'upper right' )
 
 	plt.tight_layout()
-	plt.show()
+
+	fn = '/mnt/c/Users/alfon/AWP/foom2_ode_solvers/avp_circular_eq.png'
+	plt.savefig( fn, dpi = 300 )
+

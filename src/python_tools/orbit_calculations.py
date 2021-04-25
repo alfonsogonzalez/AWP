@@ -1,6 +1,7 @@
 '''
 AWP | Astrodynamics with Python by Alfonso Gonzalez
 https://github.com/alfonsogonzalez/AWP
+https://www.youtube.com/c/AlfonsoGonzalezSpaceEngineering
 
 Orbit Calculations Library
 '''
@@ -84,4 +85,5 @@ def two_body_ode( t, state, mu = pd.earth[ 'mu' ] ):
 	r = state[ :3 ]
 	a = -mu * r / np.linalg.norm( r ) ** 3
 
-	return [ state[ 3 ], state[ 4 ], state[ 5 ], a[ 0 ], a[ 1 ], a[ 2 ] ]
+	return [ state[ 3 ], state[ 4 ], state[ 5 ],
+			 a[ 0 ], a[ 1 ], a[ 2 ] ]
