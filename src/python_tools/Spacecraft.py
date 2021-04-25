@@ -192,7 +192,6 @@ class Spacecraft:
 
 		while self.solver.successful() and self.step < self.steps:
 			self.solver.integrate( self.solver.t + self.config[ 'dt' ] )
-			self.ets   [ self.step ] = self.solver.t
 			self.states[ self.step ] = self.solver.y
 			self.alts  [ self.step ] = nt.norm( self.solver.y[ :3 ] ) -\
 										self.cb[ 'radius' ]
@@ -223,7 +222,7 @@ class Spacecraft:
 		self.apoapses  = self.coes[ :, 0 ] * ( 1 + self.coes[ :, 1 ] )
 		self.periapses = self.coes[ :, 0 ] * ( 1 - self.coes[ :, 1 ] )
 
-	def plot_3d( self, args ):
+	def plot_3d( self, args = { 'show': True } ):
 		pt.plot_orbits( [ self.states[ :, :3 ] ], args )
 
 	def plot_groundtracks( self, args = { 'show': True } ):
