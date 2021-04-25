@@ -1,4 +1,7 @@
 # AWP - Astrodynamics with Python
+
+![Channel Image](docs/prof_pic_hq.png)
+
 The GitHub repository corresponding to the Orbital Mechanics with Python, Numerical Methods with Python, and Spacecraft Attitude Control with Python video series on YouTube.
 Please direct all questions and comments to the corresponding videos on YouTube.
 
@@ -10,14 +13,14 @@ Please direct all questions and comments to the corresponding videos on YouTube.
 ## Dependencies
 * [Python 3.0+](https://www.python.org/)
 * [Matplotlib](https://matplotlib.org/stable/index.html)
-* [SpiceyPy (SPICE Python Wrapper)](https://spiceypy.readthedocs.io/en/main/)
+* [SpiceyPy (SPICE Pythoqn Wrapper)](https://spiceypy.readthedocs.io/en/main/)
 
 ### Installing Python dependencies
 Python packages can be easily and conviniently installed using `pip` via the command line like so:
 ```sh
 $ python3 -m pip install {package_name}
 ```
-For example, installing SpiceyPy can be done using:
+In the case of AWP, all Python dependencies can be installed in one command using the requirements.txt file as so:
 ```sh
-$ python3 -m pip install spiceypy
+$ python3 -m pip install -r requirements.txt
 ```
