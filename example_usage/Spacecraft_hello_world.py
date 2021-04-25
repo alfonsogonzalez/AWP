@@ -8,9 +8,6 @@ Two-body propagation with J2 perturbation for 100 periods
 '''
 
 # Python standard libraries
-from sys import path
-path.append( '../src/python_tools' )
-
 # AWP libraries
 from Spacecraft import Spacecraft as SC
 from planetary_data import earth
@@ -20,8 +17,8 @@ if __name__ == '__main__':
 	sc   = SC(
 			{
 			'coes'       : coes,
-			'tspan'      : '100',
+			'tspan'      : '1',
 			'dt'         : 100.0,
 			'orbit_perts': { 'J2': True }
 			} )
-	sc.plot_3d( { 'show' : True } )
+	sc.plot_3d()
