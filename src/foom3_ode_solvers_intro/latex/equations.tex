@@ -1,0 +1,37 @@
+\documentclass{article}
+
+\usepackage{amsmath}   %% for \cfrac
+\usepackage{xcolor}    %% for colored text
+\usepackage{pagecolor} %% for dark background
+
+\pagecolor{black}
+\definecolor{magenta}{RGB}{255,0,255}
+\definecolor{cyan}{RGB}{0,255,255}
+\definecolor{white}{RGB}{255,255,255}
+\definecolor{blue}{RGB}{0,0,255}
+\definecolor{green}{RGB}{0,255,0}
+
+\begin{document}
+
+\begin{center}\huge{
+	\color{red}
+	$k_1 = f( t, y )$
+
+	\color{green}
+	$k_2 = f( t + \cfrac{h}{2}, y + k_1\cfrac{h}{2})$
+
+	\color{blue}
+	$k_3 = f( t + \cfrac{h}{2}, y + k_2\cfrac{h}{2})$
+
+	\color{white}
+	$k_4 = f( t + h, y + k_3 h)$
+
+	\color{magenta}
+	$k_{wmean} = \cfrac{1}{6}( k_1 + 2k_2 + 2k_3 + k4)$
+
+	$v_{n+1} = v_{n} + hk_{wmean}$
+
+}
+\end{center}
+
+\end{document}
