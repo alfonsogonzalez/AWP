@@ -8,7 +8,7 @@ Ordinary Differential Equations (ODEs) Solvers Introduction
 
 Acceleration, Velocity subplots
 for Molniya orbit
-Try changing out the orbital parameters!
+Try changing out the orbital parameters and time steps!
 '''
 
 # AWP library
@@ -45,7 +45,10 @@ def rk4_step( f, t, y, h ):
 
 	return y + h / 6.0 * ( k1 + 2 * k2 + 2 * k3 + k4 )
 
-# Molniya orbital elements
+'''
+Molniya orbital elements
+Try changing these elements and seeing how the plots change
+'''
 raan = 30.0
 inc  = 63.4
 aop  = 270.0
