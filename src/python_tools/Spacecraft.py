@@ -93,8 +93,9 @@ class Spacecraft:
 	def assign_stop_condition_functions( self ):
 
 		self.stop_conditions_map = {
-			'max_alt': self.check_max_alt,
-			'min_alt': self.check_min_alt,
+			'max_alt' : self.check_max_alt,
+			'min_alt' : self.check_min_alt,
+			'exit_SOI': self.check_exit_SOI
 			}
 
 		self.stop_condition_functions = [ self.check_deorbit ]
@@ -145,6 +146,13 @@ class Spacecraft:
 		if self.alts[ self.step ] > self.config[ 'stop_conditions' ][ 'min_alt' ]:
 			if self.config[ 'print_stop' ]:
 				self.print_stop_condition( 'min altitude' )
+			return False
+		return True
+
+	def check_exit_SOI( self ):
+		if nt.norm( self.states[ self.step, :3 ] ) > self.cb[ 'SOI' ]:
+			if self.config[ 'print_stop' ]:
+				self.print_stop_condition( 'SOI exit' )
 			return False
 		return True
 
