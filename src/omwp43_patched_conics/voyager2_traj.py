@@ -14,7 +14,6 @@ https://naif.jpl.nasa.gov/pub/naif/VOYAGER/kernels/spk/
 
 # AWP library
 from Spacecraft import Spacecraft as SC
-import orbit_calculations         as oc
 import spice_tools                as st
 import plotting_tools             as pt
 import planetary_data             as pd
@@ -24,7 +23,7 @@ import os
 
 # 3rd party libraries
 import spiceypy as spice
-import numpy    as np
+from numpy import concatenate
 
 FRAME = 'ECLIPJ2000'
 
@@ -131,14 +130,14 @@ if __name__ == '__main__':
 	'''
 	Create a NumPy array with all ephemeris times
 	'''
-	ets = np.concatenate( ( sc0.ets, sc1.ets, sc2.ets, sc3.ets ) )
+	ets = concatenate( ( sc0.ets, sc1.ets, sc2.ets, sc3.ets ) )
 
 	states_earth   = st.calc_ephemeris( 399, ets, FRAME, 0 )[ :, :3 ]
 	states_jupiter = st.calc_ephemeris( 5,   ets, FRAME, 0 )[ :, :3 ]
 	states_saturn  = st.calc_ephemeris( 6,   ets, FRAME, 0 )[ :, :3 ]
 	labels         = [ 'Earth-Centered', 'Heliocentric', 'Jovicentric', 'Heliocentric',
 					   'Earth', 'Jupiter', 'Saturn' ]
-	colors         = [ 'm', 'c', 'lime', 'r', 'b', 'C3', 'C1' ]
+	colors         = [ 'm', 'c', 'm', 'c', 'b', 'C3', 'C1' ]
 
 	# ensure all states are heliocentric
 	rs0 = sc0.states[ :, :3 ] + states_earth[ :sc0.step ]
