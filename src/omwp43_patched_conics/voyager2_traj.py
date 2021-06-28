@@ -34,6 +34,8 @@ if __name__ == '__main__':
 	to the base directory of this repository, you will be able to load all
 	SPICE kernels from any directory. If not, you must run this script from
 	the src/ directory
+	For example, I used the following command to set the AWP variable:
+	$ export AWP=/home/alfonso/pub/AWP
 	'''
 	AWP_path = os.environ.get( 'AWP' )
 	if AWP_path is not None:
@@ -43,7 +45,6 @@ if __name__ == '__main__':
 
 	spice.furnsh( os.path.join( base_dir, 'spice/lsk/naif0012.tls'         ) )
 	spice.furnsh( os.path.join( base_dir, 'spice/spk/de432s-1977-1983.bsp' ) )
-	total_steps = 0
 
 	# beginning of coverage for Voyager 2 SPK kernel
 	et0 = spice.str2et( '1977 AUG 20 15:32:32.182' )
@@ -63,7 +64,6 @@ if __name__ == '__main__':
 		'dt'             : 10000,
 		'stop_conditions': { 'exit_SOI': True }
 	} )
-	total_steps += sc0.ets.shape[ 0 ]
 
 	'''
 	Calculate spacecraft state w.r.t solar system barycenter
@@ -85,7 +85,6 @@ if __name__ == '__main__':
 		'stop_conditions': { 'enter_SOI': pd.jupiter },
 		'cb'             : pd.sun
 	} )
-	total_steps += sc1.ets.shape[ 0 ]
 
 	'''
 	Calculate spacecraft state w.r.t Jupiter
@@ -107,7 +106,6 @@ if __name__ == '__main__':
 		'stop_conditions': { 'exit_SOI': True },
 		'cb'             : pd.jupiter
 	} )
-	total_steps += sc2.ets.shape[ 0 ]
 
 	'''
 	Calculate spacecraft state w.r.t solar system barycenter
@@ -129,29 +127,16 @@ if __name__ == '__main__':
 		'stop_conditions': { 'enter_SOI': pd.saturn },
 		'cb'             : pd.sun
 	} )
-	total_steps += sc3.ets.shape[ 0 ]
 
 	'''
 	Create a NumPy array with all ephemeris times
 	'''
-	ets                  = np.zeros( total_steps )
-	count0               = 0
-	count1               = sc0.step
-	ets[ :count1 ]       = sc0.ets
-	count0              += sc0.step
-	count1              += sc1.step
-	ets[ count0:count1 ] = sc1.ets
-	count0              += sc1.step
-	count1              += sc2.step
-	ets[ count0:count1 ] = sc2.ets
-	count0              += sc2.step
-	count1              += sc3.step
-	ets[ count0:count1 ] = sc3.ets
+	ets = np.concatenate( ( sc0.ets, sc1.ets, sc2.ets, sc3.ets ) )
 
 	states_earth   = st.calc_ephemeris( 399, ets, FRAME, 0 )[ :, :3 ]
 	states_jupiter = st.calc_ephemeris( 5,   ets, FRAME, 0 )[ :, :3 ]
 	states_saturn  = st.calc_ephemeris( 6,   ets, FRAME, 0 )[ :, :3 ]
-	labels         = [ 'SC0', 'SC1', 'SC2', 'SC3',
+	labels         = [ 'Earth-Centered', 'Heliocentric', 'Jovicentric', 'Heliocentric',
 					   'Earth', 'Jupiter', 'Saturn' ]
 	colors         = [ 'm', 'c', 'lime', 'r', 'b', 'C3', 'C1' ]
 
@@ -171,10 +156,13 @@ if __name__ == '__main__':
 		states_saturn 
 		],
 		{
-		'labels'  : labels,
-		'colors'  : colors,
-		'traj_lws': 2,
-		'show'    : True
+		'labels'   : labels,
+		'colors'   : colors,
+		'axes_mag' : 1.0,
+		'traj_lws' : 2,
+		'azimuth'  : -90,
+		'elevation': 94,
+		'show'     : True
 		} )
 
 	'''
