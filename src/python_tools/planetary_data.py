@@ -24,3 +24,37 @@ earth = {
 		'cmap'            : 'Blues',
 		'body_fixed_frame': 'ITRF93'
 		}
+
+jupiter = {
+		'name'            : 'Jupiter',
+		'spice_name'      : 'JUPITER BARYCENTER',
+		'SPICE_ID'        : 5,
+		'mass'            : 1.898e27,
+		'mu'              : 1.26686e8,
+		'radius'          : 71490.0,
+		'sma'             : 778.570e6, # km
+		'deorbit_altitude': 1000.0,    # km
+		'SOI'             : 48.2e6     # km
+}
+
+saturn = {
+	'name'            : 'Saturn',
+	'spice_name'      : 'SATURN BARYCENTER',
+	'SPICE_ID'        : 6,
+	'mass'            : 568.34e24,
+	'radius'          : 58232.0,
+	'mu'              : 37.931e6,
+	'sma'             : 1433.529e6,
+	'deorbit_altitude': 1000.0,
+	'SOI'             : 54890347.727
+}
+
+sun = {
+	'name'            : 'Sun',
+	'SPICE_ID'        : 10,
+	'mass'            : 1.989e30,
+	'mu'              : 1.989e30 * G,
+	'radius'          : 695510.0,
+	'deorbit_altitude': 1.2 * 695510.0,
+	'cmap'            :'gist_heat'
+}
