@@ -153,7 +153,7 @@ class Spacecraft:
 	def check_exit_SOI( self ):
 		if nt.norm( self.states[ self.step, :3 ] ) > self.cb[ 'SOI' ]:
 			if self.config[ 'print_stop' ]:
-				self.print_stop_condition( 'SOI exit' )
+				self.print_stop_condition( '%s SOI exit' % self.cb[ 'name' ] )
 			return False
 		return True
 
@@ -165,7 +165,7 @@ class Spacecraft:
 		r_sc2body = r_cb2body - self.states[ self.step, :3 ]
 
 		if nt.norm( r_sc2body ) < body[ 'SOI' ]:
-			self.print_stop_condition( 'SOI entry to %s' % body[ 'name' ] )
+			self.print_stop_condition( '%s SOI entry' % body[ 'name' ] )
 			return False
 
 		return True
