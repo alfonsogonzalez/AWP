@@ -92,8 +92,10 @@ class Spacecraft:
 	def assign_stop_condition_functions( self ):
 
 		self.stop_conditions_map = {
-			'max_alt': self.check_max_alt,
-			'min_alt': self.check_min_alt,
+			'max_alt'  : self.check_max_alt,
+			'min_alt'  : self.check_min_alt,
+			'exit_SOI' : self.check_exit_SOI,
+			'enter_SOI': self.check_enter_SOI
 			}
 
 		self.stop_condition_functions = [ self.check_deorbit ]
@@ -145,6 +147,26 @@ class Spacecraft:
 			if self.config[ 'print_stop' ]:
 				self.print_stop_condition( 'min altitude' )
 			return False
+		return True
+
+	def check_exit_SOI( self ):
+		if nt.norm( self.states[ self.step, :3 ] ) > self.cb[ 'SOI' ]:
+			if self.config[ 'print_stop' ]:
+				self.print_stop_condition( '%s SOI exit' % self.cb[ 'name' ] )
+			return False
+		return True
+
+	def check_enter_SOI( self ):
+		body      = self.config[ 'stop_conditions' ][ 'enter_SOI' ]
+		r_cb2body = spice.spkgps(
+						body[ 'SPICE_ID' ], self.ets[ self.step ],
+						self.config[ 'frame' ], self.cb[ 'SPICE_ID' ] )[ 0 ]
+		r_sc2body = r_cb2body - self.states[ self.step, :3 ]
+
+		if nt.norm( r_sc2body ) < body[ 'SOI' ]:
+			self.print_stop_condition( '%s SOI entry' % body[ 'name' ] )
+			return False
+
 		return True
 
 	def print_stop_condition( self, parameter ):
