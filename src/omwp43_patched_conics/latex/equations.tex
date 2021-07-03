@@ -1,0 +1,50 @@
+\documentclass{article}
+
+\usepackage{xcolor}    %% for colored text
+\usepackage{pagecolor} %% for dark background
+
+\pagecolor{black}
+\definecolor{magenta}{RGB}{255,0,255}
+\definecolor{cyan}{RGB}{0,255,255}
+\definecolor{white}{RGB}{255,255,255}
+\definecolor{red}{RGB}{255,0,0}
+
+\begin{document}
+
+\color{cyan}
+\begin{center}\huge{
+	$\vec{r}_{sun2sc}$
+}\end{center}
+
+\color{red}
+\begin{center}\huge{
+	$\vec{r}_{sun2jup}$
+}\end{center}
+
+\color{magenta}
+\begin{center}\huge{
+	$\vec{r}_{jup2sc}$
+}\end{center}
+
+
+\begin{center}\huge{
+$
+	\color{magenta} \vec{r}_{jup2sc}
+	\color{white}   =
+	\color{cyan}    \vec{r}_{sun2sc}
+	\color{white}   -
+	\color{red}     \vec{r}_{sun2jup}
+$
+}\end{center}
+
+\begin{center}\huge{
+$
+	\color{cyan}    \vec{r}_{sun2sc}
+	\color{white}   =
+	\color{red}     \vec{r}_{sun2jup}
+	\color{white}   +
+	\color{magenta} \vec{r}_{jup2sc}
+$
+}\end{center}
+
+\end{document}
