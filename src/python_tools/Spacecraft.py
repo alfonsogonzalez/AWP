@@ -64,7 +64,6 @@ class Spacecraft:
 			np.ceil( self.config[ 'tspan' ] / self.config[ 'dt' ] ) + 1 )
 		self.step  = 1
 
-		self.ets    = np.zeros( ( self.steps, 1 ) )
 		self.states = np.zeros( ( self.steps, 7 ) )
 		self.alts   = np.zeros( ( self.steps, 1 ) )
 
