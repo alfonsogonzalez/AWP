@@ -64,7 +64,6 @@ class Spacecraft:
 			np.ceil( self.config[ 'tspan' ] / self.config[ 'dt' ] ) + 1 )
 		self.step  = 1
 
-		self.ets    = np.zeros( ( self.steps, 1 ) )
 		self.states = np.zeros( ( self.steps, 7 ) )
 		self.alts   = np.zeros( ( self.steps, 1 ) )
 
@@ -192,14 +191,12 @@ class Spacecraft:
 
 	def diffy_q( self, et, state ):
 		rx, ry, rz, vx, vy, vz, mass = state
-		r         = np.array( [ rx,   ry,   rz   ] )
-		v         = np.array( [ vx,   vy,   vz   ] )
-		norm_r    = nt.norm( r )
+		r         = np.array( [ rx, ry, rz ] )
 		mass_dot  = 0.0
 		state_dot = np.zeros( 7 )
 		et       += self.et0
 
-		a = -r * self.cb[ 'mu' ] / norm_r ** 3
+		a = -r * self.cb[ 'mu' ] / nt.norm( r ) ** 3
 
 		for pert in self.orbit_perts_funcs:
 			a += pert( et, state )
