@@ -192,7 +192,6 @@ class Spacecraft:
 	def diffy_q( self, et, state ):
 		rx, ry, rz, vx, vy, vz, mass = state
 		r         = np.array( [ rx,   ry,   rz   ] )
-		v         = np.array( [ vx,   vy,   vz   ] )
 		norm_r    = nt.norm( r )
 		mass_dot  = 0.0
 		state_dot = np.zeros( 7 )
