@@ -192,12 +192,11 @@ class Spacecraft:
 	def diffy_q( self, et, state ):
 		rx, ry, rz, vx, vy, vz, mass = state
 		r         = np.array( [ rx,   ry,   rz   ] )
-		norm_r    = nt.norm( r )
 		mass_dot  = 0.0
 		state_dot = np.zeros( 7 )
 		et       += self.et0
 
-		a = -r * self.cb[ 'mu' ] / norm_r ** 3
+		a = -r * self.cb[ 'mu' ] / nt.norm( r ) ** 3
 
 		for pert in self.orbit_perts_funcs:
 			a += pert( et, state )
