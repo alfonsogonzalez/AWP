@@ -65,3 +65,18 @@ $ pwd
 $ python3 example_usage/Spacecraft_hello_world.py
 $ python3 example_usage/many_orbits.py
 ```
+
+## Running Unit Tests
+Again, once dependencies are installed and environment variables set, the unit tests can be run with the following command (from the base path of this repository):
+
+```sh
+# ensure you are in the base path of this repository
+$ pwd
+/home/alfonso/AWP
+# run the unit tests using one of the following commands
+$ pytest src/python_tools/unit_tests/ -vv
+# or
+$ python3 -m pytest src/python_tools/unit_tests/ -vv
+```
+
+The only difference between those two commands is that running `pytest` through the Python interpreter is that `python` [will add your current directory to sys.path](https://docs.pytest.org/en/6.2.x/usage.html#cmdline)
