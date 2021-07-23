@@ -25,3 +25,10 @@ def test_norm_basic_usage():
 def test_normed_zero_division_expect_throw():
 	with pytest.raises( RuntimeWarning ):
 		nt.normed( np.zeros( 3 ) )
+
+def test_frame_transform_same_frame():
+	arr = np.array( [ [ 1.0, 0.0, 0.0 ], [ 1.0, 0.0, 0.0] ] )
+	arr_transformed = nt.frame_transform(
+		arr, [ 0.0, 0.0 ], 'J2000', 'J2000' )
+	assert np.all( arr[ 0, : ] == arr_transformed[ 0, : ] )
+	assert np.all( arr[ 1, : ] == arr_transformed[ 1, : ] )
