@@ -19,6 +19,9 @@ pytestmark = pytest.mark.filterwarnings( 'error' )
 def test_norm_zero_vector():
 	assert nt.norm( [ 0, 0, 0 ] ) == 0.0
 
+def test_norm_basic_usage():
+	assert nt.norm( [ 1.0, 0, 0 ] ) == 1.0
+
 def test_normed_zero_division_expect_throw():
 	with pytest.raises( RuntimeWarning ):
 		nt.normed( np.zeros( 3 ) )
