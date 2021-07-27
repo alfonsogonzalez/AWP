@@ -22,6 +22,9 @@ def test_norm_zero_vector():
 def test_norm_basic_usage():
 	assert nt.norm( [ 1.0, 0, 0 ] ) == 1.0
 
+def test_norm_pythagorean():
+	assert nt.norm( [ 3.0, 4.0 ] ) == 5.0
+
 def test_normed_zero_division_expect_throw():
 	with pytest.raises( RuntimeWarning ):
 		nt.normed( np.zeros( 3 ) )
