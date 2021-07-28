@@ -232,7 +232,7 @@ class Spacecraft:
 
 		for n in range( self.step ):
 			self.coes[ n, : ] = oc.state2coes( 
-				self.states[ n, :6 ], mu = self.cb[ 'mu' ] )
+				self.states[ n, :6 ], { 'mu': self.cb[ 'mu' ] } )
 			
 		self.coes_rel        = self.coes[ : ] - self.coes[ 0, : ]
 		self.coes_calculated = True
