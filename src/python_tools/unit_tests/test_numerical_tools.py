@@ -35,6 +35,12 @@ def test_frame_transform_same_frame():
 		arr, [ 0.0, 0.0 ], 'J2000', 'J2000' )
 	assert np.all( arr == arr_transformed )
 
+def test_fdiff_cs_basic_usage():
+	f  = lambda x, _: x ** 2.0
+	x0 = 3.5
+	dx = 1e-5
+	assert pytest.approx( 7.0, dx ) == nt.fdiff_cs( f, x0, dx )
+
 def test_newton_root_single_basic_usage():
 	f    = lambda x, _: 2.0 * x ** 2 - 2
 	fp   = lambda x, _: 4.0 * x
@@ -46,3 +52,14 @@ def test_newton_root_single_basic_usage():
 
 	assert x0 == pytest.approx( -1.0, abs = tol )
 	assert x1 == pytest.approx(  1.0, abs = tol )
+
+def test_newton_root_single_fd_basic_usage():
+	f    = lambda x, _: 2 * x ** 2 - 2
+	tol  = 1e-15
+	args = { 'tol': tol, 'diff_step': tol }
+
+	x0, _ = nt.newton_root_single_fd( f, -3.0, args )
+	x1, _ = nt.newton_root_single_fd( f,  2.0, args )
+
+	assert x0 == pytest.approx( -1.0, tol )
+	assert x1 == pytest.approx(  1.0, tol )
