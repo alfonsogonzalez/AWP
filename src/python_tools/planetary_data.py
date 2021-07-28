@@ -25,6 +25,20 @@ earth = {
 		'body_fixed_frame': 'ITRF93'
 		}
 
+mars = {
+		'name'            : 'Mars',
+		'spice_name'      : 'MARS BARYCENTER',
+		'SPICE_ID'        : 4,
+		'mass'            : 6.39e23,
+		'mu'              : 4.282837362069909E+04,
+		'radius'          : 3397.0,
+		'sma'             : 227.923e6, # km
+		'SOI'             : 0.578e6,   # km
+		'deorbit_altitude': 50.0,     # km
+		'cmap'            : 'Reds',
+		'body_fixed_frame': 'IAU_MARS'
+		}
+
 jupiter = {
 		'name'            : 'Jupiter',
 		'spice_name'      : 'JUPITER BARYCENTER',
