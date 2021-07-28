@@ -9,8 +9,11 @@ Numerical Tools Library
 import numpy as np
 import spiceypy as spice
 
-r2d = 180.0 / np.pi
-d2r = 1.0  / r2d
+r2d     = 180.0 / np.pi
+d2r     = 1.0  / r2d
+sec2day = 1.0 / 3600.0 / 24.0
+fps2kms = 0.0003048
+mi2km   = 1.60934
 
 frame_transform_dict = {
 	3: spice.pxform,
