@@ -88,3 +88,37 @@ def newton_root_single( f, fp, x0, args = {} ):
 
 	raise RuntimeError(
 		'Newton\'s root solver single variable did not converge.' )
+
+def newton_root_single_fd( f, x0, args = {} ):
+	'''
+	Calculate root of single variable function using
+	finite differences (no explicit derivative function)
+	'''
+	_args = {
+		'tol'        : 1e-10,
+		'max_steps'  : 200,
+		'diff_method': 'central',
+		'diff_step'  : 1e-6
+	}
+	for key in args.keys():
+		_args[ key ] = args[ key ]
+
+	delta_x = f( x0, _args ) /\
+				fdiff_cs( f, x0, _args[ 'diff_step' ], _args )
+
+	for n in range( _args[ 'max_steps' ] ):
+		x0     -= delta_x
+		delta_x = f( x0, _args ) /\
+				  fdiff_cs( f, x0, _args[ 'diff_step' ], _args )
+
+		if abs( delta_x ) < _args[ 'tol' ]:
+			return x0, n
+
+	raise RuntimeError( 'Newton\'s root solver FD single variable did not converge. ')
+
+def fdiff_cs( f, x, dx, args = {} ):
+	'''
+	Calculate central finite difference
+	of single variable, scalar valued function
+	'''
+	return ( f( x + dx, args ) - f( x - dx, args ) ) / ( 2 * dx )
