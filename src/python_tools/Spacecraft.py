@@ -256,4 +256,6 @@ class Spacecraft:
 	def plot_coes( self, args = { 'show': True }, step = 1 ):
 		if not self.coes_calculated:
 			self.calc_coes()
-		pt.plot_coes( self.ets[ ::step ], self.coes[ ::step ], args )
+
+		pt.plot_coes( self.ets[ ::step ], self.coes[ ::step ],
+			args )
