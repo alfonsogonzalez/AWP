@@ -89,3 +89,9 @@ def two_body_ode( t, state, mu = pd.earth[ 'mu' ] ):
 
 	return np.array( [ state[ 3 ], state[ 4 ], state[ 5 ],
 			 a[ 0 ], a[ 1 ], a[ 2 ] ] )
+
+def calc_close_approach( turn_angle, v_inf, mu = pd.sun[ 'mu' ] ):
+	'''
+	Calculate periapsis distance in flyby trajectory
+	'''
+	return mu * ( 1 / math.sin( turn_angle ) - 1 ) / v_inf ** 2
