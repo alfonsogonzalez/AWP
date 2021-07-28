@@ -64,3 +64,27 @@ def inert2latlon( rs, frame_from, frame_to, ets ):
 
 	bf = frame_transform( rs, ets, frame_from, frame_to )
 	return bf2latlon( bf )
+
+def newton_root_single( f, fp, x0, args = {} ):
+	'''
+	Calculate root of single variable function
+	using explicit derivative function
+	'''
+	_args = {
+		'tol'        : 1e-10,
+		'max_steps'  : 50
+	}
+	for key in args.keys():
+		_args[ key ] = args[ key ]
+
+	delta_x = f( x0, args ) / fp( x0, args )
+
+	for n in range( _args[ 'max_steps' ] ):
+		x0     -= delta_x
+		delta_x = f( x0, args ) / fp( x0, args )
+
+		if abs( delta_x ) < _args[ 'tol' ]:
+			return x0, n
+
+	raise RuntimeError(
+		'Newton\'s root solver single variable did not converge.' )
