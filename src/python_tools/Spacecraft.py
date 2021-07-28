@@ -35,6 +35,8 @@ def null_config():
 		'coes'           : [],
 		'orbit_perts'    : {},
 		'propagator'     : 'lsoda',
+		'atol'           : 1e-6,
+		'rtol'           : 1e-6,
 		'stop_conditions': {},
 		'print_stop'     : True,
 		'mass0'          : 0,
@@ -80,8 +82,9 @@ class Spacecraft:
 			os.mkdir( self.config[ 'output_dir' ] )
 
 		self.solver = ode( self.diffy_q )
-		self.solver.set_integrator( self.config[ 'propagator' ] )
 		self.solver.set_initial_value( self.states[ 0, : ], 0 )
+		self.solver.set_integrator( self.config[ 'propagator' ],
+			atol = self.config[ 'atol' ], rtol = self.config[ 'rtol'] )
 
 		self.coes_calculated    = False
 		self.latlons_calculated = False
@@ -253,5 +256,4 @@ class Spacecraft:
 	def plot_coes( self, args = { 'show': True }, step = 1 ):
 		if not self.coes_calculated:
 			self.calc_coes()
-
 		pt.plot_coes( self.ets[ ::step ], self.coes[ ::step ], args )
