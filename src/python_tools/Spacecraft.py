@@ -204,7 +204,7 @@ class Spacecraft:
 		for pert in self.orbit_perts_funcs:
 			a += pert( et, state )
 
-		state_dot[ :3  ] = v
+		state_dot[ :3  ] = [ vx, vy, vz ]
 		state_dot[ 3:6 ] = a
 		state_dot[ 6   ] = mass_dot
 		return state_dot
@@ -257,5 +257,5 @@ class Spacecraft:
 		if not self.coes_calculated:
 			self.calc_coes()
 
-		pt.plot_coes( self.ets[ ::step ], self.coes[ ::step ],
+		pt.plot_coes( self.ets[ ::step ], [ self.coes[ ::step ] ],
 			args )
