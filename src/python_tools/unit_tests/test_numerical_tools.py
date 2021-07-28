@@ -34,3 +34,15 @@ def test_frame_transform_same_frame():
 	arr_transformed = nt.frame_transform(
 		arr, [ 0.0, 0.0 ], 'J2000', 'J2000' )
 	assert np.all( arr == arr_transformed )
+
+def test_newton_root_single_basic_usage():
+	f    = lambda x, _: 2.0 * x ** 2 - 2
+	fp   = lambda x, _: 4.0 * x
+	tol  = 1e-15
+	args = { 'tol': tol }
+
+	x0, _ = nt.newton_root_single( f, fp, -3.0, args )
+	x1, _ = nt.newton_root_single( f, fp,  2.0, args )
+
+	assert x0 == pytest.approx( -1.0, abs = tol )
+	assert x1 == pytest.approx(  1.0, abs = tol )
