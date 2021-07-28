@@ -35,6 +35,8 @@ def null_config():
 		'coes'           : [],
 		'orbit_perts'    : {},
 		'propagator'     : 'lsoda',
+		'atol'           : 1e-6,
+		'rtol'           : 1e-6,
 		'stop_conditions': {},
 		'print_stop'     : True,
 		'mass0'          : 0,
@@ -80,8 +82,9 @@ class Spacecraft:
 			os.mkdir( self.config[ 'output_dir' ] )
 
 		self.solver = ode( self.diffy_q )
-		self.solver.set_integrator( self.config[ 'propagator' ] )
 		self.solver.set_initial_value( self.states[ 0, : ], 0 )
+		self.solver.set_integrator( self.config[ 'propagator' ],
+			atol = self.config[ 'atol' ], rtol = self.config[ 'rtol'] )
 
 		self.coes_calculated    = False
 		self.latlons_calculated = False
@@ -201,7 +204,7 @@ class Spacecraft:
 		for pert in self.orbit_perts_funcs:
 			a += pert( et, state )
 
-		state_dot[ :3  ] = v
+		state_dot[ :3  ] = [ vx, vy, vz ]
 		state_dot[ 3:6 ] = a
 		state_dot[ 6   ] = mass_dot
 		return state_dot
@@ -229,7 +232,7 @@ class Spacecraft:
 
 		for n in range( self.step ):
 			self.coes[ n, : ] = oc.state2coes( 
-				self.states[ n, :6 ], mu = self.cb[ 'mu' ] )
+				self.states[ n, :6 ], { 'mu': self.cb[ 'mu' ] } )
 			
 		self.coes_rel        = self.coes[ : ] - self.coes[ 0, : ]
 		self.coes_calculated = True
@@ -254,4 +257,5 @@ class Spacecraft:
 		if not self.coes_calculated:
 			self.calc_coes()
 
-		pt.plot_coes( self.ets[ ::step ], self.coes[ ::step ], args )
+		pt.plot_coes( self.ets[ ::step ], [ self.coes[ ::step ] ],
+			args )

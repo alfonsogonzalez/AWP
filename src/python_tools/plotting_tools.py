@@ -303,3 +303,99 @@ def plot_orbits( rs, args, vectors = [] ):
 		plt.show()
 
 	plt.close()
+
+def plot_coes( ets, coes, args ):
+	_args = {
+		'figsize'  : ( 18, 9 ),
+		'labels'   : [ '' ] * len( coes ),
+		'lws'      : 1,
+		'color'    : 'm',
+		'grid'     : True,
+		'title'    : 'COEs',
+		'title_fs' : 25,
+		'wspace'   : 0.3,
+		'time_unit': 'seconds',
+		'show'     : False,
+		'filename' : False,
+		'dpi'      : 300,
+		'legend'   : True,
+	}
+	for key in args.keys():
+		_args[ key ] = args[ key ]
+
+	_args[ 'xlabel' ]     = time_handler[ _args[ 'time_unit' ] ][ 'xlabel' ]
+	_args[ 'time_coeff' ] = time_handler[ _args[ 'time_unit' ] ][ 'coeff'  ]
+
+	ts  = ets * _args[ 'time_coeff' ]
+	ts -= ts[ 0 ]
+
+	fig,( ( ax0, ax1, ax2 ),( ax3, ax4, ax5 ) ) = plt.subplots( 2, 3,
+		figsize = _args[ 'figsize' ] )
+	fig.suptitle( _args[ 'title' ], fontsize = _args[ 'title_fs' ] )
+
+	# true anomaly
+	n = 0
+	for coe in coes:
+		ax0.plot( ts, coe[ :, 3 ], _args[ 'color' ],
+		label = _args[ 'labels' ][ n ] )
+		n += 1
+	ax0.set_ylabel( 'True Anomaly $(deg)$' )
+	ax0.grid( linestyle = 'dotted' )
+
+	# semi major axis
+	n = 0
+	for coe in coes:
+		ax3.plot( ts, coe[ :, 0 ], _args[ 'color' ],
+		label = _args[ 'labels' ][ n ] )
+		n += 1
+	ax3.set_ylabel( 'Semi-Major Axis $(km)$' )
+	ax3.set_xlabel( _args[ 'xlabel' ] )
+	ax3.grid( linestyle = 'dotted' )
+
+	# eccentricity
+	n = 0
+	for coe in coes:
+		ax1.plot( ts, coe[ :, 1 ], _args[ 'color' ],
+		label = _args[ 'labels' ][ n ] )
+		n += 1
+	ax1.set_ylabel( 'Eccentricity' )
+	ax1.grid( linestyle = 'dotted' )
+
+	# inclination
+	n = 0
+	for coe in coes:
+		ax4.plot( ts, coe[ :, 2 ], _args[ 'color' ],
+		label = _args[ 'labels' ][ n ] )
+		n += 1
+	ax4.set_ylabel( 'Inclination $(deg)$' )
+	ax4.set_xlabel( _args[ 'xlabel' ] )
+	ax4.grid( linestyle = 'dotted' )
+
+	# argument of periapsis
+	n = 0
+	for coe in coes:
+		ax2.plot( ts, coe[ :, 4 ], _args[ 'color' ],
+		label = _args[ 'labels' ][ n ] )
+		n += 1
+	ax2.set_ylabel( 'Argument of Periapsis $(deg)$' )
+	ax2.grid( linestyle = 'dotted' )
+
+	# right ascension of the ascending node
+	n = 0
+	for coe in coes:
+		ax5.plot( ts, coe[ :, 5 ], _args[ 'color' ],
+		label = _args[ 'labels' ][ n ] )
+		n += 1
+	ax5.set_xlabel( _args[ 'xlabel' ] )
+	ax5.set_ylabel( 'RAAN $(deg)$' )
+	ax5.grid( linestyle = 'dotted' )
+
+	plt.subplots_adjust( wspace = _args[ 'wspace' ] )
+
+	if _args[ 'show' ]:
+		plt.show()
+
+	if _args[ 'filename' ]:
+		plt.savefig( _args[ 'filename' ], dpi = _args[ 'dpi' ] )
+
+	plt.close()

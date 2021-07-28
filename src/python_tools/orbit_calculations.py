@@ -28,6 +28,8 @@ def state2coes( state, args = {} ):
 		'deg'       : True,
 		'print_coes': False
 	}
+	for key in args.keys():
+		_args[ key ] = args[ key ]
 
 	rp,e,i,raan,aop,ma,t0,mu,ta,a,T = spice.oscltx( 
 		state, _args[ 'et' ], _args[ 'mu' ] )
