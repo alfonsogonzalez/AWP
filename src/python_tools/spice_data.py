@@ -28,3 +28,4 @@ else:
 	base_dir = '..'
 
 leapseconds_kernel = os.path.join( base_dir, 'spice/lsk/naif0012.tls' )
+de432              = os.path.join( base_dir, 'spice/spk/de432s.bsp'   )
