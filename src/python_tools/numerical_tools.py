@@ -6,6 +6,8 @@ https://www.youtube.com/c/AlfonsoGonzalezSpaceEngineering
 Numerical Tools Library
 '''
 
+from math import acos
+
 import numpy as np
 import spiceypy as spice
 
@@ -122,3 +124,12 @@ def fdiff_cs( f, x, dx, args = {} ):
 	of single variable, scalar valued function
 	'''
 	return ( f( x + dx, args ) - f( x - dx, args ) ) / ( 2 * dx )
+
+def vecs2angle( v0, v1, deg = True ):
+	'''
+	Calculate angle between 2 vectors
+	'''
+	angle = acos( np.dot( v0, v1 ) / norm( v0 ) / norm( v1 ) )
+	if deg:
+		angle *= r2d
+	return angle

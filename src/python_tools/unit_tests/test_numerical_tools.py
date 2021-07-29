@@ -63,3 +63,16 @@ def test_newton_root_single_fd_basic_usage():
 
 	assert x0 == pytest.approx( -1.0, tol )
 	assert x1 == pytest.approx(  1.0, tol )
+
+def test_vecs2angle_perpendicular():
+	v0    = [ 1, 0, 0 ]
+	v1    = [ 0, 1, 0 ]
+	angle = nt.vecs2angle( v0, v1, deg = False )
+	assert angle == np.pi / 2.0
+
+def test_vecs2angle_45_deg():
+	sqrt2 = np.sqrt( 2.0 )
+	v0    = [ sqrt2, sqrt2,  0 ]
+	v1    = [   0,     1,    0 ]
+	angle = nt.vecs2angle( v0, v1, deg = False )
+	assert angle == np.pi / 4.0
