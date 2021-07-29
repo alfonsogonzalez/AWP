@@ -11,8 +11,9 @@ import numpy as np
 import math
 import spiceypy as spice
 
-# personal libraries
+# AWP library
 import numerical_tools as nt
+import lamberts_tools  as lt
 import planetary_data  as pd
 
 def esc_v( r, mu = pd.earth[ 'mu' ] ):
@@ -95,3 +96,52 @@ def calc_close_approach( turn_angle, v_inf, mu = pd.sun[ 'mu' ] ):
 	Calculate periapsis distance in flyby trajectory
 	'''
 	return mu * ( 1 / math.sin( turn_angle ) - 1 ) / v_inf ** 2
+
+def calc_vinfinity( tof, args ):
+
+	r1_planet1 = spice.spkgps( args[ 'planet1_ID' ],
+		args[ 'et0' ] + tof, args[ 'frame' ], args[ 'center_ID' ] )[ 0 ]
+
+	v0_sc_depart, v1_sc_arrive = lt.lamberts_universal_variables(
+		args[ 'state0_planet0' ][ :3 ], r1_planet1, tof,
+		{ 'mu': args[ 'mu' ], 'tm': args[ 'tm' ] } )
+
+	vinf = nt.norm( v0_sc_depart - args[ 'state0_planet0' ][ 3: ] )
+	return vinf - args[ 'vinf' ]
+
+def vinfinity_match( planet0, planet1, v0_sc, et0, tof0, args = {} ):
+	'''
+	Given an incoming v-infinity vector to planet0, calculate the
+	outgoing v-infinity vector that will arrive at planet1 after
+	time of flight (tof) where the incoming and outgoing v-infinity
+	vectors have equal magnitude
+	'''
+	_args = {
+		'et0'           : et0,
+		'planet1_ID'    : planet1,
+		'frame'         : 'ECLIPJ2000',
+		'center_ID'     : 0,
+		'mu'            : pd.sun[ 'mu' ],
+		'tm'            : 1,
+		'diff_step'     : 1e-3,
+		'tol'           : 1e-4
+	}
+	for key in args.keys():
+		_args[ key ] = args[ key ]
+
+	_args[ 'state0_planet0' ] = spice.spkgeo( planet0, et0,
+		_args[ 'frame' ], _args[ 'center_ID' ] )[ 0 ]
+
+	_args[ 'vinf' ] = nt.norm( v0_sc - _args[ 'state0_planet0' ][ 3: ] )
+
+	tof, steps = nt.newton_root_single_fd(
+		calc_vinfinity, tof0, _args )
+
+	r1_planet1 = spice.spkgps( planet1, et0 + tof,
+		_args[ 'frame' ], _args[ 'center_ID' ] )[ 0 ]
+
+	v0_sc_depart, v1_sc_arrive = lt.lamberts_universal_variables(
+		_args[ 'state0_planet0' ][ :3 ], r1_planet1, tof,
+		{ 'mu': _args[ 'mu' ], 'tm': _args[ 'tm' ] } )
+
+	return tof, v0_sc_depart, v1_sc_arrive
