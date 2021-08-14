@@ -85,6 +85,8 @@ def state2ap( state, mu = pd.earth[ 'mu' ] ):
 	return  ra, rp
 
 def two_body_ode( t, state, mu = pd.earth[ 'mu' ] ):
+	# state = [ rx, ry, rz, vx, vy, vz ]
+
 	r = state[ :3 ]
 	a = -mu * r / np.linalg.norm( r ) ** 3
 
