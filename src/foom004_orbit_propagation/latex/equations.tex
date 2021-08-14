@@ -1,0 +1,58 @@
+\documentclass{article}
+
+\usepackage{amsmath}   %% for \cfrac
+\usepackage{xcolor}    %% for colored text
+\usepackage{pagecolor} %% for dark background
+
+\pagecolor{black}
+\definecolor{magenta}{RGB}{255,0,255}
+\definecolor{cyan}{RGB}{0,255,255}
+\definecolor{white}{RGB}{255,255,255}
+\definecolor{blue}{RGB}{0,0,255}
+\definecolor{green}{RGB}{0,255,0}
+
+\begin{document}
+
+\color{magenta}
+\begin{center}\huge{
+$states=[rx,ry,rz]$
+}
+\end{center}
+
+\begin{center}\huge{
+$states=[rx,ry,rz,vx,vy,vz]$
+}
+\end{center}
+
+\begin{center}\huge{
+$\cfrac{d(states)}{dt}=[vx,vy,vz,ax,ay,az]$
+}
+\end{center}
+
+\begin{center}\huge{
+$s * \cfrac{km}{s^2}=\cfrac{km}{s}$
+}
+\end{center}
+
+\begin{center}\huge{
+\color{red}
+$\vec{a}_1 [\cfrac{km}{s^2}]$
+
+\color{green}
+$\vec{a}_2 [\cfrac{km}{s^2}]$
+
+\color{blue}
+$\vec{a}_3 [\cfrac{km}{s^2}]$
+
+\color{white}
+$\vec{a}_4 [\cfrac{km}{s^2}]$
+
+\color{magenta}
+$\vec{a}_{wmean} [\cfrac{km}{s^2}]$
+
+$h\vec{a}_{wmean}$
+}
+\end{center}
+
+
+\end{document}
