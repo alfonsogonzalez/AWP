@@ -17,9 +17,10 @@ time_handler = {
 }
 
 dist_handler = {
-	'km': 1.0,
-	'ER': 1 / 6378.0,
-	'AU': 6.68459e-9
+	'km'    : 1.0,
+	'ER'    : 1 / 6378.0,
+	'AU'    : 6.68459e-9,
+	r'$\dfrac{km}{s}$': 1.0
 }
 
 COLORS = [ 
@@ -235,8 +236,8 @@ def plot_orbits( rs, args, vectors = [] ):
 			color = vector[ 'color' ], label = vector[ 'label' ] )
 
 		if _args[ 'vector_texts' ]:
-			vector *= _args[ 'vector_text_scale' ]
-			ax.text( vector[ 0 ], vector[ 1 ], vector[ 2 ],
+			vector[ 'r' ] *= _args[ 'vector_text_scale' ]
+			ax.text( vector[ 'r' ][ 0 ], vector[ 'r' ][ 1 ], vector[ 'r' ][ 2 ],
 				vector[ 'label' ],
 				color = vector[ 'color' ] )
 
