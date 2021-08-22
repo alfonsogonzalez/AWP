@@ -90,8 +90,9 @@ def two_body_ode( t, state, mu = pd.earth[ 'mu' ] ):
 	r = state[ :3 ]
 	a = -mu * r / np.linalg.norm( r ) ** 3
 
-	return np.array( [ state[ 3 ], state[ 4 ], state[ 5 ],
-			 a[ 0 ], a[ 1 ], a[ 2 ] ] )
+	return np.array( [
+		state[ 3 ], state[ 4 ], state[ 5 ],
+		    a[ 0 ],     a[ 1 ],     a[ 2 ] ] )
 
 def calc_close_approach( turn_angle, v_inf, mu = pd.sun[ 'mu' ] ):
 	'''
@@ -109,24 +110,24 @@ def calc_vinfinity( tof, args ):
 		{ 'mu': args[ 'mu' ], 'tm': args[ 'tm' ] } )
 
 	vinf = nt.norm( v0_sc_depart - args[ 'state0_planet0' ][ 3: ] )
-	return vinf - args[ 'vinf' ]
+	return args[ 'vinf' ] - vinf
 
 def vinfinity_match( planet0, planet1, v0_sc, et0, tof0, args = {} ):
 	'''
 	Given an incoming v-infinity vector to planet0, calculate the
 	outgoing v-infinity vector that will arrive at planet1 after
 	time of flight (tof) where the incoming and outgoing v-infinity
-	vectors have equal magnitude
+	vectors at planet0 have equal magnitude
 	'''
 	_args = {
-		'et0'           : et0,
-		'planet1_ID'    : planet1,
-		'frame'         : 'ECLIPJ2000',
-		'center_ID'     : 0,
-		'mu'            : pd.sun[ 'mu' ],
-		'tm'            : 1,
-		'diff_step'     : 1e-3,
-		'tol'           : 1e-4
+		'et0'       : et0,
+		'planet1_ID': planet1,
+		'frame'     : 'ECLIPJ2000',
+		'center_ID' : 0,
+		'mu'        : pd.sun[ 'mu' ],
+		'tm'        : 1,
+		'diff_step' : 1e-3,
+		'tol'       : 1e-4
 	}
 	for key in args.keys():
 		_args[ key ] = args[ key ]
