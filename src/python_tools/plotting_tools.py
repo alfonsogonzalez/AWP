@@ -5,6 +5,8 @@ https://github.com/alfonsogonzalez/AWP
 Plotting Tools Library
 '''
 
+from copy import copy
+
 import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use( 'dark_background' )
@@ -19,6 +21,7 @@ time_handler = {
 dist_handler = {
 	'km'    : 1.0,
 	'ER'    : 1 / 6378.0,
+	'JR'    : 1 / 71490.0,
 	'AU'    : 6.68459e-9,
 	r'$\dfrac{km}{s}$': 1.0
 }
@@ -212,16 +215,16 @@ def plot_orbits( rs, args, vectors = [] ):
 	n       = 0
 
 	for r in rs:
-		r = r[ : ] * dist_handler[ _args[ 'dist_unit' ] ]
+		_r = r.copy() * dist_handler[ _args[ 'dist_unit' ] ]
 
-		ax.plot( r[ :, 0 ], r[ :, 1 ], r[ : , 2 ],
+		ax.plot( _r[ :, 0 ], _r[ :, 1 ], _r[ : , 2 ],
 			color = _args[ 'colors' ][ n ], label = _args[ 'labels' ][ n ],
 			zorder = 10, linewidth = _args[ 'traj_lws' ] )
-		ax.plot( [ r[ 0, 0 ] ], [ r[ 0 , 1 ] ], [ r[ 0, 2 ] ], 'o',
+		ax.plot( [ _r[ 0, 0 ] ], [ _r[ 0 , 1 ] ], [ _r[ 0, 2 ] ], 'o',
 			color = _args[ 'colors' ][ n ] )
 
 		if _args[ 'groundtracks' ]:
-			rg  = r[ : ] / np.linalg.norm( r, axis = 1 ).reshape( ( r.shape[ 0 ], 1 ) )
+			rg  = _r / np.linalg.norm( r, axis = 1 ).reshape( ( r.shape[ 0 ], 1 ) )
 			rg *= _args[ 'cb_radius' ]
 
 			ax.plot( rg[ :, 0 ], rg[ :, 1 ], rg[ :, 2 ], cs[ n ], zorder = 10 )
@@ -295,6 +298,179 @@ def plot_orbits( rs, args, vectors = [] ):
 
 	if _args[ 'legend' ]:
 		plt.legend()
+
+	if _args[ 'filename' ]:
+		plt.savefig( _args[ 'filename' ], dpi = _args[ 'dpi' ] )
+		print( 'Saved', _args[ 'filename' ] )
+
+	if _args[ 'show' ]:
+		plt.show()
+
+	plt.close()
+
+def plot_states( ets, states, args ):
+	_args = {
+		'figsize'      : ( 16, 8 ),
+		'colors'       : COLORS[ : ],
+		'dist_unit'    : 'km',
+		'time_unit'    : 'seconds',
+		'lw'           : 2.5,
+		'r_hlines'     : [],
+		'v_hlines'     : [],
+		'hline_lstyles': 'dashed',
+		'title'        : 'Trajectories',
+		'xlim'         : None,
+		'r_ylim'       : None,
+		'v_ylim'       : None,
+		'legend'       : True,
+		'show'         : False,
+		'filename'     : False,
+		'dpi'          : 300,
+	}
+	for key in args.keys():
+		_args[ key ] = args[ key ]
+
+	fig, ( ax0, ax1 ) = plt.subplots( 2, 1,
+		figsize = _args[ 'figsize' ] )
+
+	_args[ 'xlabel' ]     = time_handler[ _args[ 'time_unit' ] ][ 'xlabel' ]
+	_args[ 'time_coeff' ] = time_handler[ _args[ 'time_unit' ] ][ 'coeff' ]
+	ts     = ets[:] - ets[0]
+	ts    /= _args[ 'time_coeff' ]
+	rnorms = np.linalg.norm( states[ :, :3 ], axis = 1 )
+	vnorms = np.linalg.norm( states[ :, 3: ], axis = 1 )
+
+	if _args[ 'xlim' ] is None:
+		_args[ 'xlim' ] = [ 0, ts[ -1 ] ]
+
+	if _args[ 'r_ylim' ] is None:
+		_args[ 'r_ylim' ] = [ states[ :, :3 ].min(), rnorms.max() ]
+
+	if _args[ 'v_ylim' ] is None:
+		_args[ 'v_ylim' ] = [ states[ :, 3: ].min(), vnorms.max() ]
+
+	''' Positions '''
+	ax0.plot( ts, states[ :, 0 ], 'r', label = r'$r_x$',
+		linewidth = _args[ 'lw' ] )
+	ax0.plot( ts, states[ :, 1 ], 'g', label = r'$r_y$',
+		linewidth = _args[ 'lw' ] )
+	ax0.plot( ts, states[ :, 2 ], 'b', label = r'$r_z$',
+		linewidth = _args[ 'lw' ] )
+	ax0.plot( ts, rnorms        , 'm', label = r'$Norms$',
+		linewidth = _args[ 'lw' ] )
+
+	ax0.grid( linestyle = 'dotted' )
+	ax0.set_xlim( _args[ 'xlim'   ] )
+	ax0.set_ylim( _args[ 'r_ylim' ] )
+	ax0.set_ylabel( r'Position $(km)$')
+
+	for hline in _args[ 'r_hlines' ]:
+		ax0.hlines( hline[ 'val' ], ts[ 0 ], ts[ -1 ],
+			color     = hline[ 'color' ],
+			linestyle = _args[ 'hline_lstyles' ] )
+
+	''' Velocities '''
+	ax1.plot( ts, states[ :, 3 ], 'r', label = r'$r_x$',
+		linewidth = _args[ 'lw' ] )
+	ax1.plot( ts, states[ :, 4 ], 'g', label = r'$r_y$',
+		linewidth = _args[ 'lw' ] )
+	ax1.plot( ts, states[ :, 5 ], 'b', label = r'$r_z$',
+		linewidth = _args[ 'lw' ] )
+	ax1.plot( ts, vnorms        , 'm', label = r'$Norms$',
+		linewidth = _args[ 'lw' ] )
+
+	ax1.grid( linestyle = 'dotted' )
+	ax1.set_xlim( _args[ 'xlim'   ] )
+	ax1.set_ylim( _args[ 'v_ylim' ] )
+	ax1.set_ylabel( r'Velocity $(\dfrac{km}{s})$' )
+	ax1.set_xlabel( _args[ 'xlabel' ] )
+
+	for hline in _args[ 'v_hlines' ]:
+		ax1.hlines( hline[ 'val' ], ts[ 0 ], ts[ -1 ],
+			color     = hline[ 'color' ],
+			linestyle = _args[ 'hline_lstyles' ] )
+
+	plt.suptitle( _args[ 'title' ] )
+	plt.tight_layout()
+
+	if _args[ 'legend' ]:
+		ax0.legend()
+		ax1.legend()
+
+	if _args[ 'filename' ]:
+		plt.savefig( _args[ 'filename' ], dpi = _args[ 'dpi' ] )
+		print( 'Saved', _args[ 'filename' ] )
+
+	if _args[ 'show' ]:
+		plt.show()
+
+	plt.close()
+
+def plot_velocities( ets, vs, args ):
+	_args = {
+		'figsize'          : ( 16, 8 ),
+		'dist_unit'        : 'km',
+		'time_unit'        : 'seconds',
+		'hlines'           : [],
+		'hline_lstyles'    : 'dotted',
+		'lw'               : 2,
+		'labelsize'        : 15,
+		'legend_fontsize'  : 20,
+		'legend_framealpha': 0.3,
+		'title'            : 'Trajectories',
+		'xlim'             : None,
+		'ylim'             : None,
+		'legend'           : True,
+		'show'             : False,
+		'filename'         : False,
+		'dpi'              : 300,
+	}
+	for key in args.keys():
+		_args[ key ] = args[ key ]
+
+	fig, ax0 = plt.subplots( 1, 1, figsize = _args[ 'figsize' ] )
+
+	_args[ 'xlabel' ] = time_handler[ _args[ 'time_unit' ] ][ 'xlabel' ]
+	time_coeff        = time_handler[ _args[ 'time_unit' ] ][ 'coeff'  ]
+
+	_ets   = ets.copy() - ets[ 0 ]
+	_ets  /= time_coeff
+	vnorms = np.linalg.norm( vs, axis = 1 )
+
+	if _args[ 'xlim' ] is None:
+		_args[ 'xlim' ] = [ 0, _ets[ -1 ] ]
+
+	if _args[ 'ylim' ] is None:
+		_args[ 'ylim' ] = [ vs.min(), vnorms.max() ]
+
+	ax0.plot( _ets, vs[ :, 0 ], 'r', label = r'$v_x$',
+		linewidth = _args[ 'lw' ] )
+	ax0.plot( _ets, vs[ :, 1 ], 'g', label = r'$v_y$',
+		linewidth = _args[ 'lw' ] )
+	ax0.plot( _ets, vs[ :, 2 ], 'b', label = r'$v_z$',
+		linewidth = _args[ 'lw' ]  )
+	ax0.plot( _ets, vnorms    , 'm', label = r'$Norms$',
+		linewidth = _args[ 'lw' ] )
+
+	ax0.grid( linestyle = 'dotted' )
+	ax0.set_xlim( _args[ 'xlim'   ] )
+	ax0.set_ylim( _args[ 'ylim' ] )
+	ax0.set_xlabel( _args[ 'xlabel' ], size = _args[ 'labelsize' ] )
+	ax0.set_ylabel( r'Velocity $(\dfrac{km}{s})$',
+		size = _args[ 'labelsize' ] )
+
+	for hline in _args[ 'hlines' ]:
+		ax0.hlines( hline[ 'val' ], _ets[ 0 ], _ets[ -1 ],
+			color     = hline[ 'color' ],
+			linewidth = _args[ 'lw' ],
+			linestyle = _args[ 'hline_lstyles' ] )
+
+	plt.suptitle( _args[ 'title' ] )
+	plt.tight_layout()
+
+	if _args[ 'legend' ]:
+		ax0.legend( fontsize = _args[ 'legend_fontsize' ],
+			loc = 'upper right', framealpha = _args[ 'legend_framealpha' ] )
 
 	if _args[ 'filename' ]:
 		plt.savefig( _args[ 'filename' ], dpi = _args[ 'dpi' ] )
