@@ -6,7 +6,7 @@ https://www.youtube.com/c/AlfonsoGonzalezSpaceEngineering
 Numerical Tools Library
 '''
 
-from math import acos
+import math
 
 import numpy as np
 import spiceypy as spice
@@ -27,6 +27,16 @@ def norm( v ):
 
 def normed( v ):
 	return v / np.linalg.norm( v )
+
+def Cz( a ):
+	'''
+	Principal Z axis active rotation matrix by an angle
+	'''
+	return np.array( [ 
+		[ math.cos( a ), -math.sin( a ), 0 ],
+		[ math.sin( a ),  math.cos( a ), 0 ],
+		[        0,             0,       1 ]
+	] )
 
 def frame_transform( arr, ets, frame_from, frame_to ):
 	'''
@@ -116,7 +126,7 @@ def newton_root_single_fd( f, x0, args = {} ):
 		if abs( delta_x ) < _args[ 'tol' ]:
 			return x0, n
 
-	raise RuntimeError( 'Newton\'s root solver FD single variable did not converge. ')
+	raise RuntimeError( 'Newton\'s root solver FD single variable did not converge.' )
 
 def fdiff_cs( f, x, dx, args = {} ):
 	'''
@@ -129,7 +139,7 @@ def vecs2angle( v0, v1, deg = True ):
 	'''
 	Calculate angle between 2 vectors
 	'''
-	angle = acos( np.dot( v0, v1 ) / norm( v0 ) / norm( v1 ) )
+	angle = math.acos( np.dot( v0, v1 ) / norm( v0 ) / norm( v1 ) )
 	if deg:
 		angle *= r2d
 	return angle

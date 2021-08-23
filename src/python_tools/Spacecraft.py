@@ -259,3 +259,6 @@ class Spacecraft:
 
 		pt.plot_coes( self.ets[ ::step ], [ self.coes[ ::step ] ],
 			args )
+
+	def plot_states( self, args = { 'show': True } ):
+		pt.plot_states( self.ets, self.states[ :, :6 ], args )
