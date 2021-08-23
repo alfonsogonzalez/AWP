@@ -230,7 +230,7 @@ def plot_orbits( rs, args, vectors = [] ):
 			ax.plot( rg[ :, 0 ], rg[ :, 1 ], rg[ :, 2 ], cs[ n ], zorder = 10 )
 			ax.plot( [ rg[ 0, 0 ] ], [ rg[ 0, 1 ] ], [ rg[ 0, 2 ] ], cs[ n ] + 'o', zorder = 10 )			
 
-		max_val = max( [ r.max(), max_val ] )
+		max_val = max( [ _r.max(), max_val ] )
 		n += 1
 
 	for vector in vectors:
