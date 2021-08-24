@@ -1,0 +1,20 @@
+{
+	"version"     : "1.0",
+	"name"        : "Gravity Assist Spacecraft SPICE Catalog",
+	"spiceKernels": [
+		"..\\..\\..\\spice\\spk\\de432s.bsp",
+		"..\\voyager_1.ST+1991_a54418u.merged.bsp",
+		"..\\Voyager_2.m05016u.merged.bsp",
+		"cassini_earth_to_jupiter.bsp",
+		"cassini_launch_to_venus1.bsp",
+		"cassini_venus1_to_venus2.bsp",
+		"cassini_venus2_to_earth.bsp",
+		"nh_pred_od077.bsp",
+		"rosetta0.bsp",
+		"rosetta1.bsp",
+		"rosetta2.bsp",
+		"rosetta3.bsp",
+		"rosetta4.bsp",
+		"spk_orx_160908_231024_pgaa2_day06m60_v3.bsp"
+	]
+}

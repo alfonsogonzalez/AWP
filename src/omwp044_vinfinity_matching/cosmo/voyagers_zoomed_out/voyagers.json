@@ -1,0 +1,54 @@
+{
+	"version": "1.0",
+	"name"   : "Voyagers Spacecraft Catalog",
+	"items"  : [
+		{
+			"class"     : "spacecraft",
+			"name"      : "Voyager 1",
+			"startTime" : "1977-09-06 TDB",
+			"center"    : "Sun",
+			"trajectoryFrame": {
+				"type": "Spice",
+				"name": "J2000"
+			},
+			"trajectory": {
+				"type"  : "Spice",
+				"target": "-31",
+				"center": "Sun",
+				"frame" : "J2000"
+			},
+			"label"          : { "color": [ 0, 1, 1 ] },
+			"trajectoryPlot" : {
+				"color"      : [ 0, 1, 1 ],
+				"fade"       : 1,
+				"lineWidth"  : 5,
+				"sampleCount": 500,
+				"duration"   : "10 y",
+				"lead"       : "1 h" }
+		},
+		{
+			"class"     : "spacecraft",
+			"name"      : "Voyager 2",
+			"startTime" : "1977-08-21 TDB",
+			"center"    : "Sun",
+			"trajectoryFrame": {
+				"type": "Spice",
+				"name": "J2000"
+			},
+			"trajectory": {
+				"type"  : "Spice",
+				"target": "-32",
+				"center": "Sun",
+				"frame" : "J2000"
+			},
+			"label"          : { "color": [ 1, 0, 1 ] },
+			"trajectoryPlot" : {
+				"color"      : [ 1, 0, 1 ],
+				"fade"       : 1,
+				"lineWidth"  : 5,
+				"sampleCount": 500,
+				"duration"   : "10 y",
+				"lead"       : "1 h" }
+		}
+	]
+}
