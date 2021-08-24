@@ -1,0 +1,9 @@
+{
+	"version"     : "1.0",
+	"name"        : "Voyagers SPICE Catalog",
+	"spiceKernels": [
+		"..\\..\\..\\spice\\spk\\de432s.bsp",
+		"..\\voyager_1.ST+1991_a54418u.merged.bsp",
+		"..\\Voyager_2.m05016u.merged.bsp"
+	]
+}
