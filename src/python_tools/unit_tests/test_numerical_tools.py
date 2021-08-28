@@ -30,9 +30,9 @@ def test_normed_zero_division_expect_throw():
 		nt.normed( np.zeros( 3 ) )
 
 def test_frame_transform_same_frame():
-	arr = np.array( [ [ 1.0, 0.0, 0.0 ], [ 1.0, 0.0, 0.0] ] )
+	arr = np.array( [ [ 1.0, 0.0, 0.0 ], [ 1.0, 0.0, 0.0 ] ] )
 	arr_transformed = nt.frame_transform(
-		arr, [ 0.0, 0.0 ], 'J2000', 'J2000' )
+		arr, 'J2000', 'J2000', [ 0.0, 0.0 ] )
 	assert np.all( arr == arr_transformed )
 
 def test_fdiff_cs_basic_usage():
