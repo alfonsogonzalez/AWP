@@ -27,5 +27,5 @@ if AWP_path is not None:
 else:
 	base_dir = '..'
 
-leapseconds_kernel = os.path.join( base_dir, 'spice/lsk/naif0012.tls' )
-de432              = os.path.join( base_dir, 'spice/spk/de432s.bsp'   )
+leapseconds_kernel = os.path.join( base_dir, 'data/spice/lsk/naif0012.tls' )
+de432              = os.path.join( base_dir, 'data/spice/spk/de432s.bsp'   )

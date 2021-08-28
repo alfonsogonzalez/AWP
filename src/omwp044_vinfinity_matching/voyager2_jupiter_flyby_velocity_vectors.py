@@ -26,8 +26,8 @@ import plotting_tools as pt
 
 if __name__ == '__main__':
 
-	spice.furnsh( '../../spice/lsk/naif0012.tls' )
-	spice.furnsh( '../../spice/spk/de432s.bsp'   )
+	spice.furnsh( '../../data/spice/lsk/naif0012.tls' )
+	spice.furnsh( '../../data/spice/spk/de432s.bsp'   )
 	spice.furnsh( 'voyager2_jupiter_flyby.bsp'   )
 	
 	et  = spice.str2et( '1979-07-09 TDB' )

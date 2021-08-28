@@ -42,8 +42,8 @@ if __name__ == '__main__':
 	else:
 		base_dir = '..'
 
-	spice.furnsh( os.path.join( base_dir, 'spice/lsk/naif0012.tls'         ) )
-	spice.furnsh( os.path.join( base_dir, 'spice/spk/de432s-1977-1983.bsp' ) )
+	spice.furnsh( os.path.join( base_dir, 'data/spice/lsk/naif0012.tls'         ) )
+	spice.furnsh( os.path.join( base_dir, 'data/spice/spk/de432s-1977-1983.bsp' ) )
 
 	# beginning of coverage for Voyager 2 SPK kernel
 	et0 = spice.str2et( '1977 AUG 20 15:32:32.182' )
