@@ -246,7 +246,7 @@ class Spacecraft:
 
 	def calc_latlons( self ):
 		self.latlons = nt.cart2lat( self.states[ :, :3 ],
-			self.config[ 'frame' ], 'IAU_EARTH', self.ets )
+			self.config[ 'frame' ], self.cb[ 'body_fixed_frame' ], self.ets )
 		self.latlons_calculated = True
 
 	def plot_3d( self, args = { 'show': True } ):
