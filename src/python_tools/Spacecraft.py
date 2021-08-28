@@ -244,6 +244,11 @@ class Spacecraft:
 		self.apoapses  = self.coes[ :, 0 ] * ( 1 + self.coes[ :, 1 ] )
 		self.periapses = self.coes[ :, 0 ] * ( 1 - self.coes[ :, 1 ] )
 
+	def calc_latlons( self ):
+		self.latlons = nt.cart2lat( self.states[ :, :3 ],
+			self.config[ 'frame' ], self.cb[ 'body_fixed_frame' ], self.ets )
+		self.latlons_calculated = True
+
 	def plot_3d( self, args = { 'show': True } ):
 		pt.plot_orbits( [ self.states[ :, :3 ] ], args )
 
@@ -251,7 +256,7 @@ class Spacecraft:
 		if not self.latlons_calculated:
 			self.calc_latlons()
 
-		pt.plot_groundtracks( [ self.latlons[ : ] ], args )
+		pt.plot_groundtracks( [ self.latlons ], args )
 
 	def plot_coes( self, args = { 'show': True }, step = 1 ):
 		if not self.coes_calculated:

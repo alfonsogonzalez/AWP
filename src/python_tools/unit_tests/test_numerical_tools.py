@@ -30,9 +30,9 @@ def test_normed_zero_division_expect_throw():
 		nt.normed( np.zeros( 3 ) )
 
 def test_frame_transform_same_frame():
-	arr = np.array( [ [ 1.0, 0.0, 0.0 ], [ 1.0, 0.0, 0.0] ] )
+	arr = np.array( [ [ 1.0, 0.0, 0.0 ], [ 1.0, 0.0, 0.0 ] ] )
 	arr_transformed = nt.frame_transform(
-		arr, [ 0.0, 0.0 ], 'J2000', 'J2000' )
+		arr, 'J2000', 'J2000', [ 0.0, 0.0 ] )
 	assert np.all( arr == arr_transformed )
 
 def test_fdiff_cs_basic_usage():
@@ -76,3 +76,10 @@ def test_vecs2angle_45_deg():
 	v1    = [   0,     1,    0 ]
 	angle = nt.vecs2angle( v0, v1, deg = False )
 	assert angle == np.pi / 4.0
+
+def test_frame_transform_invalid_dim_expect_throw():
+	arr0 = np.zeros( ( 3, 7 ) )
+	arr1 = np.zeros( ( 3, 2 ) )
+	with pytest.raises( KeyError ):
+		nt.frame_transform( arr0, 'J2000', 'IAU_EARTH', [] )
+		nt.frame_transform( arr1, 'J2000', 'IAU_EARTH', [] )

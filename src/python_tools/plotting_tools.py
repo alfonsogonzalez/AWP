@@ -6,10 +6,13 @@ Plotting Tools Library
 '''
 
 from copy import copy
+import os
 
 import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use( 'dark_background' )
+
+import cities_lat_long
 
 time_handler = {
 	'seconds': { 'coeff': 1.0,        'xlabel': 'Time (seconds)' },
@@ -28,6 +31,15 @@ dist_handler = {
 
 COLORS = [ 
 	'm', 'deeppink', 'chartreuse', 'w', 'springgreen', 'peachpuff',
+	'white', 'lightpink', 'royalblue', 'lime', 'aqua' ] * 100
+
+COASTLINES_COORDINATES_FILE = os.path.join(
+	os.path.dirname( os.path.realpath( __file__ ) ),
+	os.path.join( '..', '..', 'data', 'earth_data', 'coastlines.csv' )
+	)
+
+CITY_COLORS = [ 
+	'w', 'deeppink', 'chartreuse', 'magenta', 'springgreen', 'peachpuff',
 	'white', 'lightpink', 'royalblue', 'lime', 'aqua' ] * 100
 
 def plot_reference_frames( frames, args, vectors = [], plots = [], planes = [] ):
@@ -576,3 +588,83 @@ def plot_coes( ets, coes, args ):
 		plt.savefig( _args[ 'filename' ], dpi = _args[ 'dpi' ] )
 
 	plt.close()
+
+def plot_groundtracks( coords, args ):
+	_args = {
+		'figsize'    : ( 18, 9 ),
+		'markersize' : 1,
+		'labels'     : [ '' ] * len( coords ),
+		'city_names' : cities_lat_long.city_list0,
+		'colors'     : [ 'c', 'r', 'b', 'g', 'w', 'y' ],
+		'grid'       : True,
+		'title'      : 'Groundtracks',
+		'show'       : False,
+		'filename'   : False,
+		'dpi'        : 300,
+		'city_colors': CITY_COLORS[ : ],
+		'city_msize' : 3,
+		'city_fsize' : 10,
+		'legend'     : True,
+		'plot_coastlines': True
+	}
+	for key in args.keys():
+		_args[ key ] = args[ key ]
+
+	plt.figure( figsize = _args[ 'figsize' ] )	
+
+	if _args[ 'plot_coastlines' ]:
+		coast_coords = np.genfromtxt( COASTLINES_COORDINATES_FILE,
+			delimiter = ',' )
+
+		plt.plot( coast_coords[ :, 0 ], coast_coords[ :, 1 ], 'mo',
+			markersize = 0.3 )
+
+	for n in range( len( coords ) ):
+		plt.plot( [ coords[ n ][ 0, 1 ] ], [ coords[ n ][ 0, 2 ] ], 'o',
+			color = _args[ 'colors' ][ n ], 
+			label = _args[ 'labels' ][ n ] )
+		plt.plot( coords[ n ][ 1:, 1 ], coords[ n ][ 1:, 2 ], 'o',
+			color = _args[ 'colors' ][ n ],
+			markersize = _args[ 'markersize' ] )
+
+	# TODO save this as a .json
+	cities = cities_lat_long.city_dict()
+	n      = 0
+
+	for city in _args[ 'city_names' ]:
+		coords = cities[ city ]
+		plt.plot( [ coords[ 1 ] ], [ coords[ 0 ] ], 'o',
+			color      = _args[ 'city_colors' ][ n ],
+			markersize = _args[ 'city_msize' ] )
+
+		if n % 2 == 0:
+			xytext = ( 0, 2 )
+		else:
+			xytext = ( 0, -8 )
+
+		plt.annotate( city, [ coords[ 1 ], coords[ 0 ] ],
+					  textcoords = 'offset points', xytext = xytext,
+					  ha = 'center', color = _args[ 'city_colors' ][ n ],
+					  fontsize = _args[ 'city_fsize' ]
+					)
+		n += 1
+
+	plt.xlim( [ -180, 180 ] )
+	plt.ylim( [ -90, 90 ] )
+	plt.xticks( range( -180, 200, 20 ) )
+	plt.yticks( range( -90, 100, 10 ) )
+	plt.xlabel( r'Longitude (degrees $^\circ$)' )
+	plt.ylabel( r'Latitude (degrees $^\circ$)' )
+	plt.tight_layout()
+
+	if _args[ 'legend' ]:
+		plt.legend()
+
+	if _args[ 'grid' ]:
+		plt.grid( linestyle = 'dotted' )
+
+	if _args[ 'show' ]:
+		plt.show()
+
+	if _args[ 'filename' ]:
+		plt.savefig( _args[ 'filename' ], dpi = _args[ 'dpi' ] )

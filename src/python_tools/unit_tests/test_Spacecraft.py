@@ -8,11 +8,13 @@ Spacecraft Class Unit Tests
 
 # 3rd party libraries
 import pytest
-import numpy as np
+import numpy    as np
+import spiceypy as spice
 
 # AWP library
 from Spacecraft import Spacecraft as SC
 import planetary_data             as pd
+import spice_data                 as sd
 
 # Treat all warnings as errors
 pytestmark = pytest.mark.filterwarnings( 'error' )
@@ -59,5 +61,31 @@ def test_Spacecraft_basic_propagation( plot = False ):
 	if plot:
 		sc.plot_coes()
 
+def test_Spacecraft_inclination_latitude( plot = False ):
+	spice.furnsh( sd.pck00010 )
+
+	sc = SC( {
+		'coes' : [ pd.earth[ 'radius' ] + 1000.0, 0.01, 50.0, 0.0, 0.0, 0.0 ],
+		'tspan': '3',
+		'dt'   : 10.0,
+		'rtol' : 1e-8
+		} )
+	assert sc.cb == pd.earth
+
+	'''
+	Given that this spacecraft has 50 degrees inclination,
+	the latitude coordinates should remain in between
+	-50 and 50 degrees, since inclination is defined as
+	the angle between the orbital plane and Earth's
+	equatorial plane
+	'''
+	sc.calc_latlons()
+	assert np.all( sc.latlons[ :, 2 ] <=  50.0 ) and\
+		   np.all( sc.latlons[ :, 2 ] >= -50.0 )
+
+	if plot:
+		sc.plot_groundtracks()
+
 if __name__ == '__main__':
-	test_Spacecraft_basic_propagation()
+	test_Spacecraft_basic_propagation( plot = True )
+	test_Spacecraft_inclination_latitude( plot = True )

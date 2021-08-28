@@ -37,7 +37,7 @@ earth = {
 		'SOI'             : 926006.6608, # km
 		'deorbit_altitude': 100.0, # km
 		'cmap'            : 'Blues',
-		'body_fixed_frame': 'ITRF93',
+		'body_fixed_frame': 'IAU_EARTH',
 		'traj_color'      : 'b'
 		}
 
