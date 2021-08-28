@@ -8,7 +8,7 @@ Numerical Tools Library
 
 import math
 
-import numpy as np
+import numpy    as np
 import spiceypy as spice
 
 r2d     = 180.0 / np.pi
@@ -143,3 +143,42 @@ def vecs2angle( v0, v1, deg = True ):
 	if deg:
 		angle *= r2d
 	return angle
+
+def frame_transform( arr, frame_from, frame_to, ets ):
+	'''
+	Calculate length 3 or 6 vectors from
+	"frame_from" frame to "frame_to" frame using SPICE
+	'''
+	transformed = np.zeros( arr.shape )
+	func        = frame_transform_dict[ arr.shape[ 1 ] ]
+
+	for step in range( arr.shape[ 0 ] ):
+		matrix = func( frame_from, frame_to, ets[ step ] )
+		transformed[ step ] = np.dot( matrix, arr[ step ] )
+	
+	return transformed
+
+def cart2lat( rs, frame_from = None, frame_to = None, ets = None, deg = True ):
+	'''
+	Calculate latitudinal coordinates given cartesian coordinates
+	optionally calculating cartesian coordinates in new frame
+	before coordinate conversion
+	'''
+	if frame_from is not None and frame_from != frame_to:
+		rs = frame_transform( rs, frame_from, frame_to, ets )
+
+	steps   = rs.shape[ 0 ]
+	latlons = np.zeros( ( steps, 3 ) )
+
+	for step in range( steps ):
+		'''
+		Note: spice.reclat function returns latitudinal
+		coordinates in the following order:
+		radial, longitude, latitude
+		'''
+		latlons[ step ] = spice.reclat( rs[ step ] )
+
+	if deg:
+		latlons[ :, 1: ] *= r2d
+
+	return latlons
