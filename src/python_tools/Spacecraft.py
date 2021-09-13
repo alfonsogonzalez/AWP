@@ -11,11 +11,11 @@ import os
 import math as m
 
 # 3rd party libraries
-import numpy as np
+from scipy.integrate import solve_ivp
+import spiceypy          as spice
+import numpy             as np
 import matplotlib.pyplot as plt
 plt.style.use( 'dark_background' )
-from scipy.integrate import ode
-import spiceypy as spice
 
 # AWP libraries
 import orbit_calculations as oc
@@ -30,15 +30,15 @@ def null_config():
 		'date0'          : '2021-04-01',
 		'et0'            : None,
 		'frame'          : 'J2000',
-		'dt'             : 100,
 		'orbit_state'    : [],
 		'coes'           : [],
 		'orbit_perts'    : {},
-		'propagator'     : 'lsoda',
+		'propagator'     : 'LSODA',
 		'atol'           : 1e-6,
 		'rtol'           : 1e-6,
 		'stop_conditions': {},
 		'print_stop'     : True,
+		'dense_output'   : False,
 		'mass0'          : 0,
 		'output_dir'     : '.',
 		'propagate'      : True
@@ -62,50 +62,57 @@ class Spacecraft:
 			self.config[ 'tspan' ] = float( self.config[ 'tspan'] ) *\
 				oc.state2period( self.config[ 'orbit_state' ], self.cb[ 'mu' ] )
 
-		self.steps = int( 
-			np.ceil( self.config[ 'tspan' ] / self.config[ 'dt' ] ) + 1 )
-		self.step  = 1
+		self.state0       = np.zeros( 7 )
+		self.state0[ :6 ] = self.config[ 'orbit_state' ]
+		self.state0[  6 ] = self.config[ 'mass0' ]
 
-		self.states = np.zeros( ( self.steps, 7 ) )
-		self.alts   = np.zeros( ( self.steps, 1 ) )
-
-		self.states[ 0, :6 ] = self.config[ 'orbit_state' ]
-		self.states[ 0, 6  ] = self.config[ 'mass0'  ]
-		self.alts  [ 0 ]     = nt.norm( self.states[ 0, :3 ] ) -\
-									self.cb[ 'radius' ]
+		self.coes_calculated      = False
+		self.latlons_calculated   = False
+		self.altitudes_calculated = False
+		self.ra_rp_calculated     = False
 
 		self.assign_stop_condition_functions()
 		self.assign_orbit_perturbations_functions()
 		self.load_spice_kernels()
 
-		if not os.path.exists( self.config[ 'output_dir' ] ):
-			os.mkdir( self.config[ 'output_dir' ] )
-
-		self.solver = ode( self.diffy_q )
-		self.solver.set_initial_value( self.states[ 0, : ], 0 )
-		self.solver.set_integrator( self.config[ 'propagator' ],
-			atol = self.config[ 'atol' ], rtol = self.config[ 'rtol'] )
-
-		self.coes_calculated    = False
-		self.latlons_calculated = False
-
 		if self.config[ 'propagate' ]:
 			self.propagate_orbit()
 
 	def assign_stop_condition_functions( self ):
+		'''
+		The stop conditions methods are passed into scipy's solve_ivp
+		function as events. The methods can have 2 attributes added to
+		them that the solve_ivp function will use to stop propagation
+		if the method returns a 0 crossing. In order for the propagation to
+		stop, the "terminal" attribute must be set to True.
+		For 0 crossings, the "direction" attribute will dictate which direction
+		will trigger the stop condition.
+		Positive    --> negative to positive 0 crossing
+		Negative    --> positive to negative 0 crossing
+		0 (default) --> both
+		'''
+
+		self.check_min_alt.__func__.direction   = -1
+		self.check_max_alt.__func__.direction   =  1
+		self.check_enter_SOI.__func__.direction = -1
+
+		self.check_min_alt.__func__.terminal = True
+		self.stop_condition_functions        = [ self.check_min_alt ]
+
+		if 'min_alt' not in self.config[ 'stop_conditions' ].keys():
+			self.config[ 'stop_conditions' ][ 'min_alt' ] =\
+				self.cb[ 'deorbit_altitude' ]
 
 		self.stop_conditions_map = {
-			'max_alt'  : self.check_max_alt,
 			'min_alt'  : self.check_min_alt,
-			'exit_SOI' : self.check_exit_SOI,
+			'max_alt'  : self.check_max_alt,
 			'enter_SOI': self.check_enter_SOI
 			}
 
-		self.stop_condition_functions = [ self.check_deorbit ]
-
 		for key in self.config[ 'stop_conditions' ].keys():
-			self.stop_condition_functions.append(
-				self.stop_conditions_map[ key ] )
+			method                   = self.stop_conditions_map[ key ]
+			method.__func__.terminal = True
+			self.stop_condition_functions.append( method )
 
 	def assign_orbit_perturbations_functions( self ):
 	
@@ -127,59 +134,26 @@ class Spacecraft:
 		else:
 			self.et0 = spice.str2et( self.config[ 'date0' ] )
 
-		self.ets = np.arange( self.et0,
-			self.et0 + self.config[ 'tspan' ] + self.config[ 'dt' ],
-			self.config[ 'dt' ] )
+	def check_min_alt( self, et, state ):
+		return nt.norm( state[ :3 ] ) -\
+			      self.cb[ 'radius' ] -\
+			      self.config[ 'stop_conditions' ][ 'min_alt' ]
 
-	def check_deorbit( self ):
-		if self.alts[ self.step ] < self.cb[ 'deorbit_altitude' ]:
-			if self.config[ 'print_stop' ]:
-				self.print_stop_condition( 'deorbit altitude' )
-			return False
-		return True
+	def check_max_alt( self, et, state ):
+		return nt.norm( state[ :3 ] ) -\
+			      self.cb[ 'radius' ] -\
+			      self.config[ 'stop_conditions' ][ 'max_alt' ]
 
-	def check_max_alt( self ):
-		if self.alts[ self.step ] > self.config[ 'stop_conditions' ][ 'max_alt' ]:
-			if self.config[ 'print_stop' ]:
-				self.print_stop_condition( 'max altitude' )
-			return False
-		return True
-
-	def check_min_alt( self ):
-		if self.alts[ self.step ] > self.config[ 'stop_conditions' ][ 'min_alt' ]:
-			if self.config[ 'print_stop' ]:
-				self.print_stop_condition( 'min altitude' )
-			return False
-		return True
-
-	def check_exit_SOI( self ):
-		if nt.norm( self.states[ self.step, :3 ] ) > self.cb[ 'SOI' ]:
-			if self.config[ 'print_stop' ]:
-				self.print_stop_condition( '%s SOI exit' % self.cb[ 'name' ] )
-			return False
-		return True
-
-	def check_enter_SOI( self ):
+	def check_enter_SOI( self, et, state ):
 		body      = self.config[ 'stop_conditions' ][ 'enter_SOI' ]
-		r_cb2body = spice.spkgps(
-						body[ 'SPICE_ID' ], self.ets[ self.step ],
+		r_cb2body = spice.spkgps( body[ 'SPICE_ID' ], et,
 						self.config[ 'frame' ], self.cb[ 'SPICE_ID' ] )[ 0 ]
-		r_sc2body = r_cb2body - self.states[ self.step, :3 ]
+		r_sc2body = r_cb2body - state[ :3 ]
 
-		if nt.norm( r_sc2body ) < body[ 'SOI' ]:
-			self.print_stop_condition( '%s SOI entry' % body[ 'name' ] )
-			return False
-
-		return True
+		return nt.norm( r_sc2body ) - body[ 'SOI' ]
 
 	def print_stop_condition( self, parameter ):
 		print( f'Spacecraft has reached {parameter}.' )
-
-	def check_stop_conditions( self ):
-		for stop_condition in self.stop_condition_functions:
-			if not stop_condition():
-				return False
-		return True
 
 	def calc_J2( self, et, state ):
 		z2     = state[ 2 ] ** 2
@@ -212,25 +186,30 @@ class Spacecraft:
 	def propagate_orbit( self ):
 		print( 'Propagating orbit..' )
 
-		while self.solver.successful() and self.step < self.steps:
-			self.solver.integrate( self.solver.t + self.config[ 'dt' ] )
-			self.states[ self.step ] = self.solver.y
-			self.alts  [ self.step ] = nt.norm( self.solver.y[ :3 ] ) -\
-										self.cb[ 'radius' ]
-			if self.check_stop_conditions():
-				self.step += 1
-			else:
-				break
+		self.ode_sol = solve_ivp(
+			fun          = self.diffy_q,
+			t_span       = ( self.et0, self.et0 + self.config[ 'tspan' ] ),
+			y0           = self.state0,
+			method       = self.config[ 'propagator' ],
+			events       = self.stop_condition_functions,
+			rtol         = self.config[ 'rtol' ],
+			atol         = self.config[ 'atol' ],
+			dense_output = self.config[ 'dense_output' ] )
 
-		self.ets    = self.ets   [ :self.step ]
-		self.states = self.states[ :self.step ]
-		self.alts   = self.alts  [ :self.step ]
+		self.states  = self.ode_sol.y.T
+		self.ets     = self.ode_sol.t
+		self.n_steps = self.states.shape[ 0 ]
+
+	def calc_altitudes( self ):
+		self.altitudes = np.linalg.norm( self.states[ :, :3 ], axis = 1 ) -\
+						self.cb[ 'radius' ]
+		self.altitudes_calculated = True
 
 	def calc_coes( self ):
 		print( 'Calculating COEs..' )
-		self.coes = np.zeros( ( self.step, 6 ) )
+		self.coes = np.zeros( ( self.n_steps, 6 ) )
 
-		for n in range( self.step ):
+		for n in range( self.n_steps ):
 			self.coes[ n, : ] = oc.state2coes( 
 				self.states[ n, :6 ], { 'mu': self.cb[ 'mu' ] } )
 			
@@ -243,6 +222,8 @@ class Spacecraft:
 
 		self.apoapses  = self.coes[ :, 0 ] * ( 1 + self.coes[ :, 1 ] )
 		self.periapses = self.coes[ :, 0 ] * ( 1 - self.coes[ :, 1 ] )
+
+		self.ra_rp_calculated = True
 
 	def calc_latlons( self ):
 		self.latlons = nt.cart2lat( self.states[ :, :3 ],
@@ -267,3 +248,9 @@ class Spacecraft:
 
 	def plot_states( self, args = { 'show': True } ):
 		pt.plot_states( self.ets, self.states[ :, :6 ], args )
+
+	def plot_altitudes( self, args = { 'show': True } ):
+		if not self.altitudes_calculated:
+			self.calc_altitudes()
+
+		pt.plot_altitudes( self.ets, [ self.altitudes ], args )
