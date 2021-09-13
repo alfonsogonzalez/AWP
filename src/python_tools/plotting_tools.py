@@ -668,3 +668,82 @@ def plot_groundtracks( coords, args ):
 
 	if _args[ 'filename' ]:
 		plt.savefig( _args[ 'filename' ], dpi = _args[ 'dpi' ] )
+
+def plot_altitudes( ets, alts, args ):
+	_args = {
+		'figsize'          : ( 16, 8 ),
+		'labels'           : [ '' ] * len( alts ),
+		'dist_unit'        : 'km',
+		'time_unit'        : 'seconds',
+		'colors'           : [ 'm', 'lime', 'c' ],
+		'hlines'           : [],
+		'hline_lstyles'    : 'dotted',
+		'lw'               : 2,
+		'labelsize'        : 15,
+		'legend_fontsize'  : 20,
+		'legend_framealpha': 0.3,
+		'title'            : 'Trajectories',
+		'xlim'             : None,
+		'ylim'             : None,
+		'legend'           : True,
+		'show'             : False,
+		'filename'         : False,
+		'dpi'              : 300,
+	}
+	for key in args.keys():
+		_args[ key ] = args[ key ]
+
+	fig, ax0 = plt.subplots( 1, 1, figsize = _args[ 'figsize' ] )
+
+	_args[ 'xlabel' ] = time_handler[ _args[ 'time_unit' ] ][ 'xlabel' ]
+	time_coeff        = time_handler[ _args[ 'time_unit' ] ][ 'coeff'  ]
+
+	_ets    = ets - ets[ 0 ]
+	_ets   /= time_coeff
+	n       = 0
+	min_val = 1e10
+	max_val = 0
+
+	for alt in alts:
+		ax0.plot( _ets, alt, color = _args[ 'colors' ][ n ],
+			label     = _args[ 'labels' ][ n ],
+			linewidth = _args[ 'lw' ] )
+
+		min_val = min( alt.min(), min_val )
+		max_val = max( alt.max(), max_val )
+		n      += 1
+
+	if _args[ 'xlim' ] is None:
+		_args[ 'xlim' ] = [ 0, _ets[ -1 ] ]
+
+	if _args[ 'ylim' ] is None:
+		_args[ 'ylim' ] = [ min_val * 0.9, max_val * 1.1 ]
+
+	ax0.grid( linestyle = 'dotted' )
+	ax0.set_xlim( _args[ 'xlim'   ] )
+	ax0.set_ylim( _args[ 'ylim' ] )
+	ax0.set_xlabel( _args[ 'xlabel' ], size = _args[ 'labelsize' ] )
+	ax0.set_ylabel( r'Altitude $(km)$',
+		size = _args[ 'labelsize' ] )
+
+	for hline in _args[ 'hlines' ]:
+		ax0.hlines( hline[ 'val' ], _ets[ 0 ], _ets[ -1 ],
+			color     = hline[ 'color' ],
+			linewidth = _args[ 'lw' ],
+			linestyle = _args[ 'hline_lstyles' ] )
+
+	plt.suptitle( _args[ 'title' ] )
+	plt.tight_layout()
+
+	if _args[ 'legend' ]:
+		ax0.legend( fontsize = _args[ 'legend_fontsize' ],
+			loc = 'upper right', framealpha = _args[ 'legend_framealpha' ] )
+
+	if _args[ 'filename' ]:
+		plt.savefig( _args[ 'filename' ], dpi = _args[ 'dpi' ] )
+		print( 'Saved', _args[ 'filename' ] )
+
+	if _args[ 'show' ]:
+		plt.show()
+
+	plt.close()
