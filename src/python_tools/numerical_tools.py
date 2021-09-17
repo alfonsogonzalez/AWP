@@ -38,45 +38,6 @@ def Cz( a ):
 		[        0,             0,       1 ]
 	] )
 
-def frame_transform( arr, ets, frame_from, frame_to ):
-	'''
-	Calculate length 3 or 6 vectors in frame_from
-	to frame_to reference frame
-	'''
-	transformed = np.zeros( arr.shape )
-	dim         = arr.shape[ 1 ]
-
-	for step in range( arr.shape[ 0 ] ):
-		matrix = frame_transform_dict[ dim ](
-			frame_from, frame_to, ets[ step ] )
-		transformed[ step ] = np.dot( matrix, arr[ step ] )
-	
-	return transformed
-
-def bf2latlon( rs ):
-	'''
-	Calculate latitude / longitude coordinates
-	from body-fixed vectors
-	'''
-
-	steps   = rs.shape[ 0 ]
-	latlons = np.zeros( rs.shape )
-
-	for step in range( steps ):
-		r_norm, lon, lat = spice.reclat( rs[ step ] )
-		latlons[ step ]  = [ lat * r2d, lon * r2d, r_norm ]
-
-	return latlons
-
-def inert2latlon( rs, frame_from, frame_to, ets ):
-	'''
-	Calculate latitude / longitude coordinates
-	from inertial vectors
-	'''
-
-	bf = frame_transform( rs, ets, frame_from, frame_to )
-	return bf2latlon( bf )
-
 def newton_root_single( f, fp, x0, args = {} ):
 	'''
 	Calculate root of single variable function
