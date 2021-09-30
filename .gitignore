@@ -3,3 +3,8 @@
 # LaTeX files
 **/*.aux
 **/*.log
+**/*.out
+**/*.toc
+
+# book images
+book/**/*.png

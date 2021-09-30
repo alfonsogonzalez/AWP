@@ -1,6 +1,6 @@
 # AWP - Astrodynamics with Python
 
-![Channel Image](docs/prof_pic_hq.png)
+![Channel Image](docs/prof-pic-hq-centered.png)
 
 * [Video Explaining How To Use This Repository](https://youtu.be/yMJ_VU3jt7c)
 
