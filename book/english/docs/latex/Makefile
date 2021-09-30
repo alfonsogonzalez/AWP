@@ -1,4 +1,4 @@
-NAME = equations
+NAME = source
 
 ${NAME}: ${NAME}.tex
 	pdflatex ${NAME}
