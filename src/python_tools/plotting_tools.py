@@ -38,6 +38,11 @@ COASTLINES_COORDINATES_FILE = os.path.join(
 	os.path.join( '..', '..', 'data', 'earth_data', 'coastlines.csv' )
 	)
 
+EARTH_SURFACE_IMAGE = os.path.join(
+	os.path.dirname( os.path.realpath( __file__ ) ),
+	os.path.join( '..', '..', 'data', 'earth_data', 'earth_surface.png' )
+	)
+
 CITY_COLORS = [ 
 	'w', 'deeppink', 'chartreuse', 'magenta', 'springgreen', 'peachpuff',
 	'white', 'lightpink', 'royalblue', 'lime', 'aqua' ] * 100
@@ -605,12 +610,17 @@ def plot_groundtracks( coords, args ):
 		'city_msize' : 3,
 		'city_fsize' : 10,
 		'legend'     : True,
-		'plot_coastlines': True
+		'surface_image': True,
+		'plot_coastlines': False
 	}
 	for key in args.keys():
 		_args[ key ] = args[ key ]
 
 	plt.figure( figsize = _args[ 'figsize' ] )	
+
+	if _args[ 'surface_image' ]:
+		plt.imshow( plt.imread( EARTH_SURFACE_IMAGE ),
+			extent = [ -180, 180, -90, 90 ] )
 
 	if _args[ 'plot_coastlines' ]:
 		coast_coords = np.genfromtxt( COASTLINES_COORDINATES_FILE,

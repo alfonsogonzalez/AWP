@@ -8,12 +8,14 @@ groundtracks
 '''
 
 # 3rd party libraries
+from numpy import arange
 import spiceypy as spice
 
 # AWP libraries
 from Spacecraft import Spacecraft as SC
-import plotting_tools as pt
-import spice_data     as sd
+import numerical_tools as nt
+import plotting_tools  as pt
+import spice_data      as sd
 from planetary_data import earth
 
 if __name__ == '__main__':
@@ -26,14 +28,16 @@ if __name__ == '__main__':
 	coes3     = [ ER + 500,   0.01, 135.0, 0,   0, 0 ] # retrograde
 	latlons   = []
 	sc_config = {
-		'tspan': '3',
-		'dt'   : 20.0
+		'tspan'       : '3',
+		'dense_output': True
 	}
 	for coes in [ coes0, coes1, coes2, coes3 ]:
 		sc_config[ 'coes' ] = coes
-		sc = SC( sc_config )
-		sc.calc_latlons()
-		latlons.append( sc.latlons )
+		sc      = SC( sc_config )
+		ets     = arange( sc.ets[ 0 ], sc.ets[ -1 ], 15.0 )
+		rs      = sc.ode_sol.sol( ets ).T[ :, :3 ]
+
+		latlons.append( nt.cart2lat( rs, 'J2000', 'IAU_EARTH', ets ) )
 
 	pt.plot_groundtracks( latlons, 
 		{
