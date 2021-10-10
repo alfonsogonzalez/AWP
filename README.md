@@ -1,6 +1,8 @@
 # AWP - Astrodynamics with Python
 
-![Channel Image](docs/prof-pic-hq-centered.png)
+![prof-pic](docs/prof_pic_hq.png)
+![cosmo-3d-launches](docs/cosmo-3d-launches.png)
+![groundtracks-earth-img](docs/groundtracks-earth-img.png)
 
 * [Video Explaining How To Use This Repository](https://youtu.be/yMJ_VU3jt7c)
 
@@ -9,7 +11,9 @@ The GitHub repository corresponding to the YouTube channel (https://www.youtube.
 * [Space Engineering Podcast](https://www.youtube.com/playlist?list=PLOIRBaljOV8gYALpxUJywrHZuvZ9NFpz0)
 * [Orbital Mechanics with Python](https://www.youtube.com/playlist?list=PLOIRBaljOV8gn074rWFWYP1dCr2dJqWab)
 * [Fundamentals of Orbital Mechanics](https://www.youtube.com/playlist?list=PLOIRBaljOV8hBJS4m6brpmUrncqkyXBjB)
+* [Rocket Trajectories](https://youtube.com/playlist?list=PLOIRBaljOV8je0oxFAyj2o6YLXcBX1rTZ)
 * [Mecánica Orbital con Python](https://www.youtube.com/playlist?list=PLOIRBaljOV8iGCAac3UnrXHu3tjKHjXSB)
+* [How To Python](https://youtube.com/playlist?list=PLOIRBaljOV8hhBw5ij8fZfPBb192zBYBP)
 * [Spacecraft Attitude Control with Python](https://www.youtube.com/playlist?list=PLOIRBaljOV8gsvlQ_GtiDRSBECHB2vvnp)
 * [Numerical Methods with Python](https://www.youtube.com/playlist?list=PLOIRBaljOV8gMqhggseSHI9u2pldGZonA)
 
@@ -30,32 +34,31 @@ In the case of AWP, all Python dependencies can be installed in one command usin
 $ python3 -m pip install -r requirements.txt
 ```
 
-
-## Setting the `PYTHONPATH` and `AWP` Environment Variables
-In order to use this repository path independently (can run any script from any directory), one must set the `PYTHONPATH` and `AWP` variables as the following:
+## Setting the `PYTHONPATH` Environment Variable
+In order to use this repository path independently (can run any script from any directory), one must set the `PYTHONPATH` environment variable to point to the python_tools directory of this repoistory:
 
 * `PYTHONPATH`: Absolute path to your python_tools directory
 ```sh
-# Two examples of how to set the PYTHONPATH variable
+# Two examples of how to set the PYTHONPATH variable for Linux / MacOS
 
 $ export PYTHONPATH=$PYTHONPATH:/home/alfonso/AWP/src/python_tools
 # or
 $ export PYTHONPATH=$PYTHONPATH:~/AWP/src/python_tools
-``` 
-
-* `AWP`: Absolute path to the base of this repository
-```sh
-# Two examples of how to set the AWP variable
-
-$ export AWP=/home/alfonso/AWP
-# or
-$ export AWP=~/AWP
 ```
 
-For convenience, these commands can be placed in a .bashrc file and thus will be automatically set anytime a new terminal session is begun.
+```batch
+rem Examples of how to set the PYTHONPATH variable for Windows
+
+$ set PYTHONPATH=C:\Users\alfon\AWP\src\python_tools
+```
+
+For convenience, this command can be placed in a .bash_profile or .bashrc file and thus will be automatically set anytime a new terminal session is begun.
+
+* [Video explaining how to use PYTHONPATH environment variable](https://youtu.be/ey-JL8FCHnk)
+
 
 ## Running Example Usages
-Once the dependencies are installed and environment variables are set, the example usage cases can be run (from the base path of this repository):
+Once the dependencies are installed and PYTHONPATH is set, the example usage cases can be run (from the base path of this repository):
 
 ```sh
 # ensure you are in the base path of this repository
@@ -64,10 +67,11 @@ $ pwd
 # run the example usages
 $ python3 example_usage/Spacecraft_hello_world.py
 $ python3 example_usage/many_orbits.py
+$ python3 example_usage/groundtracks.py
 ```
 
 ## Running Unit Tests
-Again, once dependencies are installed and environment variables set, the unit tests can be run with the following command (from the base path of this repository):
+Again, once dependencies are installed and PYTHONPATH is set, the unit tests can be run with the following command (from the base path of this repository):
 
 ```sh
 # ensure you are in the base path of this repository
