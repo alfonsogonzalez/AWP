@@ -757,3 +757,55 @@ def plot_altitudes( ets, alts, args ):
 		plt.show()
 
 	plt.close()
+
+def plot_eclipse_array( ets, arr, args ):
+	_args = {
+		'figsize'          : ( 16, 8 ),
+		'labels'           : [ '' ],
+		'time_unit'        : 'seconds',
+		'color'            : 'm',
+		'lw'               : 2,
+		'labelsize'        : 15,
+		'legend_fontsize'  : 20,
+		'legend_framealpha': 0.3,
+		'title'            : 'Eclipse Array',
+		'xlim'             : None,
+		'legend'           : True,
+		'show'             : False,
+		'filename'         : False,
+		'dpi'              : 300,
+	}
+	for key in args.keys():
+		_args[ key ] = args[ key ]
+
+	fig, ax0 = plt.subplots( 1, 1, figsize = _args[ 'figsize' ] )
+
+	_args[ 'xlabel' ] = time_handler[ _args[ 'time_unit' ] ][ 'xlabel' ]
+	time_coeff        = time_handler[ _args[ 'time_unit' ] ][ 'coeff'  ]
+
+	_ets = ( ets - ets[ 0 ] ) / time_coeff
+
+	if _args[ 'xlim' ] is None:
+		_args[ 'xlim' ] = [ 0, _ets[ -1 ] ]
+
+	ax0.plot( _ets, arr, color = _args[ 'color' ],
+		linewidth = _args[ 'lw' ], ms = 1 )
+
+	ax0.grid( linestyle = 'dotted' )
+	ax0.set_xlim( _args[ 'xlim' ] )
+	ax0.set_ylim( [ -1.5, 2.5 ] )
+	ax0.set_xlabel( _args[ 'xlabel' ], size = _args[ 'labelsize' ] )
+	ax0.set_ylabel( r'$1=Penumbra$, $2=Umbra$',
+		size = _args[ 'labelsize' ] )
+
+	plt.suptitle( _args[ 'title' ] )
+	plt.tight_layout()
+
+	if _args[ 'filename' ]:
+		plt.savefig( _args[ 'filename' ], dpi = _args[ 'dpi' ] )
+		print( 'Saved', _args[ 'filename' ] )
+
+	if _args[ 'show' ]:
+		plt.show()
+
+	plt.close()
