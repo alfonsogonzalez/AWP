@@ -91,3 +91,8 @@ sun = {
 	'deorbit_altitude': 1.2 * 695510.0,
 	'cmap'            :'gist_heat'
 }
+
+bodies = [ venus, earth, mars, jupiter, saturn, sun ]
+
+for body in bodies:
+	body[ 'diameter' ] = body[ 'radius' ] * 2
