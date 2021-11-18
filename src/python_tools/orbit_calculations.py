@@ -16,6 +16,12 @@ import numerical_tools as nt
 import lamberts_tools  as lt
 import planetary_data  as pd
 
+ECLIPSE_MAP = {
+	'umbra'   : ( ( 1,  3 ), ( -1, -3 ) ),
+	'penumbra': ( ( 2, -1 ), (  1, -2 ) ),
+	'either'  : ( ( 3,  2 ), ( -2, -3 ) )
+}
+
 def esc_v( r, mu = pd.earth[ 'mu' ] ):
 	'''
 	Calculate escape velocity at given radial distance from body
@@ -148,3 +154,91 @@ def vinfinity_match( planet0, planet1, v0_sc, et0, tof0, args = {} ):
 		{ 'mu': _args[ 'mu' ], 'tm': _args[ 'tm' ] } )
 
 	return tof, v0_sc_depart, v1_sc_arrive
+
+def check_eclipse( et, r, body, frame = 'J2000' ):
+	r_sun2body  = spice.spkpos(
+		str( body[ 'SPICE_ID' ] ), et, frame, 'LT', 'SUN' )[ 0 ]
+	delta_ps    = nt.norm( r_sun2body )
+	s_hat       = r_sun2body / delta_ps
+	proj_scalar = np.dot( r, s_hat )
+
+	if proj_scalar <= 0.0:
+		return -1
+
+	proj     = proj_scalar * s_hat
+	rej_norm = nt.norm( r - proj )
+
+	if check_umbra( delta_ps, body[ 'diameter' ], proj_scalar, rej_norm ):
+		return 2
+	elif check_penumbra( delta_ps, body[ 'diameter' ], proj_scalar, rej_norm ):
+		return 1
+	else:
+		return -1
+
+def check_umbra( delta_ps, Dp, proj_scalar, rej_norm ):
+	Xu     = ( Dp * delta_ps ) / ( pd.sun[ 'diameter' ] - Dp )
+	alphau = math.asin( Dp / ( 2 * Xu ) )
+	zeta   = ( Xu - proj_scalar ) * math.tan( alphau )
+	return rej_norm <= zeta
+
+def check_penumbra( delta_ps, Dp, proj_scalar, rej_norm ):
+	Xp     = ( Dp * delta_ps ) / ( pd.sun[ 'diameter' ] + Dp )
+	alphap = math.asin( Dp / ( 2 * Xp ) )
+	kappa  = ( Xp + proj_scalar ) * math.tan( alphap )
+	return rej_norm <= kappa
+
+def calc_eclipse_array( ets, rs, body, frame = 'J2000' ):
+	eclipses = np.zeros( rs.shape[ 0 ] )
+
+	for n in range( len( ets ) ):
+		eclipses[ n ] = check_eclipse( ets[ n ], rs[ n ], body, frame )
+
+	return eclipses
+
+def find_eclipses( ets, a, method = 'either', v = False, vv = False ):
+	diff          = np.diff( a )
+	idxs          = ECLIPSE_MAP[ method ]
+	ecl_entrances = np.where( np.isin( diff, idxs[ 0 ] ) )[ 0 ]
+	ecl_exits     = np.where( np.isin( diff, idxs[ 1 ] ) )[ 0 ]
+
+	if len( ecl_entrances ) == 0:
+		return {}
+
+	if ecl_entrances[ 0 ] > ecl_exits[ 0 ]:
+		ecl_entrances = np.insert( ecl_entrances, 0, 0 )
+
+	if len( ecl_entrances ) > len( ecl_exits ):
+		ecl_exits = np.append( ecl_exits, len( ets ) - 1 )
+
+	ecls                = {}
+	ecls[ 'idxs' ]      = []
+	ecls[ 'ets'  ]      = []
+	ecls[ 'durations' ] = []
+	for pair in zip( ecl_entrances, ecl_exits ):
+		_ets = [ ets[ pair[ 0 ] ], ets[ pair[ 1 ] ] ]
+		ecls[ 'idxs'      ].append( pair )
+		ecls[ 'ets'       ].append( _ets )
+		ecls[ 'durations' ].append( _ets[ 1 ] - _ets[ 0 ] )
+
+	ecls[ 'total_time' ] = sum( ecls[ 'durations' ] )
+	ecls[ 'max_time'   ] = max( ecls[ 'durations' ] )
+	ecls[ 'ratio'      ] = ecls[ 'total_time' ] / ( ets[ -1 ] - ets[ 0 ] )
+
+	if v or vv:
+		print( '\n******** ECLIPSE SUMMARY START ********' )
+		print( f'Number of eclipses: {len(ecls["idxs"])}' )
+		print( 'Eclipse durations (seconds): ', end = '' )
+		print( [ float(f'{a:.2f}') for a in ecls[ "durations" ] ] )
+		print( f'Max eclipse duration: {ecls["max_time"]:.2f} seconds' )
+		print( f'Eclipse time ratio: {ecls["ratio"]:.3f}' )
+		if vv:
+			print( 'Eclipse entrances and exits:' )
+			for n in range( len( ecls[ 'ets' ] ) ):
+				print(
+					spice.et2utc( ecls[ 'ets' ][ n ][ 0 ], 'C', 1 ),
+					'-->',
+					spice.et2utc( ecls[ 'ets' ][ n ][ 1 ], 'C', 1 )
+				)
+		print( '******** ECLIPSE SUMMARY END ********\n' )
+
+	return ecls
