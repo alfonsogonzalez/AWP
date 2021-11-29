@@ -43,6 +43,16 @@ EARTH_SURFACE_IMAGE = os.path.join(
 	os.path.join( '..', '..', 'data', 'earth_data', 'earth_surface.png' )
 	)
 
+JUPITER_SURFACE_IMAGE = os.path.join(
+	os.path.dirname( os.path.realpath( __file__ ) ),
+	os.path.join( '..', '..', 'data', 'jupiter_data', 'jupiter_surface.png' )
+	)
+
+SURFACE_BODY_MAP = {
+	'earth'  : EARTH_SURFACE_IMAGE,
+	'jupiter': JUPITER_SURFACE_IMAGE
+}
+
 CITY_COLORS = [ 
 	'w', 'deeppink', 'chartreuse', 'magenta', 'springgreen', 'peachpuff',
 	'white', 'lightpink', 'royalblue', 'lime', 'aqua' ] * 100
@@ -611,6 +621,7 @@ def plot_groundtracks( coords, args ):
 		'city_fsize' : 10,
 		'legend'     : True,
 		'surface_image': True,
+		'surface_body' : 'earth',
 		'plot_coastlines': False
 	}
 	for key in args.keys():
@@ -619,7 +630,8 @@ def plot_groundtracks( coords, args ):
 	plt.figure( figsize = _args[ 'figsize' ] )	
 
 	if _args[ 'surface_image' ]:
-		plt.imshow( plt.imread( EARTH_SURFACE_IMAGE ),
+		plt.imshow(
+			plt.imread( SURFACE_BODY_MAP[ _args[ 'surface_body' ] ] ),
 			extent = [ -180, 180, -90, 90 ] )
 
 	if _args[ 'plot_coastlines' ]:
@@ -788,8 +800,8 @@ def plot_eclipse_array( ets, arr, args ):
 	if _args[ 'xlim' ] is None:
 		_args[ 'xlim' ] = [ 0, _ets[ -1 ] ]
 
-	ax0.plot( _ets, arr, color = _args[ 'color' ],
-		linewidth = _args[ 'lw' ], ms = 1 )
+	ax0.plot( _ets, arr, 'o', color = _args[ 'color' ],
+		linewidth = _args[ 'lw' ], ms = 5 )
 
 	ax0.grid( linestyle = 'dotted' )
 	ax0.set_xlim( _args[ 'xlim' ] )
