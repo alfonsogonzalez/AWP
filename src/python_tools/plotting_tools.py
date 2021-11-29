@@ -800,7 +800,7 @@ def plot_eclipse_array( ets, arr, args ):
 	if _args[ 'xlim' ] is None:
 		_args[ 'xlim' ] = [ 0, _ets[ -1 ] ]
 
-	ax0.plot( _ets, arr, 'o', color = _args[ 'color' ],
+	ax0.plot( _ets, arr, '-o', color = _args[ 'color' ],
 		linewidth = _args[ 'lw' ], ms = 5 )
 
 	ax0.grid( linestyle = 'dotted' )
