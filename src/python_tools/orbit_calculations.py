@@ -65,7 +65,7 @@ def state2period( state, mu = pd.earth['mu'] ):
 
 	# semi major axis
 	a = -mu / ( 2.0 * epsilon )
-
+ 	
 	# period
 	return 2 * math.pi * math.sqrt( a ** 3 / mu )
 
@@ -155,7 +155,7 @@ def vinfinity_match( planet0, planet1, v0_sc, et0, tof0, args = {} ):
 
 	return tof, v0_sc_depart, v1_sc_arrive
 
-def check_eclipse( et, r, body, frame = 'J2000' ):
+def check_eclipse( et, r, body, frame = 'J2000', r_body = 0 ):
 	r_sun2body  = spice.spkpos(
 		str( body[ 'SPICE_ID' ] ), et, frame, 'LT', 'SUN' )[ 0 ]
 	delta_ps    = nt.norm( r_sun2body )
@@ -168,30 +168,84 @@ def check_eclipse( et, r, body, frame = 'J2000' ):
 	proj     = proj_scalar * s_hat
 	rej_norm = nt.norm( r - proj )
 
-	if check_umbra( delta_ps, body[ 'diameter' ], proj_scalar, rej_norm ):
-		return 2
-	elif check_penumbra( delta_ps, body[ 'diameter' ], proj_scalar, rej_norm ):
-		return 1
-	else:
-		return -1
+	if r_body == 0:
+		if check_umbra( delta_ps, body[ 'diameter' ], proj_scalar, rej_norm, r_body ):
+			return 2
+		elif check_penumbra( delta_ps, body[ 'diameter' ], proj_scalar, rej_norm, r_body ):
+			return 1
+		else:
+			return -1
 
-def check_umbra( delta_ps, Dp, proj_scalar, rej_norm ):
+def check_solar_eclipse_latlons( et, body0, body1, frame = 'J2000' ):
+	r_sun2body = spice.spkpos(
+		str( body0[ 'SPICE_ID' ] ), et, frame, 'LT', 'SUN' )[ 0 ]
+	r = spice.spkpos(
+		str( body1[ 'SPICE_ID' ] ), et, frame, 'LT',
+		str( body0[ 'SPICE_ID' ] ) )[ 0 ]
+
+	delta_ps    = nt.norm( r_sun2body )
+	s_hat       = r_sun2body / delta_ps
+	proj_scalar = np.dot( r, s_hat )
+
+	if proj_scalar <= 0.0:
+		return -1, None
+
+	proj     = proj_scalar * s_hat
+	rej_norm = nt.norm( r - proj )
+	umbra    = check_umbra( delta_ps, body0[ 'diameter' ],
+		proj_scalar, rej_norm, body1[ 'radius' ] )
+
+	if umbra:
+		args = { 'r': r, 's_hat': s_hat, 'radius': body1[ 'radius' ] }
+		try:
+			sigma = nt.newton_root_single_fd( eclipse_root_func,
+				proj_scalar - body1[ 'radius' ], args )[ 0 ]
+		except RuntimeError:
+			return -1, None
+
+		r_eclipse = sigma * s_hat - r
+		r_bf      = np.dot(
+			spice.pxform( frame, body1[ 'body_fixed_frame' ], et ),
+			r_eclipse )
+		latlon        = np.array( spice.reclat( r_bf ) )
+		latlon[ 1: ] *= nt.r2d
+
+		return 2, latlon
+	else:
+		return -1, None
+
+def calc_solar_eclipse_latlons( ets, body0, body1, frame = 'J2000' ):
+	eclipses = np.zeros( len( ets ) )
+	latlons  = []
+
+	for n in range( len( ets ) ):
+		eclipse = check_solar_eclipse(
+			ets[ n ], body0, body1, frame )
+		if eclipse[ 0 ] == 2:
+			latlons.append( eclipse[ 1 ] )
+	return np.array( latlons )
+
+def eclipse_root_func( sigma, args ):
+	return nt.norm( sigma * args[ 's_hat' ] - args[ 'r' ] ) - args[ 'radius' ]
+
+def check_umbra( delta_ps, Dp, proj_scalar, rej_norm, r_body = 0 ):
 	Xu     = ( Dp * delta_ps ) / ( pd.sun[ 'diameter' ] - Dp )
 	alphau = math.asin( Dp / ( 2 * Xu ) )
 	zeta   = ( Xu - proj_scalar ) * math.tan( alphau )
-	return rej_norm <= zeta
+	return rej_norm - r_body <= zeta
 
-def check_penumbra( delta_ps, Dp, proj_scalar, rej_norm ):
+def check_penumbra( delta_ps, Dp, proj_scalar, rej_norm, r_body = 0 ):
 	Xp     = ( Dp * delta_ps ) / ( pd.sun[ 'diameter' ] + Dp )
 	alphap = math.asin( Dp / ( 2 * Xp ) )
 	kappa  = ( Xp + proj_scalar ) * math.tan( alphap )
-	return rej_norm <= kappa
+	return rej_norm - r_body <= kappa
 
-def calc_eclipse_array( ets, rs, body, frame = 'J2000' ):
+def calc_eclipse_array( ets, rs, body, frame = 'J2000', r_body = 0 ):
 	eclipses = np.zeros( rs.shape[ 0 ] )
 
 	for n in range( len( ets ) ):
-		eclipses[ n ] = check_eclipse( ets[ n ], rs[ n ], body, frame )
+		eclipses[ n ] = check_eclipse(
+			ets[ n ], rs[ n ], body, frame, r_body )
 
 	return eclipses
 
