@@ -41,6 +41,22 @@ earth = {
 		'traj_color'      : 'b'
 		}
 
+moon = {
+		'name'            : 'Moon',
+		'spice_name'      : 'MOON',
+		'SPICE_ID'        : 301,
+		'mass'            : 5.972e24,
+		'mu'              : 5.972e24 * G,
+		'radius'          : 1737.4,
+		'J2'              : 1.081874e-3,
+		'sma'             : 149.596e6, # km
+		'SOI'             : 926006.6608, # km
+		'deorbit_altitude': 100.0, # km
+		'cmap'            : 'Blues',
+		'body_fixed_frame': 'IAU_EARTH',
+		'traj_color'      : 'b'
+		}
+
 mars = {
 		'name'            : 'Mars',
 		'spice_name'      : 'MARS BARYCENTER',
@@ -66,7 +82,49 @@ jupiter = {
 		'sma'             : 778.570e6, # km
 		'deorbit_altitude': 1000.0,    # km
 		'SOI'             : 48.2e6,    # km
+		'body_fixed_frame': 'IAU_JUPITER',
 		'traj_color'      : 'C3'
+}
+
+io = {
+		'name'            : 'Io',
+		'spice_name'      : 'Io',
+		'SPICE_ID'        : 501,
+		'mass'            : 1.898e27,
+		'mu'              : 5.959916033410404E+03,
+		'radius'          : 1821.6,   # km
+		'deorbit_altitude': 10.0,    # km
+		'traj_color'      : 'C1'
+}
+
+europa = {
+		'name'            : 'Europa',
+		'spice_name'      : 'Europa',
+		'SPICE_ID'        : 502,
+		'mu'              : 3.202738774922892E+03,
+		'radius'          : 1560.8,   # km
+		'deorbit_altitude': 10.0,    # km
+		'traj_color'      : 'C2'
+}
+
+ganymede = {
+		'name'            : 'Ganymede',
+		'spice_name'      : 'Ganymede',
+		'SPICE_ID'        : 503,
+		'mu'              : 9.887834453334144E+03,
+		'radius'          : 2631.2,   # km
+		'deorbit_altitude': 100.0,    # km
+		'traj_color'      : 'C3'
+}
+
+callisto = {
+		'name'            : 'Callisto',
+		'spice_name'      : 'Callisto',
+		'SPICE_ID'        : 504,
+		'mu'              : 7.179289361397270E+03,
+		'radius'          : 2410.3,   # km
+		'deorbit_altitude': 10.0,    # km
+		'traj_color'      : 'C4'
 }
 
 saturn = {
@@ -92,7 +150,10 @@ sun = {
 	'cmap'            :'gist_heat'
 }
 
-bodies = [ venus, earth, mars, jupiter, saturn, sun ]
+bodies = [
+	venus, earth, moon, mars, 
+	jupiter, io, europa, ganymede, callisto,
+	saturn, sun ]
 
 for body in bodies:
 	body[ 'diameter' ] = body[ 'radius' ] * 2
