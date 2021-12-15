@@ -43,6 +43,16 @@ EARTH_SURFACE_IMAGE = os.path.join(
 	os.path.join( '..', '..', 'data', 'earth_data', 'earth_surface.png' )
 	)
 
+JUPITER_SURFACE_IMAGE = os.path.join(
+	os.path.dirname( os.path.realpath( __file__ ) ),
+	os.path.join( '..', '..', 'data', 'jupiter_data', 'jupiter_surface.png' )
+	)
+
+SURFACE_BODY_MAP = {
+	'earth'  : EARTH_SURFACE_IMAGE,
+	'jupiter': JUPITER_SURFACE_IMAGE
+}
+
 CITY_COLORS = [ 
 	'w', 'deeppink', 'chartreuse', 'magenta', 'springgreen', 'peachpuff',
 	'white', 'lightpink', 'royalblue', 'lime', 'aqua' ] * 100
@@ -611,6 +621,7 @@ def plot_groundtracks( coords, args ):
 		'city_fsize' : 10,
 		'legend'     : True,
 		'surface_image': True,
+		'surface_body' : 'earth',
 		'plot_coastlines': False
 	}
 	for key in args.keys():
@@ -619,7 +630,8 @@ def plot_groundtracks( coords, args ):
 	plt.figure( figsize = _args[ 'figsize' ] )	
 
 	if _args[ 'surface_image' ]:
-		plt.imshow( plt.imread( EARTH_SURFACE_IMAGE ),
+		plt.imshow(
+			plt.imread( SURFACE_BODY_MAP[ _args[ 'surface_body' ] ] ),
 			extent = [ -180, 180, -90, 90 ] )
 
 	if _args[ 'plot_coastlines' ]:
@@ -757,3 +769,87 @@ def plot_altitudes( ets, alts, args ):
 		plt.show()
 
 	plt.close()
+
+def plot_eclipse_array( ets, arr, args ):
+	_args = {
+		'figsize'          : ( 16, 8 ),
+		'labels'           : [ '' ],
+		'time_unit'        : 'seconds',
+		'color'            : 'm',
+		'lw'               : 2,
+		'labelsize'        : 15,
+		'legend_fontsize'  : 20,
+		'legend_framealpha': 0.3,
+		'title'            : 'Eclipse Array',
+		'xlim'             : None,
+		'legend'           : True,
+		'show'             : False,
+		'filename'         : False,
+		'dpi'              : 300,
+	}
+	for key in args.keys():
+		_args[ key ] = args[ key ]
+
+	fig, ax0 = plt.subplots( 1, 1, figsize = _args[ 'figsize' ] )
+
+	_args[ 'xlabel' ] = time_handler[ _args[ 'time_unit' ] ][ 'xlabel' ]
+	time_coeff        = time_handler[ _args[ 'time_unit' ] ][ 'coeff'  ]
+
+	_ets = ( ets - ets[ 0 ] ) / time_coeff
+
+	if _args[ 'xlim' ] is None:
+		_args[ 'xlim' ] = [ 0, _ets[ -1 ] ]
+
+	ax0.plot( _ets, arr, '-o', color = _args[ 'color' ],
+		linewidth = _args[ 'lw' ], ms = 5 )
+
+	ax0.grid( linestyle = 'dotted' )
+	ax0.set_xlim( _args[ 'xlim' ] )
+	ax0.set_ylim( [ -1.5, 2.5 ] )
+	ax0.set_xlabel( _args[ 'xlabel' ], size = _args[ 'labelsize' ] )
+	ax0.set_ylabel( r'$1=Penumbra$, $2=Umbra$',
+		size = _args[ 'labelsize' ] )
+
+	plt.suptitle( _args[ 'title' ] )
+	plt.tight_layout()
+
+	if _args[ 'filename' ]:
+		plt.savefig( _args[ 'filename' ], dpi = _args[ 'dpi' ] )
+		print( 'Saved', _args[ 'filename' ] )
+
+	if _args[ 'show' ]:
+		plt.show()
+
+	plt.close()
+
+def plot_cr3bp_2d( mu, rs, args ):
+	_args = {
+		'figsize'      : ( 10, 10 ),
+		'colors'       : COLORS[ : ],
+		'lw'           : 2.5,
+		'hline_lstyles': 'dashed',
+		'title'        : 'Trajectories',
+		'legend'       : True,
+		'show'         : False,
+		'filename'     : False,
+		'dpi'          : 300,
+	}
+	for key in args.keys():
+		_args[ key ] = args[ key ]
+
+	plt.figure( figsize = _args[ 'figsize' ] )
+	plt.plot( -mu,    0, 'mo', ms = 10 )
+	plt.plot( 1 - mu, 0, 'co', ms = 5  )
+
+	for r in rs:
+		plt.plot( r[ :, 0 ], r[ :, 1 ], _args[ 'colors' ][ 0 ] )
+
+	plt.grid( linestyle = 'dotted' )
+	plt.title( _args[ 'title' ] )
+
+	if _args[ 'filename' ]:
+		plt.savefig( _args[ 'filename' ], dpi = _args[ 'dpi' ] )
+		print( 'Saved', _args[ 'filename' ] )
+
+	if _args[ 'show' ]:
+		plt.show()

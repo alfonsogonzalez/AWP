@@ -70,6 +70,7 @@ class Spacecraft:
 		self.latlons_calculated   = False
 		self.altitudes_calculated = False
 		self.ra_rp_calculated     = False
+		self.eclipses_calculated  = False
 
 		self.assign_stop_condition_functions()
 		self.assign_orbit_perturbations_functions()
@@ -229,6 +230,20 @@ class Spacecraft:
 		self.latlons = nt.cart2lat( self.states[ :, :3 ],
 			self.config[ 'frame' ], self.cb[ 'body_fixed_frame' ], self.ets )
 		self.latlons_calculated = True
+
+	def calc_eclipses( self, method = 'either', v = False, vv = False ):
+		self.eclipse_array = oc.calc_eclipse_array(
+			self.ets, self.states[ :, :3 ],
+			self.cb, self.config[ 'frame'] )
+		self.eclipses = oc.find_eclipses( self.ets, self.eclipse_array,
+			method, v, vv )
+		self.eclipses_calculated = True
+
+	def plot_eclipse_array( self, args = { 'show': True } ):
+		if not self.eclipses_calculated:
+			self.calc_eclipse_array()
+
+		pt.plot_eclipse_array( self.ets, self.eclipse_array, args )
 
 	def plot_3d( self, args = { 'show': True } ):
 		pt.plot_orbits( [ self.states[ :, :3 ] ], args )
