@@ -821,3 +821,35 @@ def plot_eclipse_array( ets, arr, args ):
 		plt.show()
 
 	plt.close()
+
+def plot_cr3bp_2d( mu, rs, args ):
+	_args = {
+		'figsize'      : ( 10, 10 ),
+		'colors'       : COLORS[ : ],
+		'lw'           : 2.5,
+		'hline_lstyles': 'dashed',
+		'title'        : 'Trajectories',
+		'legend'       : True,
+		'show'         : False,
+		'filename'     : False,
+		'dpi'          : 300,
+	}
+	for key in args.keys():
+		_args[ key ] = args[ key ]
+
+	plt.figure( figsize = _args[ 'figsize' ] )
+	plt.plot( -mu,    0, 'mo', ms = 10 )
+	plt.plot( 1 - mu, 0, 'co', ms = 5  )
+
+	for r in rs:
+		plt.plot( r[ :, 0 ], r[ :, 1 ], _args[ 'colors' ][ 0 ] )
+
+	plt.grid( linestyle = 'dotted' )
+	plt.title( _args[ 'title' ] )
+
+	if _args[ 'filename' ]:
+		plt.savefig( _args[ 'filename' ], dpi = _args[ 'dpi' ] )
+		print( 'Saved', _args[ 'filename' ] )
+
+	if _args[ 'show' ]:
+		plt.show()
