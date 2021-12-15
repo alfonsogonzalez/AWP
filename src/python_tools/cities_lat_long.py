@@ -20,7 +20,7 @@ city_list0 = [
 	 'Phoenix', 'Cape Canaveral',
 	 'Mexico City', 'Villahermosa',         # Mexico
 	 'New Delhi', 'Mumbai',                 # India
-	 'Tirunelveli', 'Surat',
+	 'Tirunelveli', 'Surat', 'Chennai',
 	 'Olney', 'Norwich',                    # England
 	 'Ponce',                               # Puerto Rico
 	 'Berlin',                              # Germany
