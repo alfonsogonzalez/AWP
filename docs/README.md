@@ -51,6 +51,9 @@ Amount of time (in seconds) between each propagation step.
 3. Inclined, highly elliptical orbit (interesting groundtracks)
 4. Inclined, near circular orbit
 
+## Animate Orbits Functionality
+This functionality is a bit of a work in progress, since its *works* but there are improvements to be made to eliminiate the lag of the animations and a small bug in the position and velocity vs. time plots. Nevertheless I hope you find it useful and it will be improved over time. To use, simply click the `Animate Orbits!` button.
+
 ## Interesting Use Cases
 ### Posigrade Burns, Experimenting with Escape Velocity
 The first default orbit in the Earth case is set up to do this since its defined solely by 1 position and 1 velocity value. So one can adjust the `v_y` value to increase eccentricity. When inputting values close to escape velocity (`~`10.7km/s), the program will run much slower. This is because the plot is showing thousands of data points since the period of the very eccentric orbit is very large, and it could crash (stack overflow! Since the amount of memory needed to store that many floating point numbers exceeds the stack limit). 
@@ -80,6 +83,14 @@ As you may have seen, sometimes groundtracks can have very interesting shapes an
 * The most straightforward orbital element to read is the inclination, due to the definition of orbital inclination with respect to the reference plane (usually the equatorial plane)
 * Assuming all points are plotted with equal time steps, one can get an idea of eccentricity. If all the points are relatively evenly spaced, one can assume the orbit is near circular. But if there are some points of the orbit where the points are closer together than others, one can assume a larger eccentricity, since the close together points correspond to around apoapsis, and the more spaced out points correspond to around periapsis.
 
+## Bug Reporting / Feature Request
+Both are welcomed, feel free to do so by creating a GitHub Issue.
+Note that if you actively try to break something, you'll probably break it. I'm sure it wouldn't be hard to find bugs here if you're looking for them.
+Also, note that as was said in the beginning, this is simply meant to be a visual aid for building intuition about the relationships between different values in orbits. More complex analysis should be done via scripting (my preferences are Python and C++).
+
+## Summary
+![it-aint-much-but-its-honest-work](it-aint-much-meme.jpg)
+
 ## TO-DO LIST
 ### Backend
 * Implement TLE to state vector function
@@ -89,3 +100,4 @@ As you may have seen, sometimes groundtracks can have very interesting shapes an
 ### Frontend
 * Entries for each orbit
 	* Constant time step or choose adaptive step size solver
+
