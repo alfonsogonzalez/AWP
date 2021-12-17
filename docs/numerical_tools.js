@@ -1,5 +1,9 @@
 /*
+AID | Astrodynamics Interactive Demo with HTML/CSS/JavaScript, Alfonso Gonzalez
+https://github.com/alfonsogonzalez/AWP
+https://www.youtube.com/c/AlfonsoGonzalezSpaceEngineering
 
+Numerical tools script
 */
 
 d2r = Math.PI / 180.0;

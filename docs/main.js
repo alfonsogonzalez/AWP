@@ -1,5 +1,11 @@
-//sdfsdf
-//
+/*
+AID | Astrodynamics Interactive Demo with HTML/CSS/JavaScript, Alfonso Gonzalez
+https://github.com/alfonsogonzalez/AWP
+https://www.youtube.com/c/AlfonsoGonzalezSpaceEngineering
+
+main script
+*/
+
 const propagate_button = document.getElementById( "propagate_button" );
 const animate_button   = document.getElementById( "animate_button" );
 
@@ -19,13 +25,12 @@ function open_dropdown() {
 }
 
 window.onclick = function( event ) {
-  if (!event.target.matches('.dropbtn')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
+  if ( !event.target.matches( '.dropbtn' ) ) {
+    var dropdowns = document.getElementsByClassName( 'dropdown-content' );
+    for ( var n = 0; n < dropdowns.length; n++ ) {
+      var openDropdown = dropdowns[ i ];
+      if ( openDropdown.classList.contains( 'show' ) ) {
+        openDropdown.classList.remove( 'show' );
       }
     }
   }
@@ -227,7 +232,7 @@ function create_animated_plots() {
 
 		step++;
 
-		if( step >= states_list[ 1 ].length ) {
+		if ( step >= states_list[ 1 ].length ) {
 			clearInterval( interval_id );
 		}
 	}, 6 );

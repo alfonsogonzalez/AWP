@@ -1,5 +1,10 @@
+/*
+AID | Astrodynamics Interactive Demo with HTML/CSS/JavaScript, Alfonso Gonzalez
+https://github.com/alfonsogonzalez/AWP
+https://www.youtube.com/c/AlfonsoGonzalezSpaceEngineering
 
-
+Orbital mechanics tools script
+*/
 
 function two_body_ode( t, y ) {
 	r = y.slice( 0, 3 );

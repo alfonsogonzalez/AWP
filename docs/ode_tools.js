@@ -1,4 +1,10 @@
+/*
+AID | Astrodynamics Interactive Demo with HTML/CSS/JavaScript, Alfonso Gonzalez
+https://github.com/alfonsogonzalez/AWP
+https://www.youtube.com/c/AlfonsoGonzalezSpaceEngineering
 
+Ordinary Differential Equation (ODE) tools script
+*/
 
 function euler_step( f, t, y, h ) {
 	dy = f( t, y );
