@@ -1,0 +1,139 @@
+
+#prof-pic-image {
+	position: absolute;
+	right   : 0;
+	top     : 0;
+	display : block;
+	height  : 140px;
+	width   : 200px;
+}
+
+#rocket-launches {
+	position: absolute;
+	left    : 0;
+	top     : 0;
+	display : block;
+	height  : 140px;
+	width   : 200px;
+}
+
+#plot-3d {
+	width   : 1500px;
+	height  : 1000px;
+	position: absolute;
+	top     : 0px;
+	left    : 1000px;
+}
+
+#plot-groundtracks {
+	width   : 850px;
+	height  : 520px;
+	position: absolute;
+	top     : 315px;
+	left    : -2px;
+}
+
+#plot-positions-velocities {
+	width   : 750px;
+	height  : 450px;
+	position: absolute;
+	top     : 400px;
+	left    : 815px;
+}
+
+.dropbtn {
+	background-color: black;
+	color: white;
+}
+.dropbtn:hover, .dropbtn:focus {
+  background-color: #2980B9;
+}
+.dropdown {
+  position: absolute;
+  top     : 65px;
+  left    : 800px;
+  display : inline-block;
+}
+.dropdown-content {
+  display          : none;
+  position         : absolute;
+  background-color : black;
+  min-width        : 160px;
+  box-shadow       : 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index          : 1;
+}
+.dropdown-content a {
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+.show {display:block;}
+
+h1 {
+	color     : magenta;
+	text-align: center;
+	padding   : 0px;
+	margin    : 5px;
+}
+
+h2 {
+	color      : white;
+	text-align : left;
+	margin-left: 30px;
+}
+
+h3 {
+	color      : white;
+	text-align : left;
+	display    : inline;
+}
+
+.element-input {
+	display: inline-block;
+}
+
+input {
+	background-color: black;
+	border-color    : white;
+	margin-right: 10px;
+	color      : white;
+	text-align : left;
+	max-width  : 70;
+}
+
+label, input {
+	display: inline;
+}
+
+#rx0l, #ry0l, #rz0l,
+#vx0l, #vy0l, #vz0l,
+#sim-time0l,  #dt0l, #active0l { color: magenta; }
+
+#rx1l, #ry1l, #rz1l,
+#vx1l, #vy1l, #vz1l,
+#sim-time1l,  #dt1l, #active1l { color: cyan; }
+
+#sma0l, #ecc0l, #inc0l,
+#ta0l,  #aop0l, #raan0l,
+#sim-time-k0l,  #dt-k0l, #active-k0l { color: lime; }
+
+#sma1l, #ecc1l, #inc1l,
+#ta1l,  #aop1l, #raan1l,
+#sim-time-k1l,  #dt-k1l, #active-k1l { color: red; }
+
+.buttons {
+	width  : 200px;
+	margin : 10px;
+	display: inline;
+}
+
+p {
+	color: white;
+}
+
+img {
+	text-align : left;
+	margin-left: 30px;
+}
+
