@@ -144,7 +144,7 @@ sun = {
 	'name'            : 'Sun',
 	'SPICE_ID'        : 10,
 	'mass'            : 1.989e30,
-	'mu'              : 1.989e30 * G,
+	'mu'              : 1.3271244004193938E+11,
 	'radius'          : 695510.0,
 	'deorbit_altitude': 1.2 * 695510.0,
 	'cmap'            :'gist_heat'
