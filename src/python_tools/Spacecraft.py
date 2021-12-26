@@ -118,7 +118,8 @@ class Spacecraft:
 	def assign_orbit_perturbations_functions( self ):
 	
 		self.orbit_perts_funcs_map = {
-			'J2': self.calc_J2
+			'J2'      : self.calc_J2,
+			'n_bodies': self.calc_n_bodies
 		}
 		self.orbit_perts_funcs = []
 
@@ -155,6 +156,18 @@ class Spacecraft:
 
 	def print_stop_condition( self, parameter ):
 		print( f'Spacecraft has reached {parameter}.' )
+
+	def calc_n_bodies( self, et, state ):
+		a = np.zeros( 3 )
+		for body in self.config[ 'orbit_perts' ][ 'n_bodies' ]:
+			r_cb2body  = spice.spkgps( body[ 'SPICE_ID' ], et,
+				self.config[ 'frame' ], self.cb[ 'SPICE_ID' ] )[ 0 ]
+			r_sc2body = r_cb2body - state[ :3 ]
+
+			a += body[ 'mu' ] * (\
+				 r_sc2body / nt.norm( r_sc2body ) ** 3 -\
+				 r_cb2body / nt.norm( r_cb2body ) ** 3 )
+		return a
 
 	def calc_J2( self, et, state ):
 		z2     = state[ 2 ] ** 2
