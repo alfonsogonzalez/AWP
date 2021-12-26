@@ -1,0 +1,195 @@
+<html>
+<head>
+	<link rel="stylesheet" href="style.css">
+
+	<script src="https://cdn.plot.ly/plotly-2.6.3.min.js"></script>
+	<script src=https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js></script>
+	<script src="numerical_tools.js"></script>
+	<script src="orbit_tools.js"></script>
+	<script src="ode_tools.js"></script>
+	<script src="plotting_tools.js"></script>
+	<script src="planetary_data.js"></script>
+
+	<title>Astrodynamics Interactive Demo</title>
+	<link rel="icon" href="https://raw.githubusercontent.com/alfonsogonzalez/AWP/main/docs/cosmo-3d-launches.png" type="image/x-icon">
+
+</head>
+<body style="background-color:rgb(0,0,0);">
+	<h1>Astrodynamics Interactive Demo</h1>
+
+	<div class="dropdown">
+	  <button onclick="open_dropdown()" class="dropbtn">Central Body</button>
+	  <div id="dropdown" class="dropdown-content">
+	    <a href="#" onclick="set_central_body_earth()">Earth</a>
+	    <a href="#" onclick="set_central_body_moon()">Moon</a>
+	    <a href="#" onclick="set_central_body_mars()">Mars</a>
+	  </div>
+	</div>
+
+	<div class="element-input">
+		<label id="rx0l" for="rx0">r<sub>x</sub></label><br />
+		<input id="rx0" type="text" value="6878.0"/>
+	</div>
+	<div class="element-input">
+		<label id="ry0l" for="ry0">r<sub>y</sub></label><br />
+		<input id="ry0" type="text" value="0"/>
+	</div>
+	<div class="element-input">
+		<label id="rz0l" for="rz0">r<sub>z</sub></label><br />
+		<input id="rz0" type="text" value="0"/>
+	</div>
+	<div class="element-input">
+		<label id="vx0l" for="vx0">v<sub>x</sub></label><br />
+		<input id="vx0" type="text" value="0.0"/>
+	</div>
+	<div class="element-input">
+		<label id="vy0l" for="vy0">v<sub>y</sub></label><br />
+		<input id="vy0" type="text" value="7.62"/>
+	</div>
+	<div class="element-input">
+		<label id="vz0l" for="vz0">v<sub>z</sub></label><br />
+		<input id="vz0" type="text" value="0"/>
+	</div>
+	<div class="element-input">
+		<label id="sim-time0l" for="sim-time0">Periods</label><br />
+		<input id="sim-time0" type="text" value="2"/>
+	</div>
+	<div class="element-input">
+		<label id="dt0l" for="dt0">Time Step</label><br />
+		<input id="dt0" type="text" value="60"/>
+	</div>
+	<div class="element-input">
+		<label id="active0l" for="active0">Active</label><br />
+		<input id="active0" type="checkbox" value="1" checked="checked"/>
+	</div>
+
+	<br><br>
+
+	<div class="element-input">
+		<label id="rx1l" for="rx1">r<sub>x</sub></label><br />
+		<input id="rx1" type="text" value="6878.0"/>
+	</div>
+	<div class="element-input">
+		<label id="ry1l" for="ry1">r<sub>y</sub></label><br />
+		<input id="ry1" type="text" value="1"/>
+	</div>
+	<div class="element-input">
+		<label id="rz1l" for="rz1">r<sub>z</sub></label><br />
+		<input id="rz1" type="text" value="1"/>
+	</div>
+	<div class="element-input">
+		<label id="vx1l" for="vx1">v<sub>x</sub></label><br />
+		<input id="vx1" type="text" value="1.1"/>
+	</div>
+	<div class="element-input">
+		<label id="vy1l" for="vy1">v<sub>y</sub></label><br />
+		<input id="vy1" type="text" value="1.5"/>
+	</div>
+	<div class="element-input">
+		<label id="vz1l" for="vz1">v<sub>z</sub></label><br />
+		<input id="vz1" type="text" value="8.0"/>
+	</div>
+	<div class="element-input">
+		<label id="sim-time1l" for="sim-time1">Periods</label><br />
+		<input id="sim-time1" type="text" value="2"/>
+	</div>
+	<div class="element-input">
+		<label id="dt1l" for="dt1">Time Step</label><br />
+		<input id="dt1" type="text" value="60"/>
+	</div>
+	<div class="element-input">
+		<label id="active1l" for="active1">Active</label><br />
+		<input id="active1" type="checkbox" value="1" checked="checked"/>
+	</div>
+
+	<br><br>
+
+	<div class="element-input">
+		<label id="sma0l" for="sma0">SMA</label><br />
+		<input id="sma0" type="text" value="8500.0"/>
+	</div>
+	<div class="element-input">
+		<label id="ecc0l" for="ecc0">ECC</sub></label><br />
+		<input id="ecc0" type="text" value="0.2"/>
+	</div>
+	<div class="element-input">
+		<label id="inc0l" for="inc0">INC</label><br />
+		<input id="inc0" type="text" value="60.0"/>
+	</div>
+	<div class="element-input">
+		<label id="ta0l" for="ta0">TA (&#952)</label><br />
+		<input id="ta0" type="text" value="0.0"/>
+	</div>
+	<div class="element-input">
+		<label id="aop0l" for="aop0">AOP (&#969)</label><br />
+		<input id="aop0" type="text" value="50.0"/>
+	</div>
+	<div class="element-input">
+		<label id="raan0l" for="raan0">RAAN (&#937)</label><br />
+		<input id="raan0" type="text" value="40.0"/>
+	</div>
+	<div class="element-input">
+		<label id="sim-time-k0l" for="sim-time-k0">Periods</label><br />
+		<input id="sim-time-k0" type="text" value="2"/>
+	</div>
+	<div class="element-input">
+		<label id="dt-k0l" for="dt-k0">Time Step</label><br />
+		<input id="dt-k0" type="text" value="60"/>
+	</div>
+	<div class="element-input">
+		<label id="active-k0l" for="active-k0">Active</label><br />
+		<input id="active-k0" type="checkbox" value="1" checked="checked"/>
+	</div>
+
+	<br><br>
+
+	<div class="element-input">
+		<label id="sma1l" for="sma1">SMA</label><br />
+		<input id="sma1" type="text" value="25500.0"/>
+	</div>
+	<div class="element-input">
+		<label id="ecc1l" for="ecc1">ECC</sub></label><br />
+		<input id="ecc1" type="text" value="0.01"/>
+	</div>
+	<div class="element-input">
+		<label id="inc1l" for="inc1">INC</label><br />
+		<input id="inc1" type="text" value="1.0"/>
+	</div>
+	<div class="element-input">
+		<label id="ta1l" for="ta1">TA (&#952)</label><br />
+		<input id="ta1" type="text" value="0.0"/>
+	</div>
+	<div class="element-input">
+		<label id="aop1l" for="aop1">AOP (&#969)</label><br />
+		<input id="aop1" type="text" value="50.0"/>
+	</div>
+	<div class="element-input">
+		<label id="raan1l" for="raan1">RAAN (&#937)</label><br />
+		<input id="raan1" type="text" value="40.0"/>
+	</div>
+	<div class="element-input">
+		<label id="sim-time-k1l" for="sim-time-k1">Periods</label><br />
+		<input id="sim-time-k1" type="text" value="0.5"/>
+	</div>
+	<div class="element-input">
+		<label id="dt-k1l" for="dt-k1">Time Step</label><br />
+		<input id="dt-k1" type="text" value="60"/>
+	</div>
+	<div class="element-input">
+		<label id="active-k1l" for="active-k1">Active</label><br />
+		<input id="active-k1" type="checkbox" value="1"/>
+	</div>
+
+	<br><br>
+	<button id="propagate_button" type="submit">Propagate Orbits!</button>
+	<button id="animate_button" type="submit">Animate Orbits!</button>
+	
+	<div id="plot-3d"></div>
+	<div id="plot-groundtracks"></div>
+	<div id="plot-positions-velocities"></div>
+
+	<script src="main.js"></script>
+
+</body>
+
+</html>
