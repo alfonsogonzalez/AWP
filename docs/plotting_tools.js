@@ -11,6 +11,7 @@ const BASIS_VECTORS_SCALE    = 2.0;
 const MAX_VAL_SCALE          = 2.5;
 const GROUNDTRACK_MARKERSIZE = 2;
 const RV_LINEWIDTH           = 3;
+const EQ_PLANE_OPACITY       = 0.7;
 
 function make_basis_vectors( radius ) {
 	return [
@@ -121,6 +122,18 @@ function make_trace_rv( ets, states, n ) {
 	} ];	
 }
 
+function make_trace_eq_plane( max_val ) {
+	return {
+		x         : [ [ max_val,  max_val ], [ -max_val, -max_val ] ],
+		y         : [ [ max_val, -max_val ], [  max_val, -max_val ] ],
+		z         : [ [ 0, 0 ], [ 0, 0 ] ],
+		type      : 'surface',
+		opacity   : EQ_PLANE_OPACITY,
+		colorscale: 'Blues',
+		showscale : false
+	}
+}
+
 function create_3d_plot( states_list, idxs, lims = false ) {
 	let traces  = [];
 	let max_val = 0;
@@ -139,6 +152,10 @@ function create_3d_plot( states_list, idxs, lims = false ) {
 	traces.push( basis_vectors[ 0 ] );
 	traces.push( basis_vectors[ 1 ] );
 	traces.push( basis_vectors[ 2 ] );
+
+	if ( document.getElementById( 'active-eq-plane' ).checked ) {
+		traces.push( make_trace_eq_plane( max_val ) );
+	}
 
 	let layout = {
 	  title        : false,
