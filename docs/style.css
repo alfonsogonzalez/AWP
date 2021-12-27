@@ -41,6 +41,21 @@
 	left    : 815px;
 }
 
+#active-eq-plane {
+	position: absolute;
+	top     : 280px;
+	left    : 835px;
+	color   : white;
+}
+
+#active-eq-planel {
+	position: absolute;
+	top     : 259px;
+	left    : 795px;
+	color   : white;
+}
+
+
 .dropbtn {
 	background-color: black;
 	color: white;
