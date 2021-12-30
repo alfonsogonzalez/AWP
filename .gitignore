@@ -6,5 +6,8 @@
 **/*.out
 **/*.toc
 
+# PDFs in src directory
+src/**/*.pdf
+
 # book images
 book/**/*.png
