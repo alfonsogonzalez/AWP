@@ -22,3 +22,7 @@ def rk4_step( f, t, y, h ):
 	k4 = f( t +       h, y +       k3 * h )
 
 	return y + h / 6.0 * ( k1 + 2 * k2 + 2 * k3 + k4 )
+
+methods = {
+	'rk4': rk4_step
+}
