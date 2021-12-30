@@ -235,7 +235,7 @@ function create_animated_plots() {
 		if ( step >= states_list[ 1 ].length ) {
 			clearInterval( interval_id );
 		}
-	}, 6 );
+	}, 2 );
 }
 
 create_stationary_plots();
