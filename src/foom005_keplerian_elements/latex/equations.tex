@@ -1,0 +1,173 @@
+\documentclass{article}
+
+\usepackage{amsmath}   %% for \cfrac, column vector
+\usepackage{xcolor}    %% for colored text
+\usepackage{pagecolor} %% for dark background
+\usepackage{graphicx}
+\usepackage[margin=0.1in]{geometry}
+
+\pagecolor{black}
+\definecolor{mag}{RGB}{255,0,255}
+\definecolor{cyan}{RGB}{0,255,255}
+\definecolor{white}{RGB}{255,255,255}
+\definecolor{red}{RGB}{255,0,0}
+\definecolor{green}{RGB}{0,255,0}
+\definecolor{blue}{RGB}{10,10,255}
+\definecolor{orange}{RGB}{255,165,0}
+\definecolor{yellow}{RGB}{255,255,0}
+
+%% make subscripts smaller
+%%\begingroup\lccode`~=`_
+%%\lowercase{\endgroup\def~}#1{_{\scriptscriptstyle#1}}
+%%\AtBeginDocument{\mathcode`_="8000 \catcode`_=12 }
+
+%% small negative sign
+\newcommand{\dashexp}{\scalebox{0.35}[0.5]{$-$}}
+\newcommand{\dash}{\scalebox{0.5}[1.0]{$-$}}
+
+
+\begin{document}
+
+$\color{red}r_{apoapsis}$\\
+
+$\color{green}r_{periapsis}$\\
+
+$\color{red}r_{a}$\\
+
+$\color{green}r_{p}$\\
+
+$
+\color{mag}sma\color{white}=
+\cfrac{\color{red}r_a\color{white}+\color{green}r_p\color{white}}{2}
+$\\
+
+$
+\color{white}T=2\pi\sqrt{\cfrac{\color{mag}sma\color{white}^3}{\color{blue}\mu}\color{white}}
+$\\
+
+$
+\color{mag}ecc\color{white}=
+\cfrac{\color{red}r_a\color{white}-\color{green}r_p\color{white}}{\color{red}r_a\color{white}+\color{green}r_p\color{white}}=
+\cfrac{\color{red}r_a\color{white}-\color{green}r_p\color{white}}{\color{white}2\color{mag}sma\color{white}}
+$\\
+
+$
+\color{mag}ecc\color{white}=
+\cfrac{\color{red}r_a\color{white}-\color{green}r_p\color{white}}{\color{white}2\color{mag}sma\color{white}}
+$\\\\
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% euler angles
+
+$
+\color{white}Q_{\color{green}ECI\color{white}2\color{mag}perif}\color{white}=
+\color{blue}Q_z\color{white}(\color{mag}\omega\color{white})
+\color{red}Q_x\color{white}(\color{mag}inc\color{white})
+\color{blue}Q_z\color{white}(\color{mag}\Omega\color{white})
+$\\\\
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% inclination
+
+$
+\color{white}0^{\circ}\leq\color{mag}inc\color{white}<90^{\circ}: prograde
+$
+
+$
+\color{white}90^{\circ}<\color{mag}inc\color{white}<180^{\circ}: retrograde
+$\\		
+
+$
+\color{white}-90^{\circ}<\color{mag}inc\color{white}<0^{\circ}: retrograde
+$\\	
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% eccentricity
+
+$\color{white}0<\color{mag}ecc\color{white}<1: elliptical$
+
+$\color{mag}ecc\color{white}>1: hyperbolic$\\\\
+
+$
+\color{mag}ecc\color{white}=1-\cfrac{\color{green}r_p\color{white}}{\color{mag}sma}
+$\\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% kepler's equation
+
+$
+\color{cyan}M\color{white}=\color{red}E\color{white}-\color{mag}ecc
+\color{white}\,sin(\color{red}E\color{white})
+$\\\\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% state vector to keplerian orbital elements
+
+$
+\color{green}\varepsilon\color{white}=
+\cfrac{|\color{mag}\vec{v}\color{white}\,|^2}{2}-
+\cfrac{\color{blue}\mu\color{white}}{|\color{mag}\vec{r}\color{white}\,|}
+$
+
+$
+\color{mag}sma\color{white}=
+\cfrac{\dash\color{blue}\mu\color{white}}{2\color{green}\varepsilon\color{white}}
+$
+
+
+$
+\color{cyan}\vec{h}\color{white}=\color{mag}\vec{r}
+\color{white}\times\color{mag}\vec{v}
+$
+
+$
+\color{mag}inc\color{white}=cos^{\dashexp1}
+(\cfrac{\color{cyan}h_z\color{white}}{|\color{cyan}\vec{h}\color{white}|})
+$
+
+$
+\color{blue}\vec{N}\color{white}=\hat{z}\times
+\color{cyan}\vec{h}
+$
+
+$
+\color{mag}\Omega\color{white}=cos^{\dashexp1}
+(\cfrac{\color{blue}N_x\color{white}}{|\color{blue}\vec{N}\color{white}|})
+$
+
+$
+\color{mag}\vec{e}\color{white}=\cfrac{1}{\color{blue}\mu\color{white}}\left(
+(|\color{mag}\vec{v}\color{white}\,|^2-\cfrac{\color{blue}\mu\color{white}}{|\color{mag}\vec{r}\color{white}\,|})
+\color{mag}\vec{r}\color{white}-|\color{mag}\vec{r}\color{white}\,|
+\color{mag}v_{rad}\vec{v}\color{white}\,\right)
+$
+
+$
+\color{mag}\omega\color{white}=cos^{\dashexp1}(
+\color{blue}\hat{N}\color{white}\cdot\color{mag}\hat{e}\color{white})
+$ \\\\
+
+$
+\color{mag}\vec{r}_{perif}\color{white}=
+|\color{mag}\vec{r}\color{white}\,|
+\begin{bmatrix}
+	cos(\color{mag}\theta\color{white}) \\
+	sin(\color{mag}\theta\color{white}) \\
+	0
+\end{bmatrix}
+$
+
+$
+\color{mag}\vec{v}_{perif}\color{white}=
+\cfrac{\color{blue}\mu\color{white}}
+{|\color{cyan}\vec{h}\color{white}\,|}
+\begin{bmatrix}
+	\dash sin(\color{mag}\theta\color{white}) \\
+	\color{mag}ecc\color{white}+cos(\color{mag}\theta\color{white}) \\
+	0
+\end{bmatrix}
+$
+
+\end{document}
