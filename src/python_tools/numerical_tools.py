@@ -6,10 +6,16 @@ https://www.youtube.com/c/AlfonsoGonzalezSpaceEngineering
 Numerical Tools Library
 '''
 
+# Python standard libraries
 import math
 
+# 3rd party libraries
 import numpy    as np
 import spiceypy as spice
+
+# AWP library
+import orbit_calculations as oc
+import ode_tools          as ot
 
 r2d     = 180.0 / np.pi
 d2r     = 1.0  / r2d
@@ -143,3 +149,16 @@ def cart2lat( rs, frame_from = None, frame_to = None, ets = None, deg = True ):
 		latlons[ :, 1: ] *= r2d
 
 	return latlons
+
+def propagate_ode( ode, state0, tspan, dt, method = 'rk4' ):
+	func        = ot.methods[ method ]
+	ets         = np.arange( 0, tspan, dt )
+	steps       = len( ets )
+	states      = np.zeros( ( steps, len( state0 ) ) )
+	states[ 0 ] = state0
+
+	for step in range( steps - 1 ):
+		states[ step + 1 ] = func(
+			ode, ets[ step ], states[ step ], dt )
+
+	return ets, states

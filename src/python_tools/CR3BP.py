@@ -23,7 +23,12 @@ def null_args():
 	}
 
 CR3BP_SYSTEMS = {
-	'earth-moon' : { 'mu': 0.012277471 },
+	'earth-moon' : {
+		'mu': 0.012277471,
+		'L1': 0.8362925909457339,
+		'L2': 1.1561681659055247,
+		'L3': -1.0051155116068917
+	},
 	'sun-jupiter': { 'mu': 0.000953875 }
 }
 
@@ -41,9 +46,9 @@ class CR3BP:
 
 	def diffy_q( self, et, state ):
 		rx, ry, rz, vx, vy, vz = state
-		r       = state[ :3 ]
-		r13_vec = r + [ self.mu, 0, 0 ]
-		r23_vec = r + [ -1 + self.mu, 0, 0 ]
+
+		r13_vec = [ rx + self.mu, ry, rz ]
+		r23_vec = [ rx - 1 + self.mu, ry, rz ]
 		r13_3   = nt.norm( r13_vec ) ** 3
 		r23_3   = nt.norm( r23_vec ) ** 3
 		omega_x = rx - self.one_mu * ( rx + self.mu ) / r13_3 -\
@@ -88,3 +93,12 @@ class CR3BP:
 			_args[ key ] = args[ key ]
 
 		pt.plot_cr3bp_2d( self.mu, [ self.states[ :, :3 ] ], _args )
+
+	def plot_3d( self, args = { 'show': True } ):
+		_args = {
+			'show' : True
+		}
+		for key in args.keys():
+			_args[ key ] = args[ key ]
+
+		pt.plot_cr3bp_3d( self.mu, [ self.states[ :, :3 ] ], _args )
