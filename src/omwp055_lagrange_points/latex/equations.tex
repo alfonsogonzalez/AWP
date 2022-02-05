@@ -1,0 +1,407 @@
+\documentclass{article}
+
+\usepackage{amsmath}   %% for \cfrac, column vector
+\usepackage{xcolor}    %% for colored text
+\usepackage{pagecolor} %% for dark background
+\usepackage{graphicx}
+\usepackage[margin=0.1in]{geometry}
+
+\pagecolor{black}
+\definecolor{mag}{RGB}{255,0,255}
+\definecolor{cyan}{RGB}{0,255,255}
+\definecolor{white}{RGB}{255,255,255}
+\definecolor{red}{RGB}{255,0,0}
+\definecolor{green}{RGB}{0,255,0}
+\definecolor{blue}{RGB}{10,10,255}
+\definecolor{orange}{RGB}{255,165,0}
+\definecolor{yellow}{RGB}{255,255,0}
+
+\newcommand{\cw}{\color{white}}
+\newcommand{\cm}{\color{mag}}
+\newcommand{\cred}{\color{red}}
+\newcommand{\cb}{\color{blue}}
+\newcommand{\cg}{\color{green}}
+
+%% make subscripts smaller
+\begingroup\lccode`~=`_
+\lowercase{\endgroup\def~}#1{_{\scriptscriptstyle#1}}
+\AtBeginDocument{\mathcode`_="8000 \catcode`_=12 }
+
+%% small negative sign
+\newcommand{\dashexp}{\scalebox{0.35}[0.5]{$-$}}
+\newcommand{\dash}{\scalebox{0.5}[1.0]{$-$}}
+
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ODEs
+$\color{white}
+\color{mag}\vec{r}\color{white}(t)=\color{mag}\vec{r}\color{white}(0),\;
+\cfrac{d\color{mag}\vec{r}\color{white}}{dt}=\vec{0},\;
+\cfrac{d\color{mag}\vec{v}\color{white}}{dt}=\vec{0}
+$\\
+
+$
+\color{white}\underline{\color{green}s\color{white}}=
+\begin{bmatrix}
+	 \color{mag}r_x \\
+	 \color{mag}r_y \\
+	 \color{mag}r_z \\
+	 \color{mag}v_x \\
+	 \color{mag}v_y \\
+	 \color{mag}v_z
+\end{bmatrix}
+,\;\;
+\color{white}\dot{\underline{\color{green}s\color{white}}}=
+\begin{bmatrix}
+	 \color{mag}v_x \\
+	 \color{mag}v_y \\
+	 \color{mag}v_z \\
+	 \color{white}2\color{mag}v_y\color{white}+\cfrac{\partial\color{cyan}\Omega}{\partial \color{mag}r_x} \\
+	 \color{white}-2\color{mag}v_x\color{white}+\cfrac{\partial\color{cyan}\Omega}{\partial \color{mag}r_y} \\
+	 \color{white}\cfrac{\partial\color{cyan}\Omega}{\partial \color{mag}r_z}
+\end{bmatrix}=
+\begin{bmatrix}
+	0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0
+\end{bmatrix}
+$\\\\
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% gradient
+
+$
+\color{white}\nabla_{\!\!\color{mag}\vec{r}}\,
+\color{cyan}\Omega\color{white}=
+\begin{bmatrix}
+	\color{white}\cfrac{\partial\color{cyan}\Omega}{\partial \color{mag}r_x} \\\\
+	\color{white}\cfrac{\partial\color{cyan}\Omega}{\partial \color{mag}r_y} \\\\
+	\color{white}\cfrac{\partial\color{cyan}\Omega}{\partial \color{mag}r_z}
+\end{bmatrix}
+=
+\begin{bmatrix}
+	\color{red}n^2\color{mag}r_x\color{white}-
+	\cfrac{(1-\color{red}\mu\color{white})(\color{mag}r_x\color{white}+\color{red}\mu\color{white})}
+	{|\color{blue}\vec{r}_{1\color{mag}3}\color{white}|^3}-
+	\cfrac{\color{red}\mu\color{white}(\color{mag}r_x\color{white}-1+\color{red}\mu\color{white})}
+	{|\color{green}\vec{r}_{2\color{mag}3}\color{white}|^3} \\
+
+	\color{red}n^2\color{mag}r_y\color{white}-
+	\cfrac{(1-\color{red}\mu\color{white})\color{mag}r_y}
+	{|\color{blue}\vec{r}_{1\color{mag}3}\color{white}|^3}-
+	\cfrac{\color{red}\mu\color{white}\color{mag}r_y}
+	{|\color{green}\vec{r}_{2\color{mag}3}\color{white}|^3} \\
+
+	-\cfrac{(1-\color{red}\mu\color{white})\color{mag}r_z}
+	{|\color{blue}\vec{r}_{1\color{mag}3}\color{white}|^3}-
+	\cfrac{\color{red}\mu\color{white}\color{mag}r_z}
+	{|\color{green}\vec{r}_{2\color{mag}3}\color{white}|^3}
+\end{bmatrix}
+=
+\begin{bmatrix}
+	0 \\\\ 0 \\\\ 0
+\end{bmatrix}
+$
+
+$
+\color{cyan}\Omega\color{white}(\color{mag}\vec{r}\color{white}\,)=
+\cfrac{1-\color{red}\mu\color{white}}{\color{white}|\color{blue}\vec{r}_{1\color{mag}3\color{white}}\color{white}|}+
+\cfrac{\color{red}\mu\color{white}}{\color{white}|\color{green}\vec{r}_{2\color{mag}3\color{white}}\color{white}|}+
+\cfrac{1}{2}\,\color{red}n^{\color{white}2}\color{white}
+(\color{mag}r_{\color{mag}x}^{\color{white}2}\color{white}+\color{mag}r_{\color{mag}y}^{\color{white}2}\color{white})
+$\\\\
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% z-axis
+
+$
+\color{white}\cfrac{\partial\color{cyan}\Omega}{\partial \color{mag}r_z}=
+-\cfrac{(1-\color{red}\mu\color{white})\color{mag}r_z}
+{|\color{blue}\vec{r}_{1\color{mag}3}\color{white}|^3}-
+\cfrac{\color{red}\mu\color{white}\color{mag}r_z}
+{|\color{green}\vec{r}_{2\color{mag}3}\color{white}|^3}
+$\\
+
+$
+\color{white}\cfrac{\partial\color{cyan}\Omega}{\partial \color{mag}r_z}=
+\dash\color{mag}r_z\color{white}\left(
+\cfrac{(1-\color{red}\mu\color{white})}
+{|\color{blue}\vec{r}_{1\color{mag}3}\color{white}|^3}+
+\cfrac{\color{red}\mu\color{white}}
+{|\color{green}\vec{r}_{2\color{mag}3}\color{white}|^3}
+\right)
+$
+
+$
+\color{mag}r_z\color{white}=0
+$\\\\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% y-axis
+
+$
+\color{white}\cfrac{\partial\color{cyan}\Omega}{\partial \color{mag}r_y}=
+\color{red}n^2\color{mag}r_y\color{white}-
+\cfrac{(1-\color{red}\mu\color{white})\color{mag}r_y}
+{|\color{blue}\vec{r}_{1\color{mag}3}\color{white}|^3}-
+\cfrac{\color{red}\mu\color{white}\color{mag}r_y}
+{|\color{green}\vec{r}_{2\color{mag}3}\color{white}|^3}
+$\\
+
+$
+\color{white}\cfrac{\partial\color{cyan}\Omega}{\partial \color{mag}r_y}=
+\color{mag}r_y\color{white}\left(
+\color{white}1-
+\cfrac{(1-\color{red}\mu\color{white})}
+{|\color{blue}\vec{r}_{1\color{mag}3}\color{white}|^3}-
+\cfrac{\color{red}\mu\color{white}}
+{|\color{green}\vec{r}_{2\color{mag}3}\color{white}|^3}
+\right)
+$\\\\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% x-axis
+
+$
+\color{mag}r_y\color{white}=0,\;\color{mag}r_z\color{white}=0
+$\\
+
+$
+\color{white}\cfrac{\partial\color{cyan}\Omega}{\partial \color{mag}r_x}=
+\color{red}n^2\color{mag}r_x\color{white}-
+\cfrac{(1-\color{red}\mu\color{white})(\color{mag}r_x\color{white}+\color{red}\mu\color{white})}
+{|\color{blue}\vec{r}_{1\color{mag}3}\color{white}|^3}-
+\cfrac{\color{red}\mu\color{white}(\color{mag}r_x\color{white}-1+\color{red}\mu\color{white})}
+{|\color{green}\vec{r}_{2\color{mag}3}\color{white}|^3}
+$\\
+
+$
+\color{blue}\vec{r}_{\color{blue}1\color{mag}3}\color{white}=
+\begin{bmatrix}
+	\color{mag}r_x\color{white}+\color{red}\mu \\
+	\color{mag}r_y \\
+	\color{mag}r_z
+\end{bmatrix}
+$\\\\
+
+$
+\color{green}\vec{r}_{\color{green}2\color{mag}3}\color{white}=
+\begin{bmatrix}
+	\color{mag}r_x\color{white}-1+\color{red}\mu \\
+	\color{mag}r_y \\
+	\color{mag}r_z
+\end{bmatrix}
+$\\\\
+
+$
+\color{white}\cfrac{\partial\color{cyan}\Omega}{\partial \color{mag}r_x}=
+\color{mag}r_x\color{white}-
+\cfrac{(1-\color{red}\mu\color{white})(\color{mag}r_x\color{white}+\color{red}\mu\color{white})}
+{\left( \sqrt{(\color{mag}r_x\color{white}+\color{red}\mu\color{white})^2}   \right)^3}
+\color{white}-
+\cfrac{\color{red}\mu\color{white}(\color{mag}r_x\color{white}-1+\color{red}\mu\color{white})}
+{\left( \sqrt{(\color{mag}r_x\color{white}-1+\color{red}\mu\color{white})^2}   \right)^3}
+$\\\\
+
+$\color{white}
+\sqrt{(x+1)^2}
+$\\
+
+$\color{white}
+f(x)=\sqrt{(x+1)^2}
+$\\
+
+$\color{white}
+f(x+1)=f(\dash(x+1))
+$
+
+%%% inequalities
+$\color{mag}r_x\color{white}+\color{red}\mu\color{white}>0,\;
+\color{mag}r_x\color{white}+\color{red}\mu\color{white}<0$
+
+$\color{mag}r_x\color{white}-1+\color{red}\mu\color{white}>0,\;
+\color{mag}r_x\color{white}-1+\color{red}\mu\color{white}<0$\\\\
+
+$\color{mag}r_x\color{white}>\dash\color{red}\mu\color{white},\;
+\color{mag}r_x\color{white}<\dash\color{red}\mu$
+
+$\color{mag}r_x\color{white}>1-\color{red}\mu\color{white},\;
+\color{mag}r_x\color{white}<1-\color{red}\mu$
+
+$\color{blue}>\color{white},\color{green}>$
+$\color{blue}>\color{white},\color{green}<$
+$\color{blue}<\color{white},\color{green}>$
+$\color{blue}<\color{white},\color{green}<$
+
+$\color{mag}L1$
+$\color{mag}L2$
+$\color{mag}L3$\\\\
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% colinear solutions
+
+%% L2
+$
+\color{white}\cfrac{\partial\color{cyan}\Omega}{\partial \color{mag}r_x}=
+\color{mag}r_x\color{white}-
+\cfrac{1-\color{red}\mu\color{white}}
+{(\color{mag}r_x\color{white}+\color{red}\mu\color{white})^2}
+\color{white}-
+\cfrac{\color{red}\mu\color{white}}
+{(\color{mag}r_x\color{white}-1+\color{red}\mu\color{white})^2}
+$\\\\
+
+%% L1
+$
+\color{white}\cfrac{\partial\color{cyan}\Omega}{\partial \color{mag}r_x}=
+\color{mag}r_x\color{white}-
+\cfrac{1-\color{red}\mu\color{white}}
+{(\color{mag}r_x\color{white}+\color{red}\mu\color{white})^2}
+\color{white}+
+\cfrac{\color{red}\mu\color{white}}
+{(\color{mag}r_x\color{white}-1+\color{red}\mu\color{white})^2}
+$\\\\
+
+%% L1
+$
+\color{white}\cfrac{\partial\color{cyan}\Omega}{\partial \color{mag}r_x}=
+\color{mag}r_x\color{white}+
+\cfrac{1-\color{red}\mu\color{white}}
+{(\color{mag}r_x\color{white}+\color{red}\mu\color{white})^2}
+\color{white}+
+\cfrac{\color{red}\mu\color{white}}
+{(\color{mag}r_x\color{white}-1+\color{red}\mu\color{white})^2}
+$\\\\
+
+%% invalid
+$
+\color{white}\cfrac{\partial\color{cyan}\Omega}{\partial \color{mag}r_x}=
+\color{mag}r_x\color{white}+
+\cfrac{1-\color{red}\mu\color{white}}
+{(\color{mag}r_x\color{white}+\color{red}\mu\color{white})^2}
+\color{white}-
+\cfrac{\color{red}\mu\color{white}}
+{(\color{mag}r_x\color{white}-1+\color{red}\mu\color{white})^2}
+$\\\\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% triangular solutions
+
+$
+\cb\alpha\cw=\cfrac{1}{|\cb\vec{r}_{1\cm3}\cw|^3}\cw,\;
+\cg\beta\cw=\cfrac{1}{|\cg\vec{r}_{2\cm3}\cw|^3}
+$\\\\
+
+$
+\cm r_x\cw-(1-\cred\mu\cw)(\cm r_x\cw+\cred\mu\cw)\cb\alpha\cw-
+\cred\mu\cw(\cm r_x\cw-1+\cred\mu\cw)\cg\beta\cw=0
+$
+
+$
+\cw1-(1-\cred\mu\cw)\cb\alpha\cw-\cred\mu\cg\beta\cw=0
+$
+
+%%%%
+%% matrix vector
+
+$
+\cw \begin{bmatrix}A\end{bmatrix}\underline{x}+\underline{b}=
+\underline{0}
+$\\\\
+
+$\cw
+\begin{bmatrix}
+	\cw-(1-\cred\mu\cw)(\cm r_x\cw+\cred\mu\cw) & -\cred\mu\cw(\cm r_x\cw-1+\cred\mu\cw) \\
+	\cred\mu\cw-1 & -\cred\mu\cw
+\end{bmatrix}
+\!
+\begin{bmatrix}
+	\cb\alpha \\ \cg\beta\cw
+\end{bmatrix}
++
+\begin{bmatrix}
+	\cm r_x \cw \\ 1
+\end{bmatrix}
+=
+\begin{bmatrix}
+	\cw 0 \cw \\ 0
+\end{bmatrix}
+$\\\\
+
+$\cw
+\underline{x}=\dash\begin{bmatrix}A\end{bmatrix}^{\dashexp1}\underline{b}
+$\\\\
+
+$\cw
+\begin{bmatrix}
+	\cb\alpha \\ \cg\beta\cw
+\end{bmatrix}
+=\dash
+\begin{bmatrix}
+	\cw-(1-\cred\mu\cw)(\cm r_x\cw+\cred\mu\cw) & -\cred\mu\cw(\cm r_x\cw-1+\cred\mu\cw) \\
+	\cred\mu\cw-1 & -\cred\mu\cw
+\end{bmatrix}^{\dashexp1}
+\begin{bmatrix}
+	\cm r_x \cw \\ 1
+\end{bmatrix}
+$\\\\
+
+$\cw
+\begin{bmatrix}
+	\cb\alpha \\ \cg\beta\cw
+\end{bmatrix}
+=
+\begin{bmatrix}
+	\cw 1 \\ 1
+\end{bmatrix}
+$\\\\
+
+$
+\cb\alpha\cw=\cfrac{1}{|\cb\vec{r}_{1\cm3}\cw|^3}\cw=
+\cg\beta\cw=\cfrac{1}{|\cg\vec{r}_{2\cm3}\cw|^3}=1=\ell
+$\\\\
+
+
+$\cw
+(\cm r_x\cw+\cred\mu\cw)^2+\cm r_y\cw^2\cw=1
+$
+
+$\cw
+(\cm r_x\cw-1+\cred\mu\cw)^2+\cm r_y\cw^2\cw=1
+$\\
+
+$\cw
+(\cm r_x\cw+\cred\mu\cw)^2\cw=
+(\cm r_x\cw-1+\cred\mu\cw)^2\cw
+$\\
+
+$\cw
+\cm r_x\cw^2+2\cred\mu\cm r_x\cw+\cred\mu\cw^2=
+\cm r_x\cw^2-2\cm r_x\cw+2\cred\mu\cm r_x\cw-2\cred\mu\cw+
+\cred\mu\cw^2+1
+$\\
+
+$\cw
+0=-2\cm r_x\cw-2\cred\mu\cw+1
+$\\
+
+$
+\cm r_x\cw=\cfrac{1}{2}-\cred\mu\cw
+$\\
+
+$\cw
+(\frac{1}{2})^2+\cm r_y\cw^2=1
+$\\
+
+$
+\cm r_y\cw^2=\cfrac{3}{4}
+$\\
+
+$
+\cm r_y\cw=\pm\cfrac{\sqrt{3}}{2}
+$
+
+\end{document}
