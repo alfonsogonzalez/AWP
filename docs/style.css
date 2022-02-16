@@ -18,7 +18,7 @@
 }
 
 #plot-3d {
-	width   : 1500px;
+	width   : 500px;
 	height  : 1000px;
 	position: absolute;
 	top     : 0px;
@@ -55,6 +55,20 @@
 	color   : white;
 }
 
+#hs-checkbox {
+	position: absolute;
+	top     : 230px;
+	left    : 835px;
+	color   : white;
+}
+
+#hs-checkboxl {
+	font-style: normal;
+	position: absolute;
+	top     : 205px;
+	left    : 840px;
+	color   : white;
+}
 
 .dropbtn {
 	background-color: black;
@@ -86,10 +100,11 @@
 .show {display:block;}
 
 h1 {
-	color     : magenta;
-	text-align: center;
-	padding   : 0px;
-	margin    : 5px;
+	font-family: "monospace";
+	color      : magenta;
+	text-align : center;
+	padding    : 0px;
+	margin     : 5px;
 }
 
 h2 {
@@ -108,6 +123,54 @@ h3 {
 	display: inline-block;
 }
 
+#vinf-checkbox {
+	position: absolute;
+	top     : 80px;
+	right   : 100px;
+	color   : white;
+}
+#vinf-checkboxl {
+	font-style: normal;
+	position: absolute;
+	top     : 60px;
+	right   : 116px;
+	color   : gold;
+}
+
+#vinf-input-x {
+	position: absolute;
+	right   : 70px;
+	top     : 120px;
+}
+#vinf-input-x-l {
+	position: absolute;
+	right   : 135px;
+	top     : 100px;
+	color   : gold;
+}
+#vinf-input-y {
+	position: absolute;
+	right   : 70px;
+	top     : 160px;
+}
+#vinf-input-y-l {
+	position: absolute;
+	right   : 135px;
+	top     : 140px;
+	color   : gold;
+}
+#vinf-input-z {
+	position: absolute;
+	right   : 70px;
+	top     : 200px;
+}
+#vinf-input-z-l {
+	position: absolute;
+	right   : 135px;
+	top     : 180px;
+	color   : gold;
+}
+
 input {
 	background-color: black;
 	border-color    : white;
@@ -117,8 +180,19 @@ input {
 	max-width  : 70;
 }
 
-label, input {
-	display: inline;
+label {
+	display    : inline;
+	margin-left: -5px;
+}
+
+input {
+	display    : inline;
+	margin-left: -2px;
+}
+
+.h-input {
+	display    : inline-block;
+	margin-left: 12px;
 }
 
 #rx0l, #ry0l, #rz0l,

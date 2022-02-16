@@ -7,6 +7,7 @@ Plotting tools
 */
 
 const COLORS                 = [ 'magenta', 'cyan', 'lime', 'red' ];
+const VINF_COLOR             = 'gold';
 const BASIS_VECTORS_SCALE    = 2.0;
 const MAX_VAL_SCALE          = 2.5;
 const GROUNDTRACK_MARKERSIZE = 2;
@@ -122,6 +123,19 @@ function make_trace_rv( ets, states, n ) {
 	} ];	
 }
 
+function make_trace_rv_vinf( xmax, vinf ) {
+	return {
+		x    : [ 0, xmax ],
+		y    : [ vinf, vinf ],
+		mode : 'lines',
+		name : 'vinf',
+		line : { color: VINF_COLOR, width: RV_LINEWIDTH },
+		type : 'scatter',
+		xaxis: 'x2',
+		yaxis: 'y2'
+	};
+}
+
 function make_trace_eq_plane( max_val ) {
 	return {
 		x         : [ [ max_val,  max_val ], [ -max_val, -max_val ] ],
@@ -134,13 +148,31 @@ function make_trace_eq_plane( max_val ) {
 	}
 }
 
-function create_3d_plot( states_list, idxs, lims = false ) {
+function make_trace_vec( v, n, ccolor = false ) {
+	let mag = CB[ 'radius' ] * BASIS_VECTORS_SCALE;
+
+	if ( ccolor ) { _color = VINF_COLOR; }
+	else { _color = COLORS[ n ]; }
+
+	return {
+		x: [ 0, v[ 0 ] * mag ], y: [ 0, v[ 1 ] * mag ], z: [ 0, v[ 2 ] * mag ],
+		mode  : 'lines+markers',
+		line  : { color: _color, width: 5 },
+		type  : 'scatter3d',
+		marker: { size: 5, color: _color }, name: 'h'
+	}
+}
+
+function create_3d_plot( states_list, hs_list, idxs, lims = false ) {
 	let traces  = [];
 	let max_val = 0;
 	for( var n = 0; n < idxs.length; n++ ) {
 		vals    = make_trace_3d( states_list[ n ], idxs[ n ], max_val );
 		max_val = Math.max( max_val, vals[ 1 ] );
 		traces.push( vals[ 0 ] );
+		if ( hs_checkbox.checked ) {
+			traces.push( make_trace_vec( hs_list[ n ], idxs[ n ] ) );
+		}
 	}
 	if ( lims ) { max_val = lims; }
 	else { max_val *= MAX_VAL_SCALE; }
@@ -153,8 +185,14 @@ function create_3d_plot( states_list, idxs, lims = false ) {
 	traces.push( basis_vectors[ 1 ] );
 	traces.push( basis_vectors[ 2 ] );
 
-	if ( document.getElementById( 'active-eq-plane' ).checked ) {
+	if ( eq_plane_checkbox.checked ) {
 		traces.push( make_trace_eq_plane( max_val ) );
+	}
+
+	if ( vinf_checkbox.checked ) {
+		let vinf        = read_vinf();
+		let vinf_normed = scale( vinf, 1 / norm( vinf ) );
+		traces.push( make_trace_vec( vinf_normed, 0, true ) );
 	}
 
 	let layout = {
@@ -233,6 +271,11 @@ function create_rv_plot( ets_list, states_list, idxs, xlim = false, ylims = fals
 	}
 	if ( xlim  ) { xmax = xlim; }
 	if ( ylims ) { rmax = ylims[ 0 ]; vmax = ylims[ 1 ]; }
+
+	if ( vinf_checkbox.checked ) {
+		let vinf = read_vinf();
+		traces_rv.push( make_trace_rv_vinf( xmax, norm( vinf ) ) );
+	}
 
 	var layout_rv = {
 		title        : false,

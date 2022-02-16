@@ -186,8 +186,26 @@
 	<button id="animate_button" type="submit">Animate Orbits!</button>
 	<button id="reset_button" onclick="set_central_body_earth()" type="submit">Reset</button>
 
+	<div class="vinf-input">
+		<label id="vinf-input-x-l" for="vinf-input-x">vx</label><br />
+		<input id="vinf-input-x" type="text" value="1"/>
+	</div>
+	<div class="vinf-input">
+		<label id="vinf-input-y-l" for="vinf-input-y">vy</label><br />
+		<input id="vinf-input-y" type="text" value="2"/>
+	</div>
+	<div class="vinf-input">
+		<label id="vinf-input-z-l" for="vinf-input-z">vz</label><br />
+		<input id="vinf-input-z" type="text" value="3"/>
+	</div>
+	<label id="vinf-checkboxl" for="vinf-checkbox">v<span style="vertical-align:2px; margin-left:-3px;">&#8407;</span></label><br />
+	<input id="vinf-checkbox" type="checkbox" value="1"/>
+
 	<label id="active-eq-planel" for="active-eq-plane">Equatorial Plane</label><br />
 	<input id="active-eq-plane" type="checkbox" value="1"/>
+
+	<label id="hs-checkboxl" for="hs-checkbox">h<span style="vertical-align:4px; margin-left:-3px;">&#8407;</span></label><br />
+	<input id="hs-checkbox" type="checkbox" value="1"/>
 
 	<div id="plot-3d"></div>
 	<div id="plot-groundtracks"></div>

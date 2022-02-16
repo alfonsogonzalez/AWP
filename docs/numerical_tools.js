@@ -47,6 +47,14 @@ function norm( v ) {
 	return Math.sqrt( sum );
 }
 
+function cross( v0, v1 ) {
+	return [
+		v0[ 1 ] * v1[ 2 ] - v0[ 2 ] * v1[ 1 ],
+		v0[ 2 ] * v1[ 0 ] - v0[ 0 ] * v1[ 2 ],
+		v0[ 0 ] * v1[ 1 ] - v0[ 1 ] * v1[ 0 ]
+	]
+}
+
 function linspace( start, stop, n ) {
     var arr  = [];
     var step = ( stop - start ) / ( n - 1 );
