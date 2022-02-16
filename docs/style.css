@@ -18,7 +18,7 @@
 }
 
 #plot-3d {
-	width   : 1500px;
+	width   : 500px;
 	height  : 1000px;
 	position: absolute;
 	top     : 0px;
@@ -70,8 +70,6 @@
 	color   : white;
 }
 
-
-
 .dropbtn {
 	background-color: black;
 	color: white;
@@ -102,10 +100,11 @@
 .show {display:block;}
 
 h1 {
-	color     : magenta;
-	text-align: center;
-	padding   : 0px;
-	margin    : 5px;
+	font-family: "monospace";
+	color      : magenta;
+	text-align : center;
+	padding    : 0px;
+	margin     : 5px;
 }
 
 h2 {
@@ -122,6 +121,54 @@ h3 {
 
 .element-input {
 	display: inline-block;
+}
+
+#vinf-checkbox {
+	position: absolute;
+	top     : 80px;
+	right   : 100px;
+	color   : white;
+}
+#vinf-checkboxl {
+	font-style: normal;
+	position: absolute;
+	top     : 60px;
+	right   : 116px;
+	color   : gold;
+}
+
+#vinf-input-x {
+	position: absolute;
+	right   : 70px;
+	top     : 120px;
+}
+#vinf-input-x-l {
+	position: absolute;
+	right   : 135px;
+	top     : 100px;
+	color   : gold;
+}
+#vinf-input-y {
+	position: absolute;
+	right   : 70px;
+	top     : 160px;
+}
+#vinf-input-y-l {
+	position: absolute;
+	right   : 135px;
+	top     : 140px;
+	color   : gold;
+}
+#vinf-input-z {
+	position: absolute;
+	right   : 70px;
+	top     : 200px;
+}
+#vinf-input-z-l {
+	position: absolute;
+	right   : 135px;
+	top     : 180px;
+	color   : gold;
 }
 
 input {

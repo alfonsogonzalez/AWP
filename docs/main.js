@@ -6,9 +6,14 @@ https://www.youtube.com/c/AlfonsoGonzalezSpaceEngineering
 main script
 */
 
-const propagate_button = document.getElementById( "propagate_button" );
-const animate_button   = document.getElementById( "animate_button" );
-const hs_checkbox      = document.getElementById( 'hs-checkbox' );
+const propagate_button  = document.getElementById( "propagate_button" );
+const animate_button    = document.getElementById( "animate_button" );
+const hs_checkbox       = document.getElementById( 'hs-checkbox' );
+const eq_plane_checkbox = document.getElementById( 'active-eq-plane' );
+const vinf_checkbox     = document.getElementById( 'vinf-checkbox' );
+const vinf_input_x      = document.getElementById( 'vinf-input-x' );
+const vinf_input_y      = document.getElementById( 'vinf-input-y' );
+const vinf_input_z      = document.getElementById( 'vinf-input-z' );
 
 propagate_button.addEventListener( "click", create_stationary_plots );
 animate_button.addEventListener( "click", create_animated_plots );
@@ -76,6 +81,14 @@ function set_defaults() {
 		document.getElementById( "dt-k" + n ).value = CB[ 'defaults' ][ 'dt-k' + n ];
 		document.getElementById( "sim-time-k" + n ).value = CB[ 'defaults' ][ 'sim-time-k' + n ];
 	}
+}
+
+function read_vinf() {
+	return [
+		parseFloat( vinf_input_x.value ),
+		parseFloat( vinf_input_y.value ),
+		parseFloat( vinf_input_z.value )
+	];
 }
 
 function propagate_orbits() {
@@ -162,7 +175,7 @@ function propagate_orbits() {
 
 function create_stationary_plots() {
 	let [ ets_list, states_list, latlons_list, hs_list, idxs ] = propagate_orbits();
-	create_3d_plot( states_list, hs_list, idxs, hs_checkbox.checked );
+	create_3d_plot( states_list, hs_list, idxs );
 	create_groundtracks_plot( latlons_list, idxs );
 	create_rv_plot( ets_list, states_list, idxs );
 }
