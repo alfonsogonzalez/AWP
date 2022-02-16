@@ -55,6 +55,22 @@
 	color   : white;
 }
 
+#hs-checkbox {
+	position: absolute;
+	top     : 230px;
+	left    : 835px;
+	color   : white;
+}
+
+#hs-checkboxl {
+	font-style: normal;
+	position: absolute;
+	top     : 205px;
+	left    : 840px;
+	color   : white;
+}
+
+
 
 .dropbtn {
 	background-color: black;
@@ -117,8 +133,19 @@ input {
 	max-width  : 70;
 }
 
-label, input {
-	display: inline;
+label {
+	display    : inline;
+	margin-left: -5px;
+}
+
+input {
+	display    : inline;
+	margin-left: -2px;
+}
+
+.h-input {
+	display    : inline-block;
+	margin-left: 12px;
 }
 
 #rx0l, #ry0l, #rz0l,

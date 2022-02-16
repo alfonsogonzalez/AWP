@@ -8,6 +8,7 @@ main script
 
 const propagate_button = document.getElementById( "propagate_button" );
 const animate_button   = document.getElementById( "animate_button" );
+const hs_checkbox      = document.getElementById( 'hs-checkbox' );
 
 propagate_button.addEventListener( "click", create_stationary_plots );
 animate_button.addEventListener( "click", create_animated_plots );
@@ -28,7 +29,7 @@ window.onclick = function( event ) {
   if ( !event.target.matches( '.dropbtn' ) ) {
     var dropdowns = document.getElementsByClassName( 'dropdown-content' );
     for ( var n = 0; n < dropdowns.length; n++ ) {
-      var openDropdown = dropdowns[ i ];
+      var openDropdown = dropdowns[ n ];
       if ( openDropdown.classList.contains( 'show' ) ) {
         openDropdown.classList.remove( 'show' );
       }
@@ -81,6 +82,7 @@ function propagate_orbits() {
 	let states_list  = [];
 	let latlons_list = [];
 	let ets_list     = [];
+	let hs_list      = [];
 	let n_orbit      = 0;
 	let idxs         = [];
 
@@ -113,6 +115,12 @@ function propagate_orbits() {
 			latlons_list.push( latlons );
 			ets_list.push( ets );
 			idxs.push( n_orbit );
+
+			if ( hs_checkbox.checked ) {
+				let hvec  = cross( [ rx, ry, rz ], [ vx, vy, vz ] );
+				let hnorm = norm( hvec );
+				hs_list.push( scale( hvec, 1 / hnorm ) );
+			}
 		}
 		n_orbit++;
 	}
@@ -139,16 +147,22 @@ function propagate_orbits() {
 			latlons_list.push( latlons );
 			ets_list.push( ets );
 			idxs.push( n_orbit );
+
+			if ( hs_checkbox.checked ) {
+				let hvec  = cross( state.slice( 0, 3 ), state.slice( 3 ) );
+				let hnorm = norm( hvec );
+				hs_list.push( scale( hvec, 1 / hnorm ) );
+			}
 		}
 		n_orbit++;
 	}
 
-	return [ ets_list, states_list, latlons_list, idxs ];
+	return [ ets_list, states_list, latlons_list, hs_list, idxs ];
 }
 
 function create_stationary_plots() {
-	let [ ets_list, states_list, latlons_list, idxs ] = propagate_orbits();
-	create_3d_plot( states_list, idxs );
+	let [ ets_list, states_list, latlons_list, hs_list, idxs ] = propagate_orbits();
+	create_3d_plot( states_list, hs_list, idxs, hs_checkbox.checked );
 	create_groundtracks_plot( latlons_list, idxs );
 	create_rv_plot( ets_list, states_list, idxs );
 }

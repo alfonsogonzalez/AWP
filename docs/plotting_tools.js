@@ -134,13 +134,28 @@ function make_trace_eq_plane( max_val ) {
 	}
 }
 
-function create_3d_plot( states_list, idxs, lims = false ) {
+function make_trace_vec( v, n ) {
+	let mag = CB[ 'radius' ] * BASIS_VECTORS_SCALE;
+	return {
+		x: [ 0, v[ 0 ] * mag ], y: [ 0, v[ 1 ] * mag ], z: [ 0, v[ 2 ] * mag ],
+		mode  : 'lines+markers',
+		line  : { color: COLORS[ n ], width: 5 },
+		type  : 'scatter3d',
+		marker: { size: 5, color: COLORS[ n ] }, name: 'h'
+	}
+}
+
+
+function create_3d_plot( states_list, hs_list, idxs, hs, lims = false ) {
 	let traces  = [];
 	let max_val = 0;
 	for( var n = 0; n < idxs.length; n++ ) {
 		vals    = make_trace_3d( states_list[ n ], idxs[ n ], max_val );
 		max_val = Math.max( max_val, vals[ 1 ] );
 		traces.push( vals[ 0 ] );
+		if ( hs ) {
+			traces.push( make_trace_vec( hs_list[ n ], idxs[ n ] ) );
+		}
 	}
 	if ( lims ) { max_val = lims; }
 	else { max_val *= MAX_VAL_SCALE; }
