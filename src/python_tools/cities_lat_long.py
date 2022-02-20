@@ -63,7 +63,8 @@ city_list0 = [
 	 'Cairo',                               # Egypt
 	 'Seoul',                               # South Korea
 	 'Broom Bridge',                        # Ireland
-	 'Lima'                                 # Peru
+	 'Lima',                                # Peru
+	 'Akure'                                # Nigeria
 ]
 
 def city_dict():
