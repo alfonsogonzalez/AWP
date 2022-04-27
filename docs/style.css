@@ -205,11 +205,15 @@ input {
 
 #sma0l, #ecc0l, #inc0l,
 #ta0l,  #aop0l, #raan0l,
-#sim-time-k0l,  #dt-k0l, #active-k0l { color: lime; }
+#sim-time-k0l,  #dt-k0l, #active-k0l { color: red; }
 
 #sma1l, #ecc1l, #inc1l,
 #ta1l,  #aop1l, #raan1l,
-#sim-time-k1l,  #dt-k1l, #active-k1l { color: red; }
+#sim-time-k1l,  #dt-k1l, #active-k1l { color: lime; }
+
+#sma2l, #ecc2l, #inc2l,
+#ta2l,  #aop2l, #raan2l,
+#sim-time-k2l,  #dt-k2l, #active-k2l { color: blue; }
 
 .buttons {
 	width  : 200px;
@@ -230,7 +234,7 @@ img {
 	width   : 850px;
 	height  : 520px;
 	position: absolute;
-	top     : 315px;
+	top     : 395px;
 	left    : -2px;
 }
 

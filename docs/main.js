@@ -21,7 +21,7 @@ propagate_button.addEventListener( "click", create_stationary_plots );
 animate_button.addEventListener( "click", create_animated_plots );
 
 const N_STATE_VECTOR_INPUTS  = 2;
-const N_COES_INPUTS          = 2;
+const N_COES_INPUTS          = 3;
 const N_TOTAL_ORBITS         = N_STATE_VECTOR_INPUTS + N_COES_INPUTS;
 const HYPERBOLIC_TSPAN       = 35000;
 
