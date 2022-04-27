@@ -6,14 +6,16 @@ https://www.youtube.com/c/AlfonsoGonzalezSpaceEngineering
 main script
 */
 
-const propagate_button  = document.getElementById( "propagate_button" );
-const animate_button    = document.getElementById( "animate_button" );
-const hs_checkbox       = document.getElementById( 'hs-checkbox' );
-const eq_plane_checkbox = document.getElementById( 'active-eq-plane' );
-const vinf_checkbox     = document.getElementById( 'vinf-checkbox' );
-const vinf_input_x      = document.getElementById( 'vinf-input-x' );
-const vinf_input_y      = document.getElementById( 'vinf-input-y' );
-const vinf_input_z      = document.getElementById( 'vinf-input-z' );
+const propagate_button      = document.getElementById( "propagate_button" );
+const animate_button        = document.getElementById( "animate_button" );
+const hs_checkbox           = document.getElementById( 'hs-checkbox' );
+const eq_plane_checkbox     = document.getElementById( 'active-eq-plane' );
+const vinf_checkbox         = document.getElementById( 'vinf-checkbox' );
+const vinf_input_x          = document.getElementById( 'vinf-input-x' );
+const vinf_input_y          = document.getElementById( 'vinf-input-y' );
+const vinf_input_z          = document.getElementById( 'vinf-input-z' );
+const read_config_text_box  = document.getElementById( 'read-config-text-box' );
+const write_config_text_box = document.getElementById( 'write-config-text-box' );
 
 propagate_button.addEventListener( "click", create_stationary_plots );
 animate_button.addEventListener( "click", create_animated_plots );
@@ -25,6 +27,7 @@ const HYPERBOLIC_TSPAN       = 35000;
 
 var CB = EARTH;
 set_defaults();
+write_text_box();
 
 function open_dropdown() {
 	document.getElementById( 'dropdown' ).classList.toggle( 'show' );
@@ -92,6 +95,7 @@ function read_vinf() {
 }
 
 function propagate_orbits() {
+	write_text_box();
 	let states_list  = [];
 	let latlons_list = [];
 	let ets_list     = [];

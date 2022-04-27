@@ -9,7 +9,7 @@ Numerical tools script
 d2r = Math.PI / 180.0;
 r2d = 180.0 / Math.PI;
 
-REFERENCE_FRAME_MAP = {
+const REFERENCE_FRAME_MAP = {
 	'IAU_EARTH': eci2ecef,
 	'IAU_MOON' : mci2mcmf,
 	'IAU_MARS' : maci2macmaf

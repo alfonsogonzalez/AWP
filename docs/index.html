@@ -9,6 +9,7 @@
 	<script src="ode_tools.js"></script>
 	<script src="plotting_tools.js"></script>
 	<script src="planetary_data.js"></script>
+	<script src="config.js"></script>
 
 	<title>Astrodynamics Interactive Demo</title>
 	<link rel="icon" href="https://raw.githubusercontent.com/alfonsogonzalez/AWP/main/docs/cosmo-3d-launches.png" type="image/x-icon">
@@ -210,6 +211,14 @@
 	<div id="plot-3d"></div>
 	<div id="plot-groundtracks"></div>
 	<div id="plot-positions-velocities"></div>
+
+	<label id=read-config-text-box-label for="read-config-text-box">READ</label><br />
+	<textarea id="read-config-text-box" cols=20 rows=100></textarea>
+
+	<textarea id="write-config-text-box" cols=20 rows=100></textarea>
+	<button id="apply_config_button" onclick="apply_written_config()" type="submit">Write</button>
+
+	<button id="config-000-button" onclick="apply_default_config(0)" type="submit">Config 000</button>
 
 	<script src="main.js"></script>
 

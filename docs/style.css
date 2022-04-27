@@ -226,3 +226,63 @@ img {
 	margin-left: 30px;
 }
 
+#plot-groundtracks {
+	width   : 850px;
+	height  : 520px;
+	position: absolute;
+	top     : 315px;
+	left    : -2px;
+}
+
+
+#read-config-text-box {
+	width   : 300px;
+	height  : 600px;
+	position: absolute;
+	top     : 900px;
+	left    : 850px;
+	background-color: black;
+	color: white;
+}
+#read-config-text-box-label {
+	position: absolute;
+	top     : 880px;
+	left    : 980px;
+	color   : lime;
+}
+
+#write-config-text-box {
+	width   : 300px;
+	height  : 600px;
+	position: absolute;
+	top     : 900px;
+	left    : 1200px;
+	background-color: black;
+	color: white;
+}
+
+#apply_config_button {
+	position: absolute;
+	top             : 875px;
+	left            : 1330px;
+	background-color: black;
+	color           : magenta;
+	border          : 3px solid magenta;
+	border-color    : magenta;
+	size:           : 30px;
+	hover: { background: gray };
+}
+
+
+#config-000-button {
+	position: absolute;
+	top     : 900px;
+	left    : 20px;
+}
+
+.buttons {
+	width  : 200px;
+	margin : 10px;
+	display: inline;
+}
+
