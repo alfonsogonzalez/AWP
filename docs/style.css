@@ -197,11 +197,11 @@ input {
 
 #rx0l, #ry0l, #rz0l,
 #vx0l, #vy0l, #vz0l,
-#sim-time0l,  #dt0l, #active0l { color: magenta; }
+#sim-time0l,  #dt0l, #active0l { color: cyan; }
 
 #rx1l, #ry1l, #rz1l,
 #vx1l, #vy1l, #vz1l,
-#sim-time1l,  #dt1l, #active1l { color: cyan; }
+#sim-time1l,  #dt1l, #active1l { color: magenta; }
 
 #sma0l, #ecc0l, #inc0l,
 #ta0l,  #aop0l, #raan0l,

@@ -6,7 +6,7 @@ https://www.youtube.com/c/AlfonsoGonzalezSpaceEngineering
 Plotting tools
 */
 
-const COLORS                 = [ 'magenta', 'cyan', 'red', 'lime', 'blue' ];
+const COLORS                 = [ 'cyan', 'magenta', 'red', 'lime', 'blue' ];
 const VINF_COLOR             = 'gold';
 const BASIS_VECTORS_SCALE    = 2.0;
 const MAX_VAL_SCALE          = 2.5;
