@@ -41,23 +41,24 @@
 	left    : 815px;
 }
 
-#active-eq-plane {
+#periapses-checkbox {
 	position: absolute;
-	top     : 280px;
+	top     : 230px;
 	left    : 835px;
 	color   : white;
 }
 
-#active-eq-planel {
+#periapses-checkboxl {
+	font-style: normal;
 	position: absolute;
-	top     : 259px;
-	left    : 795px;
+	top     : 205px;
+	left    : 818px;
 	color   : white;
 }
 
 #hs-checkbox {
 	position: absolute;
-	top     : 230px;
+	top     : 280px;
 	left    : 835px;
 	color   : white;
 }
@@ -65,8 +66,22 @@
 #hs-checkboxl {
 	font-style: normal;
 	position: absolute;
-	top     : 205px;
+	top     : 259px;
 	left    : 840px;
+	color   : white;
+}
+
+#active-eq-plane {
+	position: absolute;
+	top     : 330px;
+	left    : 835px;
+	color   : white;
+}
+
+#active-eq-planel {
+	position: absolute;
+	top     : 310px;
+	left    : 795px;
 	color   : white;
 }
 

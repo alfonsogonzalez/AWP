@@ -33,8 +33,9 @@ function read_state() {
 		config[ "active-k"   + n ] = document.getElementById( 'active-k'   + n ).checked;
 	}
 
-	config[ "hs-checkbox"   ] = hs_checkbox.checked;
-	config[ "vinf-checkbox" ] = vinf_checkbox.checked;
+	config[ "periapses-checkbox" ] = periapses_checkbox.checked;
+	config[ "hs-checkbox"   ]      = hs_checkbox.checked;
+	config[ "vinf-checkbox" ]      = vinf_checkbox.checked;
 
 	vinf = read_vinf();
 	config[ "vinf-x" ] = vinf[ 0 ];
@@ -83,8 +84,9 @@ function apply_config( config ) {
 		document.getElementById( "sim-time-k" + n ).value = config[ 'sim-time-k' + n ];
 		document.getElementById( 'active-k' + n ).checked = config[ 'active-k' + n ];
 	}
-	hs_checkbox.checked   = config[ "hs-checkbox"   ];
-	vinf_checkbox.checked = config[ "vinf-checkbox" ];
+	periapses_checkbox.checked = config[ "periapses-checkbox" ];
+	hs_checkbox.checked        = config[ "hs-checkbox"   ];
+	vinf_checkbox.checked      = config[ "vinf-checkbox" ];
 
 	vinf_input_x.value = config[ "vinf-x" ];
 	vinf_input_y.value = config[ "vinf-y" ];

@@ -163,7 +163,7 @@ function make_trace_vec( v, n, ccolor = false ) {
 	}
 }
 
-function create_3d_plot( states_list, hs_list, idxs, lims = false ) {
+function create_3d_plot( states_list, hs_list, periapses_list, idxs, lims = false ) {
 	let traces  = [];
 	let max_val = 0;
 	for( var n = 0; n < idxs.length; n++ ) {
@@ -172,6 +172,9 @@ function create_3d_plot( states_list, hs_list, idxs, lims = false ) {
 		traces.push( vals[ 0 ] );
 		if ( hs_checkbox.checked ) {
 			traces.push( make_trace_vec( hs_list[ n ], idxs[ n ] ) );
+		}
+		if ( periapses_checkbox.checked ) {
+			traces.push( make_trace_vec( periapses_list[ n ], idxs[ n ] ) );
 		}
 	}
 	if ( lims ) { max_val = lims; }

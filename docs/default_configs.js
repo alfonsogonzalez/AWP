@@ -54,6 +54,7 @@ const DEFAULT_CONFIGS = [
     "dt-k2": "30",
     "sim-time-k2": "1",
     "active-k2": true,
+    "periapses-checkbox": true,
     "hs-checkbox": true,
     "vinf-checkbox": false,
     "vinf-x": 1,

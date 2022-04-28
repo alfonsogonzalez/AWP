@@ -9,6 +9,7 @@ main script
 const propagate_button      = document.getElementById( "propagate_button" );
 const animate_button        = document.getElementById( "animate_button" );
 const hs_checkbox           = document.getElementById( 'hs-checkbox' );
+const periapses_checkbox    = document.getElementById( 'periapses-checkbox' );
 const eq_plane_checkbox     = document.getElementById( 'active-eq-plane' );
 const vinf_checkbox         = document.getElementById( 'vinf-checkbox' );
 const vinf_input_x          = document.getElementById( 'vinf-input-x' );
@@ -96,12 +97,13 @@ function read_vinf() {
 
 function propagate_orbits() {
 	write_text_box();
-	let states_list  = [];
-	let latlons_list = [];
-	let ets_list     = [];
-	let hs_list      = [];
-	let n_orbit      = 0;
-	let idxs         = [];
+	let states_list    = [];
+	let latlons_list   = [];
+	let ets_list       = [];
+	let hs_list        = [];
+	let periapses_list = [];
+	let n_orbit        = 0;
+	let idxs           = [];
 
 	for( var n = 0; n < N_STATE_VECTOR_INPUTS; n++ ) {
 		if ( document.getElementById( 'active' + n ).checked ) {
@@ -138,6 +140,17 @@ function propagate_orbits() {
 				let hnorm = norm( hvec );
 				hs_list.push( scale( hvec, 1 / hnorm ) );
 			}
+			if ( periapses_checkbox.checked ) {
+				let r      = state.slice( 0, 3 );
+				let v      = state.slice( 3 );
+				let rnorm  = norm( r );
+				let vnorm  = norm( v );
+				let vrad   = scale( dot( r, v ), rnorm );
+				let coeff0 = ( vnorm * vnorm - CB[ 'mu' ] / rnorm ) / CB[ 'mu' ];
+				let coeff1 = -rnorm * vrad / CB[ 'mu' ];
+				let ecc    = add( scale( r, coeff0 ), scale( v, coeff1 ) );
+				periapses_list.push( scale( ecc, 1.0 / norm( ecc ) ) );
+			}
 		}
 		n_orbit++;
 	}
@@ -170,16 +183,27 @@ function propagate_orbits() {
 				let hnorm = norm( hvec );
 				hs_list.push( scale( hvec, 1 / hnorm ) );
 			}
+			if ( periapses_checkbox.checked ) {
+				let r      = state.slice( 0, 3 );
+				let v      = state.slice( 3 );
+				let rnorm  = norm( r );
+				let vnorm  = norm( v );
+				let vrad   = scale( dot( r, v ), rnorm );
+				let coeff0 = ( vnorm * vnorm - CB[ 'mu' ] / rnorm ) / CB[ 'mu' ];
+				let coeff1 = -rnorm * vrad / CB[ 'mu' ];
+				let ecc    = add( scale( r, coeff0 ), scale( v, coeff1 ) );
+				periapses_list.push( scale( ecc, 1.0 / norm( ecc ) ) );
+			}
 		}
 		n_orbit++;
 	}
 
-	return [ ets_list, states_list, latlons_list, hs_list, idxs ];
+	return [ ets_list, states_list, latlons_list, hs_list, periapses_list, idxs ];
 }
 
 function create_stationary_plots() {
-	let [ ets_list, states_list, latlons_list, hs_list, idxs ] = propagate_orbits();
-	create_3d_plot( states_list, hs_list, idxs );
+	let [ ets_list, states_list, latlons_list, hs_list, periapses_list, idxs ] = propagate_orbits();
+	create_3d_plot( states_list, hs_list, periapses_list, idxs );
 	create_groundtracks_plot( latlons_list, idxs );
 	create_rv_plot( ets_list, states_list, idxs );
 }
