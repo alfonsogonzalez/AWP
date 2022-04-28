@@ -9,6 +9,7 @@
 	<script src="ode_tools.js"></script>
 	<script src="plotting_tools.js"></script>
 	<script src="planetary_data.js"></script>
+	<script src="default_configs.js"></script>
 	<script src="config.js"></script>
 
 	<title>Astrodynamics Interactive Demo</title>
@@ -114,20 +115,20 @@
 		<input id="ecc0" type="text" value="0.2"/>
 	</div>
 	<div class="element-input">
-		<label id="inc0l" for="inc0">INC</label><br />
-		<input id="inc0" type="text" value="60.0"/>
+		<label id="raan0l" for="raan0">RAAN (&#937)</label><br />
+		<input id="raan0" type="text" value="40.0"/>
 	</div>
 	<div class="element-input">
-		<label id="ta0l" for="ta0">TA (&#952)</label><br />
-		<input id="ta0" type="text" value="0.0"/>
+		<label id="inc0l" for="inc0">INC</label><br />
+		<input id="inc0" type="text" value="60.0"/>
 	</div>
 	<div class="element-input">
 		<label id="aop0l" for="aop0">AOP (&#969)</label><br />
 		<input id="aop0" type="text" value="50.0"/>
 	</div>
 	<div class="element-input">
-		<label id="raan0l" for="raan0">RAAN (&#937)</label><br />
-		<input id="raan0" type="text" value="40.0"/>
+		<label id="ta0l" for="ta0">TA (&#952)</label><br />
+		<input id="ta0" type="text" value="0.0"/>
 	</div>
 	<div class="element-input">
 		<label id="sim-time-k0l" for="sim-time-k0">Periods</label><br />
@@ -153,20 +154,20 @@
 		<input id="ecc1" type="text" value="0.01"/>
 	</div>
 	<div class="element-input">
-		<label id="inc1l" for="inc1">INC</label><br />
-		<input id="inc1" type="text" value="1.0"/>
+		<label id="raan1l" for="raan1">RAAN (&#937)</label><br />
+		<input id="raan1" type="text" value="40.0"/>
 	</div>
 	<div class="element-input">
-		<label id="ta1l" for="ta1">TA (&#952)</label><br />
-		<input id="ta1" type="text" value="0.0"/>
+		<label id="inc1l" for="inc1">INC</label><br />
+		<input id="inc1" type="text" value="1.0"/>
 	</div>
 	<div class="element-input">
 		<label id="aop1l" for="aop1">AOP (&#969)</label><br />
 		<input id="aop1" type="text" value="50.0"/>
 	</div>
 	<div class="element-input">
-		<label id="raan1l" for="raan1">RAAN (&#937)</label><br />
-		<input id="raan1" type="text" value="40.0"/>
+		<label id="ta1l" for="ta1">TA (&#952)</label><br />
+		<input id="ta1" type="text" value="0.0"/>
 	</div>
 	<div class="element-input">
 		<label id="sim-time-k1l" for="sim-time-k1">Periods</label><br />
@@ -192,20 +193,20 @@
 		<input id="ecc2" type="text" value="0.01"/>
 	</div>
 	<div class="element-input">
-		<label id="inc2l" for="inc2">INC</label><br />
-		<input id="inc2" type="text" value="1.0"/>
+		<label id="raan2l" for="raan2">RAAN (&#937)</label><br />
+		<input id="raan2" type="text" value="40.0"/>
 	</div>
 	<div class="element-input">
-		<label id="ta2l" for="ta2">TA (&#952)</label><br />
-		<input id="ta2" type="text" value="0.0"/>
+		<label id="inc2l" for="inc2">INC</label><br />
+		<input id="inc2" type="text" value="1.0"/>
 	</div>
 	<div class="element-input">
 		<label id="aop2l" for="aop2">AOP (&#969)</label><br />
 		<input id="aop2" type="text" value="50.0"/>
 	</div>
 	<div class="element-input">
-		<label id="raan2l" for="raan2">RAAN (&#937)</label><br />
-		<input id="raan2" type="text" value="40.0"/>
+		<label id="ta2l" for="ta2">TA (&#952)</label><br />
+		<input id="ta2" type="text" value="0.0"/>
 	</div>
 	<div class="element-input">
 		<label id="sim-time-k2l" for="sim-time-k2">Periods</label><br />
@@ -255,9 +256,9 @@
 	<textarea id="read-config-text-box" cols=20 rows=100></textarea>
 
 	<textarea id="write-config-text-box" cols=20 rows=100></textarea>
-	<button id="apply_config_button" onclick="apply_written_config()" type="submit">Write</button>
+	<button id="apply_config_button" onclick="apply_written_config()" type="submit">WRITE</button>
 
-	<button id="config-000-button" onclick="apply_default_config(0)" type="submit">Config 000</button>
+	<button id="config-000-button" onclick="apply_default_config(0)" type="submit">COEs Config 000</button>
 
 	<script src="main.js"></script>
 
