@@ -21,6 +21,7 @@ to fit your needs
 # 3rd party libraries
 import spiceypy as spice
 import numpy    as np
+import os
 
 # AWP library
 import spice_tools    as st
@@ -29,8 +30,15 @@ import spice_data     as sd
 from numerical_tools import norm
 
 if __name__ == '__main__':
+
+	AWP_path = os.environ.get( 'AWP' )
+	if AWP_path is not None:
+		base_dir = AWP_path
+	else:
+		base_dir = '..'
+
 	spice.furnsh( sd.leapseconds_kernel )
-	spice.furnsh( 'voyager2_jupiter_flyby.bsp' )
+	spice.furnsh( os.path.join( base_dir, 'data/spice/spk/voyager2_jupiter_flyby.bsp' ) )
 
 	et        = spice.str2et( '1979-07-09 TDB' )
 	dt        = 20 * 24 * 3600.0

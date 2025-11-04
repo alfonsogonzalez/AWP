@@ -20,16 +20,23 @@ to fit your needs
 
 # 3rd party libraries
 import spiceypy as spice
+import os
 
 # AWP library
 import plotting_tools as pt
 
 if __name__ == '__main__':
 
-	spice.furnsh( '../../data/spice/lsk/naif0012.tls' )
-	spice.furnsh( '../../data/spice/spk/de432s.bsp'   )
-	spice.furnsh( 'voyager2_jupiter_flyby.bsp'   )
-	
+	AWP_path = os.environ.get( 'AWP' )
+	if AWP_path is not None:
+		base_dir = AWP_path
+	else:
+		base_dir = '..'
+
+	spice.furnsh( os.path.join( base_dir, 'data/spice/lsk/naif0012.tls'         ) )
+	spice.furnsh( os.path.join( base_dir, 'data/spice/spk/de432s.bsp'         ) )
+	spice.furnsh( os.path.join( base_dir, 'data/spice/spk/voyager2_jupiter_flyby.bsp' ) )
+
 	et  = spice.str2et( '1979-07-09 TDB' )
 	dt  = 10 * 24 * 3600.0
 	et0 = et - dt

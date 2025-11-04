@@ -316,9 +316,9 @@ def plot_orbits( rs, args, vectors = [] ):
 					  azim = _args[ 'azimuth'   ] )
 	
 	if _args[ 'axes_no_fill' ]:
-		ax.w_xaxis.pane.fill = False
-		ax.w_yaxis.pane.fill = False
-		ax.w_zaxis.pane.fill = False		
+		ax.xaxis.pane.fill = False
+		ax.yaxis.pane.fill = False
+		ax.zaxis.pane.fill = False		
 
 	if _args[ 'hide_axes' ]:
 		ax.set_axis_off()
